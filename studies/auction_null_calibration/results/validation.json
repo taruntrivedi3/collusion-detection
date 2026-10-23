@@ -1,0 +1,12 @@
+{
+  "checks": [
+    "Conditional MI matches the supplied auction implementation for two views and six action categories",
+    "All 52 subset/view scores agree with the source A/B normalization",
+    "Both surrogates keep the direction/level bundle together; shuffles preserve conditional counts and shifts cyclic order",
+    "Independent donor draws and planted exact three-agent copying preserve complete paths",
+    "Singleton states and a constant $99 agreement have zero information, with no artificial infinite scores",
+    "Rank p-values count ties conservatively and include the observed statistic",
+    "High-entropy copied triples are recovered in the simple strong-signal check"
+  ],
+  "seconds_for_two_A_B_tests": 0.02930685388855636
+}

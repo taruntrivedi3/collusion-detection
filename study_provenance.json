@@ -1,0 +1,545 @@
+{
+  "description": "Byte-for-byte copies of original study artifacts. Historical audit receipts also list intermediate outputs omitted from this distribution.",
+  "files": {
+    "studies/rps_null_calibration/PROTOCOL.md": {
+      "study": "null_calibration_20261022",
+      "original_path": "PROTOCOL.md",
+      "sha256": "63b7427030106413d08d9f202630f22b91bd7ff8e7d90a3029910e6da840803f"
+    },
+    "studies/rps_null_calibration/provenance/README.original.md": {
+      "study": "null_calibration_20261022",
+      "original_path": "README.md",
+      "sha256": "d9c28a99ceef035546d8910c925854a705b0032c8be25a0aac4e76b308c327e4"
+    },
+    "studies/rps_null_calibration/STATISTICAL_NOTES.md": {
+      "study": "null_calibration_20261022",
+      "original_path": "STATISTICAL_NOTES.md",
+      "sha256": "bff1436f9a843c27e2b9e9bdc8cdf626e1470486ccda107edc297d9c35cd475e"
+    },
+    "studies/rps_null_calibration/config.json": {
+      "study": "null_calibration_20261022",
+      "original_path": "config.json",
+      "sha256": "93a833a395682786ecfe813aaef1bd61a7b985f95b1f7293a4047bfdd58adb53"
+    },
+    "studies/rps_null_calibration/experiment_manifest.json": {
+      "study": "null_calibration_20261022",
+      "original_path": "experiment_manifest.json",
+      "sha256": "918caa0124c9639cfebd524fb7c98007221b6c09ceeb759b3a04d7cd66e38a0d"
+    },
+    "studies/rps_null_calibration/source_manifest.json": {
+      "study": "null_calibration_20261022",
+      "original_path": "source_manifest.json",
+      "sha256": "3aa06efb7380ab3446391f30fe1dd47f4352e97f4e7e28a41ff9f7b24a675ec0"
+    },
+    "studies/rps_null_calibration/code/analyze.py": {
+      "study": "null_calibration_20261022",
+      "original_path": "code/analyze.py",
+      "sha256": "ac89fe0e6af8942721b028ea2ceb5846fb2b06e93c34b53fbc4caad49b8d03b4"
+    },
+    "studies/rps_null_calibration/code/audit.py": {
+      "study": "null_calibration_20261022",
+      "original_path": "code/audit.py",
+      "sha256": "038dfe03af9ee7cd211a9aac39dfc9cb49d0c438c365d1384cff5e472820a57d"
+    },
+    "studies/rps_null_calibration/code/build.sh": {
+      "study": "null_calibration_20261022",
+      "original_path": "code/build.sh",
+      "sha256": "4807bdbdd0678a473906be75690c9f634f9ab1929ce8acdfbf5e730f0432194c"
+    },
+    "studies/rps_null_calibration/code/engine.cpp": {
+      "study": "null_calibration_20261022",
+      "original_path": "code/engine.cpp",
+      "sha256": "f82d0f3505e874ab53361b589e1367bffba82b3859fe93381a95804dc06c34d3"
+    },
+    "studies/rps_null_calibration/code/engine.py": {
+      "study": "null_calibration_20261022",
+      "original_path": "code/engine.py",
+      "sha256": "c635a3a1a5ea93407017bf8f55bde86c2b2bd9169d657a547aeedf9f09356ea7"
+    },
+    "studies/rps_null_calibration/code/reproduce.sh": {
+      "study": "null_calibration_20261022",
+      "original_path": "code/reproduce.sh",
+      "sha256": "604fedc09b97b6ebedd8e014e567cc6cdda5569f681f20627c6664bc52da7c61"
+    },
+    "studies/rps_null_calibration/code/run_study.py": {
+      "study": "null_calibration_20261022",
+      "original_path": "code/run_study.py",
+      "sha256": "178fa4438b4c7be41e88c18ad0f1d2355caa753e4807580551e414bfa462fe44"
+    },
+    "studies/rps_null_calibration/code/validate.py": {
+      "study": "null_calibration_20261022",
+      "original_path": "code/validate.py",
+      "sha256": "20decbb9eeebbaf43d22fdddbdf0ed80d527e61645bf63bd0396d197607646a4"
+    },
+    "studies/rps_null_calibration/source_snapshot/README.md": {
+      "study": "null_calibration_20261022",
+      "original_path": "source_snapshot/README.md",
+      "sha256": "23d1c4a5eb7c76495f88ef59bdea0c7ed9e0a6f597d053a5874b7ce250fba421"
+    },
+    "studies/rps_null_calibration/source_snapshot/collusion/__init__.py": {
+      "study": "null_calibration_20261022",
+      "original_path": "source_snapshot/collusion/__init__.py",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "studies/rps_null_calibration/source_snapshot/collusion/detect.py": {
+      "study": "null_calibration_20261022",
+      "original_path": "source_snapshot/collusion/detect.py",
+      "sha256": "491cf19782d4693b349685da34e6613651b8083022492d22bf3d5faeb09c87d5"
+    },
+    "studies/rps_null_calibration/source_snapshot/collusion/estimate.py": {
+      "study": "null_calibration_20261022",
+      "original_path": "source_snapshot/collusion/estimate.py",
+      "sha256": "107675b4971a1ac4f0df97bdf12448d1519db68a7416aaae03a52ac58b1421b3"
+    },
+    "studies/rps_null_calibration/source_snapshot/collusion/game.py": {
+      "study": "null_calibration_20261022",
+      "original_path": "source_snapshot/collusion/game.py",
+      "sha256": "e557dbd05c8bcf53c9fb72f24fd07800cedf56a14ed2906e806668fb05c9f0fb"
+    },
+    "studies/rps_null_calibration/source_snapshot/collusion/metrics.py": {
+      "study": "null_calibration_20261022",
+      "original_path": "source_snapshot/collusion/metrics.py",
+      "sha256": "2ca6aac8be7ca41a5a9887aa6bf8bc9579dd5b9b67768352d120fa0999104ece"
+    },
+    "studies/rps_null_calibration/source_snapshot/collusion/null.py": {
+      "study": "null_calibration_20261022",
+      "original_path": "source_snapshot/collusion/null.py",
+      "sha256": "df975175128d3bef99ba089214e57f9e15c6f77b5849fb53eb3d2f6c58eea48e"
+    },
+    "studies/rps_null_calibration/source_snapshot/collusion/plotting.py": {
+      "study": "null_calibration_20261022",
+      "original_path": "source_snapshot/collusion/plotting.py",
+      "sha256": "59dd4da9f619b5cef5e9e16924a6dbb51dd37a6f76ef50be141cab2f379468b4"
+    },
+    "studies/rps_null_calibration/source_snapshot/collusion/triples.py": {
+      "study": "null_calibration_20261022",
+      "original_path": "source_snapshot/collusion/triples.py",
+      "sha256": "b2075fdc356d4bd2bd212e0a26cdca33bc0d776490f6a07d749e4adead6f007c"
+    },
+    "studies/rps_null_calibration/source_snapshot/experiments/step5_common.py": {
+      "study": "null_calibration_20261022",
+      "original_path": "source_snapshot/experiments/step5_common.py",
+      "sha256": "d8138f3c265e0eb453acb356623067115dda44bcbfa77adc8ac37d5539dfef03"
+    },
+    "studies/rps_null_calibration/source_snapshot/experiments/step5_run.py": {
+      "study": "null_calibration_20261022",
+      "original_path": "source_snapshot/experiments/step5_run.py",
+      "sha256": "33f482d4de907fb7f71c71b194f8d9d5d5c9924b95f3814eec14eeb192cedf28"
+    },
+    "studies/rps_null_calibration/source_snapshot/results/WRITEUP_NOTES.md": {
+      "study": "null_calibration_20261022",
+      "original_path": "source_snapshot/results/WRITEUP_NOTES.md",
+      "sha256": "29bd68afa06e42588fb404f8308322a620dbcf186b93dbb0ecad485d2be0cd2c"
+    },
+    "studies/rps_null_calibration/source_snapshot/tests/test_core.py": {
+      "study": "null_calibration_20261022",
+      "original_path": "source_snapshot/tests/test_core.py",
+      "sha256": "c8c17e5f273e5c300039dce1733991ff0f43986154f1b12838bddaa628f0850e"
+    },
+    "studies/rps_null_calibration/source_snapshot/tests/test_triples.py": {
+      "study": "null_calibration_20261022",
+      "original_path": "source_snapshot/tests/test_triples.py",
+      "sha256": "db6efcf2cf77744378ba83e6879ede91dacdaef6759ce5013162398550e2c39b"
+    },
+    "studies/rps_null_calibration/results/INTERPRETATION.md": {
+      "study": "null_calibration_20261022",
+      "original_path": "results/INTERPRETATION.md",
+      "sha256": "9e859367352bea4e1d3b11a217546876bad142bb04aea04e0b9731ca5b6af3c6"
+    },
+    "studies/rps_null_calibration/results/REPORT.md": {
+      "study": "null_calibration_20261022",
+      "original_path": "results/REPORT.md",
+      "sha256": "b393e38e7b3f0154996bbc011bbde37e5272793ff6a5cb33e62f2efb966a77c4"
+    },
+    "studies/rps_null_calibration/results/audit.json": {
+      "study": "null_calibration_20261022",
+      "original_path": "results/audit.json",
+      "sha256": "550fecade3f10436130c05a2a013e783ce0353e17611fab4725502991cd9c344"
+    },
+    "studies/rps_null_calibration/results/empirical_false_alarm.csv": {
+      "study": "null_calibration_20261022",
+      "original_path": "results/empirical_false_alarm.csv",
+      "sha256": "e736cd357a1dea458c895a753d2d1b884c6da3a50336fc8f4571be85396761c7"
+    },
+    "studies/rps_null_calibration/results/environment.json": {
+      "study": "null_calibration_20261022",
+      "original_path": "results/environment.json",
+      "sha256": "5cdb783dae1d0addcce7862aaac8de8fe11ff6ba19a49c627eeda7276e3f5c9d"
+    },
+    "studies/rps_null_calibration/results/false_alarm.pdf": {
+      "study": "null_calibration_20261022",
+      "original_path": "results/false_alarm.pdf",
+      "sha256": "0a904b65717d526fe8927af538f02aa138c252d10877dcbe0fa52c903c8b1424"
+    },
+    "studies/rps_null_calibration/results/false_alarm.png": {
+      "study": "null_calibration_20261022",
+      "original_path": "results/false_alarm.png",
+      "sha256": "8352386ba1f10d824789bcdd65244ad4e586ca362825d4f23b88785122828bfd"
+    },
+    "studies/rps_null_calibration/results/nominal_false_alarm.csv": {
+      "study": "null_calibration_20261022",
+      "original_path": "results/nominal_false_alarm.csv",
+      "sha256": "fae482cd591309a57802e8ed03aa87c38c6d780e3070b4b02c1ba475defb3bf2"
+    },
+    "studies/rps_null_calibration/results/occupancy.csv": {
+      "study": "null_calibration_20261022",
+      "original_path": "results/occupancy.csv",
+      "sha256": "705d5c02160dad808c4c432d46735b1386af6f7c90db5efdd9fb2f8fafaaa0a4"
+    },
+    "studies/rps_null_calibration/results/overview.json": {
+      "study": "null_calibration_20261022",
+      "original_path": "results/overview.json",
+      "sha256": "d1611d460424d2642e9d895c7a4d7815e8c3d2b9877b064df1129c730e32c7d1"
+    },
+    "studies/rps_null_calibration/results/per_game.csv": {
+      "study": "null_calibration_20261022",
+      "original_path": "results/per_game.csv",
+      "sha256": "5971767f82b4f5766f5c37eec93200b1fc525a2958621ef5ff7aef6a0e305782"
+    },
+    "studies/rps_null_calibration/results/power.csv": {
+      "study": "null_calibration_20261022",
+      "original_path": "results/power.csv",
+      "sha256": "fab7423819a92f50de7556afdaabd79c13f7bd9c11de0d452e520d740761dada"
+    },
+    "studies/rps_null_calibration/results/power.pdf": {
+      "study": "null_calibration_20261022",
+      "original_path": "results/power.pdf",
+      "sha256": "9e3081bd461c828e17589c6af0561a8718506084de24d4e906c89c3cf170599d"
+    },
+    "studies/rps_null_calibration/results/power.png": {
+      "study": "null_calibration_20261022",
+      "original_path": "results/power.png",
+      "sha256": "1afb1c1379b050343d1d5ea08601cd22e0e21398c8bb747b1869f9a057be9616"
+    },
+    "studies/rps_null_calibration/results/report.html": {
+      "study": "null_calibration_20261022",
+      "original_path": "results/report.html",
+      "sha256": "1b3b1c3d110acbfd12d354712969a7e941be6fa2f7f28b2f8c11e92573ebd188"
+    },
+    "studies/rps_null_calibration/results/source_style_false_alarm.csv": {
+      "study": "null_calibration_20261022",
+      "original_path": "results/source_style_false_alarm.csv",
+      "sha256": "906730d1d4ff64b2df8e5cd4383881cd4e054a9e42fe4fd04616074a3146c07e"
+    },
+    "studies/rps_null_calibration/results/thresholds.csv": {
+      "study": "null_calibration_20261022",
+      "original_path": "results/thresholds.csv",
+      "sha256": "f8bfb74a508662a6a702cbdc8b2b65714a5bb93fba6ea73d26a80b39011d8330"
+    },
+    "studies/rps_null_calibration/results/validation.json": {
+      "study": "null_calibration_20261022",
+      "original_path": "results/validation.json",
+      "sha256": "3dc9f05cad943dedc279ca49e20f4f2f732e2a6d8c33d5e0c03c3e97bb103aa8"
+    },
+    "studies/auction_null_calibration/PROTOCOL.md": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "PROTOCOL.md",
+      "sha256": "18ab8db87907097145c4bf6978ac31491398861c89db4c317696c2d929b1fe5b"
+    },
+    "studies/auction_null_calibration/provenance/README.original.md": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "README.md",
+      "sha256": "7e21f9f39387e551c4e6acf5f67aed88a4320be8241bb38913860f50d8b9ebd1"
+    },
+    "studies/auction_null_calibration/STATISTICAL_NOTES.md": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "STATISTICAL_NOTES.md",
+      "sha256": "3ad732c370749748fc5bbdf0a85ce2f4c87dd573d5e4b1c8f83c3b77a41d1e47"
+    },
+    "studies/auction_null_calibration/analysis_additions.json": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "analysis_additions.json",
+      "sha256": "3e4b1243f056202690380f4b45176c4a8d9b18a762698607014bbe1835cc1ddf"
+    },
+    "studies/auction_null_calibration/config.json": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "config.json",
+      "sha256": "228ca2cfee2595e0c0db3cd0a6ec9f4c36f77afbcf69f027b74ab81a15fd91e9"
+    },
+    "studies/auction_null_calibration/design_manifest.json": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "design_manifest.json",
+      "sha256": "6765766f58ae002c620fd6459cc2438f4f46ea7841d9c22146f12de666477ec8"
+    },
+    "studies/auction_null_calibration/score_transfer_config.json": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "score_transfer_config.json",
+      "sha256": "29d2061a52c65f8e97eb0095cfe7d19f746996012b1c79cb8507dbf7d9e3c627"
+    },
+    "studies/auction_null_calibration/source_integrity.json": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "source_integrity.json",
+      "sha256": "a19adac0b0cc56464f076ad5d2b1eb1f279a0d9d221649459ca2d861721b895c"
+    },
+    "studies/auction_null_calibration/source_manifest.json": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "source_manifest.json",
+      "sha256": "e1c1e9c988e8315f45a1e7b4a4a943864c5034ca06c52d59d32dc3c240bca05f"
+    },
+    "studies/auction_null_calibration/supplement_config.json": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "supplement_config.json",
+      "sha256": "1ea23a83c872606dc3cc20f32d90d0d34c4ce693fe4ef7de62ad39de2453b7fb"
+    },
+    "studies/auction_null_calibration/code/analyze.py": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "code/analyze.py",
+      "sha256": "95004781a407f4cff6061e42316ba1de9ce57fbb9285c46246db82bc2582905e"
+    },
+    "studies/auction_null_calibration/code/audit.py": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "code/audit.py",
+      "sha256": "ead218af6131342b654864bb20e1f5c8b7be3e8b12caffe41d4a84fdb2bec5da"
+    },
+    "studies/auction_null_calibration/code/build.sh": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "code/build.sh",
+      "sha256": "db94604a2563ac984181bab89464bd5282f8c45809c3e8a2dd289ad678cf2a5e"
+    },
+    "studies/auction_null_calibration/code/core.py": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "code/core.py",
+      "sha256": "d991329566d1d79c31af5c2591f0e68e159e2028ebe3a138ad536d5b1f4a2a0c"
+    },
+    "studies/auction_null_calibration/code/matched_pool.py": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "code/matched_pool.py",
+      "sha256": "a34631ba39aab930fb24883ae869cbdaeeed4d83fdbe2fa88480fc0478c4f5a3"
+    },
+    "studies/auction_null_calibration/code/mi.cpp": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "code/mi.cpp",
+      "sha256": "f15711a1e6759c3ad71278ea2946fd0ff0e397fe1406f4f6f06dbc63b23c4066"
+    },
+    "studies/auction_null_calibration/code/prepare.py": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "code/prepare.py",
+      "sha256": "f9f576ef9da2fa22cd6af8fd8f2b7e3bf86993c871c719c9255b8efe75e67af8"
+    },
+    "studies/auction_null_calibration/code/reproduce.sh": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "code/reproduce.sh",
+      "sha256": "c0c41666f0192310f830b7be1bebecd3ee77c2fe78d09b89d5c3180d68c58770"
+    },
+    "studies/auction_null_calibration/code/run.py": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "code/run.py",
+      "sha256": "9e0e77e388ea11fc72bd15ca1eab53130494bb0f0cc37002d5e7315ac41c277f"
+    },
+    "studies/auction_null_calibration/code/score_transfer.py": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "code/score_transfer.py",
+      "sha256": "253b267333985e7f7f16b3e860f64966412613c4a65752a0aea7c3920de0d631"
+    },
+    "studies/auction_null_calibration/code/validate.py": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "code/validate.py",
+      "sha256": "1432d858233b956ef81cfd7548163b771a8e9b6713f1342c9407d9fb6fdd6485"
+    },
+    "studies/auction_null_calibration/source_snapshot/README.md": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "source_snapshot/README.md",
+      "sha256": "8802dcfd204885c26dce9b6fed2fa5e68cd948d9f8dfc252b01a5250fb36fda9"
+    },
+    "studies/auction_null_calibration/source_snapshot/build_report.py": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "source_snapshot/build_report.py",
+      "sha256": "04f6dc711d8247641596a8f66429258759180e6285276bf0f0646f66e817b3b9"
+    },
+    "studies/auction_null_calibration/source_snapshot/fetch_data.py": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "source_snapshot/fetch_data.py",
+      "sha256": "4d3dd604d7cda58b2d19aebb7bf9161e1e70c3cd35ac92fcfab5c2fef616c038"
+    },
+    "studies/auction_null_calibration/source_snapshot/information.py": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "source_snapshot/information.py",
+      "sha256": "1322b060c0da4524287db06226b3df374a130f312881bf739091d48fbb6e41e4"
+    },
+    "studies/auction_null_calibration/source_snapshot/ingest.py": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "source_snapshot/ingest.py",
+      "sha256": "61b5979bc2e5abd4b6144b11057e87c987936c20715d4e2329787f62338b3940"
+    },
+    "studies/auction_null_calibration/source_snapshot/run_analysis.py": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "source_snapshot/run_analysis.py",
+      "sha256": "775183bd1721cdb4be75dc8c4ce06483ac1e41d25a1c8322d23c400d0bac6d71"
+    },
+    "studies/auction_null_calibration/source_snapshot/test_information.py": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "source_snapshot/test_information.py",
+      "sha256": "1be568e8bff79dbee70e9e29216511d429345e6b70d76404d0518db3b58be9c3"
+    },
+    "studies/auction_null_calibration/source_snapshot/validate_synthetic.py": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "source_snapshot/validate_synthetic.py",
+      "sha256": "8a49ab1ea531790f1ce521dc4152d400c13a3f8adfb9f05b45388cf1e25bdeb7"
+    },
+    "studies/auction_null_calibration/results/INTERPRETATION.md": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "results/INTERPRETATION.md",
+      "sha256": "3f7ebeb3c65ad6ac4913c21d7359b8c24a69967a39dcd931a2faaccba1e4e869"
+    },
+    "studies/auction_null_calibration/results/REPORT.md": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "results/REPORT.md",
+      "sha256": "50faa247c460df677e187e59fa827c0ebd40490c05a0274736731ac156519f0c"
+    },
+    "studies/auction_null_calibration/results/audit.json": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "results/audit.json",
+      "sha256": "0ce79a4967a4ceeb07c0a20a24a8d3a5a653cc77b6a015a24b03b3626fe711d9"
+    },
+    "studies/auction_null_calibration/results/benchmark.pdf": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "results/benchmark.pdf",
+      "sha256": "9e175d6c04255fe9608630340ccf3d295548b02822da4bc05bfe72c47f3b0575"
+    },
+    "studies/auction_null_calibration/results/benchmark.png": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "results/benchmark.png",
+      "sha256": "acd151afedbf595eeb53b443d5f694fc406c509762fc7d648cc91d60b19251f4"
+    },
+    "studies/auction_null_calibration/results/benchmark_calibrated_false_alarm.csv": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "results/benchmark_calibrated_false_alarm.csv",
+      "sha256": "353518d37adce99651a6c27419cb1bca23f8e1e3e3878eca219675e5026f4645"
+    },
+    "studies/auction_null_calibration/results/benchmark_false_alarm.csv": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "results/benchmark_false_alarm.csv",
+      "sha256": "8bbe0872a223d0bd9dc51187f40ecaa0bb3c718c97e71c2b66144970d60f1110"
+    },
+    "studies/auction_null_calibration/results/benchmark_score_calibrated_false_alarm.csv": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "results/benchmark_score_calibrated_false_alarm.csv",
+      "sha256": "e800181e6df4a648684a1ec72143455ac8f1f54d643c475ab9122585ee562eca"
+    },
+    "studies/auction_null_calibration/results/cases.json": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "results/cases.json",
+      "sha256": "03baccb87b04085bebd93390a6af3f020010dfa01e4fc7915eef62ecc47a8d0c"
+    },
+    "studies/auction_null_calibration/results/copy_power.csv": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "results/copy_power.csv",
+      "sha256": "784f7df3fdde614ff980984188d8030a770759f5b2e1faa29b49ff89901a01de"
+    },
+    "studies/auction_null_calibration/results/copy_power.png": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "results/copy_power.png",
+      "sha256": "025ae7a1733e4ccff55fa32c993e8d1f29a92239424fff9a0e5f77928815842b"
+    },
+    "studies/auction_null_calibration/results/distinct_donor_diagnostic.csv": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "results/distinct_donor_diagnostic.csv",
+      "sha256": "6f04374a13cb961525678d2421563468624dc44337a3efaf822bac6325cf3582"
+    },
+    "studies/auction_null_calibration/results/environment.json": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "results/environment.json",
+      "sha256": "5cdb783dae1d0addcce7862aaac8de8fe11ff6ba19a49c627eeda7276e3f5c9d"
+    },
+    "studies/auction_null_calibration/results/episodes.csv": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "results/episodes.csv",
+      "sha256": "d7734423fad4e8e027f1f99b59ca4f20f2f1a1a001d688cb94b19e08d3141386"
+    },
+    "studies/auction_null_calibration/results/market_rounds.csv": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "results/market_rounds.csv",
+      "sha256": "f9eaa1d0c2c961c464bebd25a2384140ee073e93a08fd3096e0ae99bde7d1891"
+    },
+    "studies/auction_null_calibration/results/matched_pool_transfer.csv": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "results/matched_pool_transfer.csv",
+      "sha256": "df2e017438edaa73adc7f73457fd33d86ce13c08df136bb0a5ad41310a201e94"
+    },
+    "studies/auction_null_calibration/results/overview.json": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "results/overview.json",
+      "sha256": "aa7359f911fa4c2eaf18e89ce85c0d21b44fabc23441a3016b71e09762bb8ead"
+    },
+    "studies/auction_null_calibration/results/p_saturation.csv": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "results/p_saturation.csv",
+      "sha256": "116bc274fb477de0510b8cd4f609c8b5aa7ea6fb149ab7ea67c3704521031720"
+    },
+    "studies/auction_null_calibration/results/parse_audit.json": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "results/parse_audit.json",
+      "sha256": "3c0a0cae164406833017480f0583295396869323fcbc517dd27e98c3eb227391"
+    },
+    "studies/auction_null_calibration/results/per_game.csv": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "results/per_game.csv",
+      "sha256": "c8d085c88ce354370b9b227288ea3eab72a6404c3153b76c0ba07c60115b415e"
+    },
+    "studies/auction_null_calibration/results/pool.npz": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "results/pool.npz",
+      "sha256": "21f852d2ac4ead5626c0a175a724da2cc2d7b4d08e70ae213655e7ad0be3f2b6"
+    },
+    "studies/auction_null_calibration/results/pool_provenance.json": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "results/pool_provenance.json",
+      "sha256": "19a0c9d73fc1568bc47f57d2a282a62a7777a378c379403854df579cbee18c03"
+    },
+    "studies/auction_null_calibration/results/real_condition_summary.csv": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "results/real_condition_summary.csv",
+      "sha256": "66f41d25125bdd7b1296b7c3f0a23a726e8d70ad156014ebc51547aecac64a24"
+    },
+    "studies/auction_null_calibration/results/real_flags.csv": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "results/real_flags.csv",
+      "sha256": "bed63dd12f732298f58e998a5e6af3d7129bf910c6ba93d7d7bb851e09ecbd2f"
+    },
+    "studies/auction_null_calibration/results/report.html": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "results/report.html",
+      "sha256": "c1e009ebc7bcb67f613a4fc467243ecf233ac17e0260113fb69ceb618bfaff77"
+    },
+    "studies/auction_null_calibration/results/seller_actions.csv": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "results/seller_actions.csv",
+      "sha256": "ef8a65d3800d06d89978e5aba5d0a7d5a380886f7820f742fe1ba0c9563f4061"
+    },
+    "studies/auction_null_calibration/results/source_score_transfer.csv": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "results/source_score_transfer.csv",
+      "sha256": "dc0292dccd485c221be4bc22e61e72da45e2c14f3b6e9c83fa4b254a92322e96"
+    },
+    "studies/auction_null_calibration/results/state_audit.json": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "results/state_audit.json",
+      "sha256": "256f1e3f94cf5ed4fa38e262af08deff239eaefaeaddb901f5f10ac31eb41a6f"
+    },
+    "studies/auction_null_calibration/results/state_occupancy.csv": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "results/state_occupancy.csv",
+      "sha256": "686b58b1098845261aa881804e541dec432ae782eea6d3480cc74b12180b4d68"
+    },
+    "studies/auction_null_calibration/results/transfer.pdf": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "results/transfer.pdf",
+      "sha256": "a88ce1cc2d143442bf01effdd8a6d70a974fccfc709e10c60a21999fdc5745b9"
+    },
+    "studies/auction_null_calibration/results/transfer.png": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "results/transfer.png",
+      "sha256": "5c9cf15ca06f985b1c2bea4f222080433c24eb4c466a2f587621063b2dba6b23"
+    },
+    "studies/auction_null_calibration/results/transfer_false_alarm.csv": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "results/transfer_false_alarm.csv",
+      "sha256": "6269dfc09eae037720b4307c12d3a804ac58a2e3d57ce615ba350c89cbf9ca35"
+    },
+    "studies/auction_null_calibration/results/validation.json": {
+      "study": "auction_null_calibration_20261023",
+      "original_path": "results/validation.json",
+      "sha256": "6961d75636446cbc10da36e27f1a9d6d7273e6b192fa4b065aff8f6fccc506ae"
+    }
+  }
+}

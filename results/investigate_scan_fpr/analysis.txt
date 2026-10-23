@@ -1,0 +1,8 @@
+level of the rule at B = 200: 5.45%
+level of the rule at B = 1000: 5.09%
+V1-V3 pooled scan: 154/3000 = 5.13% [4.40, 5.98]
+V1-V3 pooled bh: 232/3000 = 7.73% [6.83, 8.74]
+V0: chi2 uniformity of scan p-value deciles = 27.2 (df 9, 95% critical value 16.9)
+V1: chi2 uniformity of scan p-value deciles = 6.5 (df 9, 95% critical value 16.9)
+V2: chi2 uniformity of scan p-value deciles = 5.6 (df 9, 95% critical value 16.9)
+V3: chi2 uniformity of scan p-value deciles = 10.9 (df 9, 95% critical value 16.9)

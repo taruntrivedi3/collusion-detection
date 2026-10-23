@@ -1,0 +1,601 @@
+n,structure,cp,rounds,rep,seed,B,detector,found,n_planted,detected,exact,exact_first,recovered,best_jacc,false_coal,false_disjoint
+5,triangle,0.1,300,10,4208458749,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,10,4208458749,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,10,4208458749,1000,edge_bh,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,10,4208458749,1000,node_score,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,10,4208458749,1000,subgraph,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,10,4208458749,1000,subgraph_grow,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,13,1532316951,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,13,1532316951,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,13,1532316951,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,13,1532316951,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,13,1532316951,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,13,1532316951,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,12,2048714742,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,12,2048714742,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,12,2048714742,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,12,2048714742,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,12,2048714742,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,12,2048714742,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,4,2339382053,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,4,2339382053,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,4,2339382053,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,4,2339382053,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,4,2339382053,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,4,2339382053,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,6,1498866534,1000,bonjour,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,6,1498866534,1000,bonjour_cal,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,6,1498866534,1000,edge_bh,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,6,1498866534,1000,node_score,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,6,1498866534,1000,subgraph,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,6,1498866534,1000,subgraph_grow,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,11,2002539216,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,11,2002539216,1000,bonjour_cal,"[[0, 3]]",1,True,False,0.0,0.0,0.25,1,0
+5,triangle,0.1,300,11,2002539216,1000,edge_bh,"[[0, 3]]",1,True,False,0.0,0.0,0.25,1,0
+5,triangle,0.1,300,11,2002539216,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,11,2002539216,1000,subgraph,"[[0, 3]]",1,True,False,0.0,0.0,0.25,1,0
+5,triangle,0.1,300,11,2002539216,1000,subgraph_grow,"[[0, 3]]",1,True,False,0.0,0.0,0.25,1,0
+5,triangle,0.1,300,2,1860226189,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,2,1860226189,1000,bonjour_cal,"[[0, 1]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,2,1860226189,1000,edge_bh,"[[0, 1]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,2,1860226189,1000,node_score,"[[0, 1]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,2,1860226189,1000,subgraph,"[[0, 1]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,2,1860226189,1000,subgraph_grow,"[[0, 1]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,8,3560793184,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,8,3560793184,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,8,3560793184,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,8,3560793184,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,8,3560793184,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,8,3560793184,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,5,3098620382,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,5,3098620382,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,5,3098620382,1000,edge_bh,"[[0, 3]]",1,True,False,0.0,0.0,0.25,1,0
+5,triangle,0.1,300,5,3098620382,1000,node_score,"[[0, 3]]",1,True,False,0.0,0.0,0.25,1,0
+5,triangle,0.1,300,5,3098620382,1000,subgraph,"[[0, 3]]",1,True,False,0.0,0.0,0.25,1,0
+5,triangle,0.1,300,5,3098620382,1000,subgraph_grow,"[[0, 3]]",1,True,False,0.0,0.0,0.25,1,0
+5,triangle,0.1,300,3,345467912,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,3,345467912,1000,bonjour_cal,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,3,345467912,1000,edge_bh,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,3,345467912,1000,node_score,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,3,345467912,1000,subgraph,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,3,345467912,1000,subgraph_grow,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,15,301543700,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,15,301543700,1000,bonjour_cal,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,15,301543700,1000,edge_bh,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,15,301543700,1000,node_score,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,15,301543700,1000,subgraph,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,15,301543700,1000,subgraph_grow,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,1,2772282872,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,1,2772282872,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,1,2772282872,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,1,2772282872,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,1,2772282872,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,1,2772282872,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,7,3087706835,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,7,3087706835,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,7,3087706835,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,7,3087706835,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,7,3087706835,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,7,3087706835,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,0,3788079801,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,0,3788079801,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,0,3788079801,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,0,3788079801,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,0,3788079801,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,0,3788079801,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,14,298837167,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,14,298837167,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,14,298837167,1000,edge_bh,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,14,298837167,1000,node_score,[[2]],1,True,False,0.0,0.0,0.3333333333333333,1,0
+5,triangle,0.1,300,14,298837167,1000,subgraph,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,14,298837167,1000,subgraph_grow,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,9,2685918713,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,9,2685918713,1000,bonjour_cal,"[[0, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,9,2685918713,1000,edge_bh,"[[0, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,9,2685918713,1000,node_score,"[[0, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,9,2685918713,1000,subgraph,"[[0, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,9,2685918713,1000,subgraph_grow,"[[0, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,16,736861669,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,16,736861669,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,16,736861669,1000,edge_bh,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,16,736861669,1000,node_score,[[0]],1,True,False,0.0,0.0,0.3333333333333333,1,0
+5,triangle,0.1,300,16,736861669,1000,subgraph,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,16,736861669,1000,subgraph_grow,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,21,1970997604,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,21,1970997604,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,21,1970997604,1000,edge_bh,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,21,1970997604,1000,node_score,"[[0, 1]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,21,1970997604,1000,subgraph,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,21,1970997604,1000,subgraph_grow,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,17,2496553858,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,17,2496553858,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,17,2496553858,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,17,2496553858,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,17,2496553858,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,17,2496553858,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,19,2878664830,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,19,2878664830,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,19,2878664830,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,19,2878664830,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,19,2878664830,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,19,2878664830,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,18,781430691,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,18,781430691,1000,bonjour_cal,"[[0, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,18,781430691,1000,edge_bh,"[[0, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,18,781430691,1000,node_score,[[0]],1,True,False,0.0,0.0,0.3333333333333333,1,0
+5,triangle,0.1,300,18,781430691,1000,subgraph,"[[0, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,18,781430691,1000,subgraph_grow,"[[0, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,23,3795319191,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,23,3795319191,1000,bonjour_cal,"[[0, 1]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,23,3795319191,1000,edge_bh,"[[0, 1]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,23,3795319191,1000,node_score,[[0]],1,True,False,0.0,0.0,0.3333333333333333,1,0
+5,triangle,0.1,300,23,3795319191,1000,subgraph,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,23,3795319191,1000,subgraph_grow,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,24,969894555,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,24,969894555,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,24,969894555,1000,edge_bh,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,24,969894555,1000,node_score,[[2]],1,True,False,0.0,0.0,0.3333333333333333,1,0
+5,triangle,0.1,300,24,969894555,1000,subgraph,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,24,969894555,1000,subgraph_grow,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,25,2416153869,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,25,2416153869,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,25,2416153869,1000,edge_bh,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,25,2416153869,1000,node_score,[[0]],1,True,False,0.0,0.0,0.3333333333333333,1,0
+5,triangle,0.1,300,25,2416153869,1000,subgraph,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,25,2416153869,1000,subgraph_grow,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,26,3724355596,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,26,3724355596,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,26,3724355596,1000,edge_bh,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,26,3724355596,1000,node_score,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,26,3724355596,1000,subgraph,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,26,3724355596,1000,subgraph_grow,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,20,448626984,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,20,448626984,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,20,448626984,1000,edge_bh,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,20,448626984,1000,node_score,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,20,448626984,1000,subgraph,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,20,448626984,1000,subgraph_grow,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,29,262428925,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,29,262428925,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,29,262428925,1000,edge_bh,"[[0, 1, 2, 4]]",1,True,False,0.0,0.0,0.75,1,0
+5,triangle,0.1,300,29,262428925,1000,node_score,"[[0, 1, 2, 4]]",1,True,False,0.0,0.0,0.75,1,0
+5,triangle,0.1,300,29,262428925,1000,subgraph,"[[0, 1, 2, 4]]",1,True,False,0.0,0.0,0.75,1,0
+5,triangle,0.1,300,29,262428925,1000,subgraph_grow,"[[0, 1, 2, 4]]",1,True,False,0.0,0.0,0.75,1,0
+5,triangle,0.1,300,22,605825224,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,22,605825224,1000,bonjour_cal,"[[0, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,22,605825224,1000,edge_bh,"[[0, 2], [3, 4]]",1,True,False,0.0,0.0,0.6666666666666666,2,1
+5,triangle,0.1,300,22,605825224,1000,node_score,"[[0, 2, 4]]",1,True,False,0.0,0.0,0.5,1,0
+5,triangle,0.1,300,22,605825224,1000,subgraph,"[[0, 2], [3, 4]]",1,True,False,0.0,0.0,0.6666666666666666,2,1
+5,triangle,0.1,300,22,605825224,1000,subgraph_grow,"[[0, 2], [3, 4]]",1,True,False,0.0,0.0,0.6666666666666666,2,1
+5,triangle,0.1,300,27,2051870171,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,27,2051870171,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,27,2051870171,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,27,2051870171,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,27,2051870171,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,27,2051870171,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,28,3698949863,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,28,3698949863,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,28,3698949863,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,28,3698949863,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,28,3698949863,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,28,3698949863,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,32,678338857,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,32,678338857,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,32,678338857,1000,edge_bh,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,32,678338857,1000,node_score,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,32,678338857,1000,subgraph,"[[0, 1, 2], [3, 4]]",1,True,False,1.0,1.0,1.0,1,1
+5,triangle,0.1,300,32,678338857,1000,subgraph_grow,"[[0, 1, 2], [3, 4]]",1,True,False,1.0,1.0,1.0,1,1
+5,triangle,0.1,300,33,3625342409,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,33,3625342409,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,33,3625342409,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,33,3625342409,1000,node_score,[[0]],1,True,False,0.0,0.0,0.3333333333333333,1,0
+5,triangle,0.1,300,33,3625342409,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,33,3625342409,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,34,3111657526,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,34,3111657526,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,34,3111657526,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,34,3111657526,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,34,3111657526,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,34,3111657526,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,35,1690437826,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,35,1690437826,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,35,1690437826,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,35,1690437826,1000,node_score,[[0]],1,True,False,0.0,0.0,0.3333333333333333,1,0
+5,triangle,0.1,300,35,1690437826,1000,subgraph,"[[0, 2, 3]]",1,True,False,0.0,0.0,0.5,1,0
+5,triangle,0.1,300,35,1690437826,1000,subgraph_grow,"[[0, 2, 3]]",1,True,False,0.0,0.0,0.5,1,0
+5,triangle,0.1,300,37,253028670,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,37,253028670,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,37,253028670,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,37,253028670,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,37,253028670,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,37,253028670,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,36,1055664809,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,36,1055664809,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,36,1055664809,1000,edge_bh,"[[0, 1, 2, 3]]",1,True,False,0.0,0.0,0.75,1,0
+5,triangle,0.1,300,36,1055664809,1000,node_score,[[1]],1,True,False,0.0,0.0,0.3333333333333333,1,0
+5,triangle,0.1,300,36,1055664809,1000,subgraph,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,36,1055664809,1000,subgraph_grow,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,30,480217224,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,30,480217224,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,30,480217224,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,30,480217224,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,30,480217224,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,30,480217224,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,31,4109138001,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,31,4109138001,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,31,4109138001,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,31,4109138001,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,31,4109138001,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,31,4109138001,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,40,3805493608,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,40,3805493608,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,40,3805493608,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,40,3805493608,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,40,3805493608,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,40,3805493608,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,38,117638882,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,38,117638882,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,38,117638882,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,38,117638882,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,38,117638882,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,38,117638882,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,41,1016094442,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,41,1016094442,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,41,1016094442,1000,edge_bh,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,41,1016094442,1000,node_score,[[0]],1,True,False,0.0,0.0,0.3333333333333333,1,0
+5,triangle,0.1,300,41,1016094442,1000,subgraph,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,41,1016094442,1000,subgraph_grow,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,39,2328676624,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,39,2328676624,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,39,2328676624,1000,edge_bh,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,39,2328676624,1000,node_score,"[[0, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,39,2328676624,1000,subgraph,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,39,2328676624,1000,subgraph_grow,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,42,1154407369,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,42,1154407369,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,42,1154407369,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,42,1154407369,1000,node_score,[[1]],1,True,False,0.0,0.0,0.3333333333333333,1,0
+5,triangle,0.1,300,42,1154407369,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,42,1154407369,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,43,591012953,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,43,591012953,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,43,591012953,1000,edge_bh,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,43,591012953,1000,node_score,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,43,591012953,1000,subgraph,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,43,591012953,1000,subgraph_grow,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,44,2662883853,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,44,2662883853,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,44,2662883853,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,44,2662883853,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,44,2662883853,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,44,2662883853,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,45,3032300543,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,45,3032300543,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,45,3032300543,1000,edge_bh,"[[0, 1, 2, 4]]",1,True,False,0.0,0.0,0.75,1,0
+5,triangle,0.1,300,45,3032300543,1000,node_score,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,45,3032300543,1000,subgraph,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,45,3032300543,1000,subgraph_grow,"[[0, 1, 2, 4]]",1,True,False,0.0,0.0,0.75,1,0
+5,triangle,0.1,300,46,4240258805,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,46,4240258805,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,46,4240258805,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,46,4240258805,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,46,4240258805,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,46,4240258805,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,47,2740160422,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,47,2740160422,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,47,2740160422,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,47,2740160422,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,47,2740160422,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,47,2740160422,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,49,167327111,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,49,167327111,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,49,167327111,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,49,167327111,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,49,167327111,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,49,167327111,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,48,3088778628,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,48,3088778628,1000,bonjour_cal,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,48,3088778628,1000,edge_bh,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,48,3088778628,1000,node_score,[[1]],1,True,False,0.0,0.0,0.3333333333333333,1,0
+5,triangle,0.1,300,48,3088778628,1000,subgraph,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,48,3088778628,1000,subgraph_grow,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,51,1458738268,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,51,1458738268,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,51,1458738268,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,51,1458738268,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,51,1458738268,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,51,1458738268,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,50,3399651758,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,50,3399651758,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,50,3399651758,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,50,3399651758,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,50,3399651758,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,50,3399651758,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,56,2724010442,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,56,2724010442,1000,bonjour_cal,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,56,2724010442,1000,edge_bh,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,56,2724010442,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,56,2724010442,1000,subgraph,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,56,2724010442,1000,subgraph_grow,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,52,1568486545,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,52,1568486545,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,52,1568486545,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,52,1568486545,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,52,1568486545,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,52,1568486545,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,55,2171037257,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,55,2171037257,1000,bonjour_cal,"[[0, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,55,2171037257,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,55,2171037257,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,55,2171037257,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,55,2171037257,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,53,3884958247,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,53,3884958247,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,53,3884958247,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,53,3884958247,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,53,3884958247,1000,subgraph,"[[0, 1, 4]]",1,True,False,0.0,0.0,0.5,1,0
+5,triangle,0.1,300,53,3884958247,1000,subgraph_grow,"[[0, 1, 4]]",1,True,False,0.0,0.0,0.5,1,0
+5,triangle,0.1,300,54,945555488,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,54,945555488,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,54,945555488,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,54,945555488,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,54,945555488,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,54,945555488,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,57,3770779645,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,57,3770779645,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,57,3770779645,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,57,3770779645,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,57,3770779645,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,57,3770779645,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,59,3612607895,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,59,3612607895,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,59,3612607895,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,59,3612607895,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,59,3612607895,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,59,3612607895,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,60,3040790071,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,60,3040790071,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,60,3040790071,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,60,3040790071,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,60,3040790071,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,60,3040790071,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,58,3773546691,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,58,3773546691,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,58,3773546691,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,58,3773546691,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,58,3773546691,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,58,3773546691,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,61,3209367285,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,61,3209367285,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,61,3209367285,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,61,3209367285,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,61,3209367285,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,61,3209367285,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,62,2450975940,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,62,2450975940,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,62,2450975940,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,62,2450975940,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,62,2450975940,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,62,2450975940,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,63,994366428,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,63,994366428,1000,bonjour_cal,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,63,994366428,1000,edge_bh,"[[0, 1, 2, 4]]",1,True,False,0.0,0.0,0.75,1,0
+5,triangle,0.1,300,63,994366428,1000,node_score,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,63,994366428,1000,subgraph,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,63,994366428,1000,subgraph_grow,"[[0, 1, 2, 3, 4]]",1,True,False,0.0,0.0,0.6,1,0
+5,triangle,0.1,300,64,1529319547,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,64,1529319547,1000,bonjour_cal,"[[0, 1]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,64,1529319547,1000,edge_bh,"[[0, 1]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,64,1529319547,1000,node_score,"[[0, 1]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,64,1529319547,1000,subgraph,"[[0, 1]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,64,1529319547,1000,subgraph_grow,"[[0, 1]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,66,1938311289,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,66,1938311289,1000,bonjour_cal,"[[0, 1]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,66,1938311289,1000,edge_bh,"[[0, 1]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,66,1938311289,1000,node_score,[[0]],1,True,False,0.0,0.0,0.3333333333333333,1,0
+5,triangle,0.1,300,66,1938311289,1000,subgraph,"[[0, 1]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,66,1938311289,1000,subgraph_grow,"[[0, 1]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,65,703240024,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,65,703240024,1000,bonjour_cal,"[[3, 4]]",1,True,False,0.0,0.0,0.0,1,1
+5,triangle,0.1,300,65,703240024,1000,edge_bh,"[[3, 4]]",1,True,False,0.0,0.0,0.0,1,1
+5,triangle,0.1,300,65,703240024,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,65,703240024,1000,subgraph,"[[3, 4]]",1,True,False,0.0,0.0,0.0,1,1
+5,triangle,0.1,300,65,703240024,1000,subgraph_grow,"[[3, 4]]",1,True,False,0.0,0.0,0.0,1,1
+5,triangle,0.1,300,67,3348713717,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,67,3348713717,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,67,3348713717,1000,edge_bh,"[[0, 1]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,67,3348713717,1000,node_score,"[[0, 1]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,67,3348713717,1000,subgraph,"[[0, 1]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,67,3348713717,1000,subgraph_grow,"[[0, 1]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,71,2014180320,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,71,2014180320,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,71,2014180320,1000,edge_bh,"[[0, 1]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,71,2014180320,1000,node_score,[[1]],1,True,False,0.0,0.0,0.3333333333333333,1,0
+5,triangle,0.1,300,71,2014180320,1000,subgraph,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,71,2014180320,1000,subgraph_grow,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,69,3311907210,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,69,3311907210,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,69,3311907210,1000,edge_bh,"[[0, 4]]",1,True,False,0.0,0.0,0.25,1,0
+5,triangle,0.1,300,69,3311907210,1000,node_score,[[0]],1,True,False,0.0,0.0,0.3333333333333333,1,0
+5,triangle,0.1,300,69,3311907210,1000,subgraph,"[[0, 4]]",1,True,False,0.0,0.0,0.25,1,0
+5,triangle,0.1,300,69,3311907210,1000,subgraph_grow,"[[0, 4]]",1,True,False,0.0,0.0,0.25,1,0
+5,triangle,0.1,300,68,2941737566,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,68,2941737566,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,68,2941737566,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,68,2941737566,1000,node_score,[[1]],1,True,False,0.0,0.0,0.3333333333333333,1,0
+5,triangle,0.1,300,68,2941737566,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,68,2941737566,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,70,2595840472,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,70,2595840472,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,70,2595840472,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,70,2595840472,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,70,2595840472,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,70,2595840472,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,72,4212340628,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,72,4212340628,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,72,4212340628,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,72,4212340628,1000,node_score,[[0]],1,True,False,0.0,0.0,0.3333333333333333,1,0
+5,triangle,0.1,300,72,4212340628,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,72,4212340628,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,74,1060419187,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,74,1060419187,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,74,1060419187,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,74,1060419187,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,74,1060419187,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,74,1060419187,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,73,1043459970,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,73,1043459970,1000,bonjour_cal,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,73,1043459970,1000,edge_bh,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,73,1043459970,1000,node_score,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,73,1043459970,1000,subgraph,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,73,1043459970,1000,subgraph_grow,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,75,9601420,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,75,9601420,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,75,9601420,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,75,9601420,1000,node_score,[[1]],1,True,False,0.0,0.0,0.3333333333333333,1,0
+5,triangle,0.1,300,75,9601420,1000,subgraph,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,75,9601420,1000,subgraph_grow,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,76,1903231945,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,76,1903231945,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,76,1903231945,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,76,1903231945,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,76,1903231945,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,76,1903231945,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,77,2563895129,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,77,2563895129,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,77,2563895129,1000,edge_bh,"[[0, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,77,2563895129,1000,node_score,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,77,2563895129,1000,subgraph,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,77,2563895129,1000,subgraph_grow,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,78,620775273,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,78,620775273,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,78,620775273,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,78,620775273,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,78,620775273,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,78,620775273,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,79,775846769,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,79,775846769,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,79,775846769,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,79,775846769,1000,node_score,[[0]],1,True,False,0.0,0.0,0.3333333333333333,1,0
+5,triangle,0.1,300,79,775846769,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,79,775846769,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,80,3114039256,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,80,3114039256,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,80,3114039256,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,80,3114039256,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,80,3114039256,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,80,3114039256,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,82,1014814030,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,82,1014814030,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,82,1014814030,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,82,1014814030,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,82,1014814030,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,82,1014814030,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,84,3961472455,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,84,3961472455,1000,bonjour_cal,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,84,3961472455,1000,edge_bh,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,84,3961472455,1000,node_score,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,84,3961472455,1000,subgraph,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,84,3961472455,1000,subgraph_grow,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,85,2243510568,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,85,2243510568,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,85,2243510568,1000,edge_bh,"[[0, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,85,2243510568,1000,node_score,[[2]],1,True,False,0.0,0.0,0.3333333333333333,1,0
+5,triangle,0.1,300,85,2243510568,1000,subgraph,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,85,2243510568,1000,subgraph_grow,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,86,657584506,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,86,657584506,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,86,657584506,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,86,657584506,1000,node_score,"[[0, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,86,657584506,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,86,657584506,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,83,4115517799,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,83,4115517799,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,83,4115517799,1000,edge_bh,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,83,4115517799,1000,node_score,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,83,4115517799,1000,subgraph,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,83,4115517799,1000,subgraph_grow,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,89,3646751567,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,89,3646751567,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,89,3646751567,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,89,3646751567,1000,node_score,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,89,3646751567,1000,subgraph,"[[0, 1, 2, 3]]",1,True,False,0.0,0.0,0.75,1,0
+5,triangle,0.1,300,89,3646751567,1000,subgraph_grow,"[[0, 1, 2, 3]]",1,True,False,0.0,0.0,0.75,1,0
+5,triangle,0.1,300,87,1089705842,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,87,1089705842,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,87,1089705842,1000,edge_bh,"[[0, 1, 2, 4]]",1,True,False,0.0,0.0,0.75,1,0
+5,triangle,0.1,300,87,1089705842,1000,node_score,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,87,1089705842,1000,subgraph,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,87,1089705842,1000,subgraph_grow,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,88,4265509977,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,88,4265509977,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,88,4265509977,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,88,4265509977,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,88,4265509977,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,88,4265509977,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,90,3464379507,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,90,3464379507,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,90,3464379507,1000,edge_bh,"[[1, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,90,3464379507,1000,node_score,[[1]],1,True,False,0.0,0.0,0.3333333333333333,1,0
+5,triangle,0.1,300,90,3464379507,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,90,3464379507,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,91,437041131,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,91,437041131,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,91,437041131,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,91,437041131,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,91,437041131,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,91,437041131,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,81,1378522963,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,81,1378522963,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,81,1378522963,1000,edge_bh,"[[0, 2]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,81,1378522963,1000,node_score,[[0]],1,True,False,0.0,0.0,0.3333333333333333,1,0
+5,triangle,0.1,300,81,1378522963,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,81,1378522963,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,92,1087279572,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,92,1087279572,1000,bonjour_cal,"[[0, 1]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,92,1087279572,1000,edge_bh,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,92,1087279572,1000,node_score,"[[0, 1]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,92,1087279572,1000,subgraph,"[[0, 1]]",1,True,False,0.0,0.0,0.6666666666666666,1,0
+5,triangle,0.1,300,92,1087279572,1000,subgraph_grow,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,94,3673093915,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,94,3673093915,1000,bonjour_cal,"[[3, 4]]",1,True,False,0.0,0.0,0.0,1,1
+5,triangle,0.1,300,94,3673093915,1000,edge_bh,"[[1, 2], [3, 4]]",1,True,False,0.0,0.0,0.6666666666666666,2,1
+5,triangle,0.1,300,94,3673093915,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,94,3673093915,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,94,3673093915,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,95,2760822243,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,95,2760822243,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,95,2760822243,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,95,2760822243,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,95,2760822243,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,95,2760822243,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,93,2734527028,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,93,2734527028,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,93,2734527028,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,93,2734527028,1000,node_score,[[2]],1,True,False,0.0,0.0,0.3333333333333333,1,0
+5,triangle,0.1,300,93,2734527028,1000,subgraph,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,93,2734527028,1000,subgraph_grow,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,96,3324690150,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,96,3324690150,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,96,3324690150,1000,edge_bh,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,96,3324690150,1000,node_score,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,96,3324690150,1000,subgraph,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,96,3324690150,1000,subgraph_grow,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,98,475037346,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,98,475037346,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,98,475037346,1000,edge_bh,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,98,475037346,1000,node_score,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,98,475037346,1000,subgraph,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,98,475037346,1000,subgraph_grow,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,97,2273640025,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,97,2273640025,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,97,2273640025,1000,edge_bh,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,97,2273640025,1000,node_score,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,97,2273640025,1000,subgraph,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,97,2273640025,1000,subgraph_grow,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,99,2731252255,1000,bonjour,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,99,2731252255,1000,bonjour_cal,[],1,False,False,0.0,0.0,0.0,0,0
+5,triangle,0.1,300,99,2731252255,1000,edge_bh,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,99,2731252255,1000,node_score,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,99,2731252255,1000,subgraph,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0
+5,triangle,0.1,300,99,2731252255,1000,subgraph_grow,"[[0, 1, 2]]",1,True,True,1.0,1.0,1.0,0,0

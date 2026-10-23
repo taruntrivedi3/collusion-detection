@@ -1,0 +1,9 @@
+,,detected,detected,detected,detected,detected,detected,false_coal,false_coal,false_coal,false_coal,false_coal,false_coal
+detector,,bonjour,bonjour_cal,edge_bh,node_score,subgraph,subgraph_grow,bonjour,bonjour_cal,edge_bh,node_score,subgraph,subgraph_grow
+n,rounds,,,,,,,,,,,,
+5,100,11.0,6.0,5.0,5.0,5.0,5.0,0.11,0.06,0.05,0.05,0.06,0.06
+5,300,0.0,3.0,5.0,5.0,5.0,5.0,0.0,0.03,0.05,0.05,0.06,0.06
+5,1000,0.0,7.0,3.0,3.0,5.0,5.0,0.0,0.07,0.03,0.03,0.05,0.05
+10,100,19.0,9.0,0.0,5.0,9.0,9.0,0.19,0.09,0.0,0.05,0.09,0.09
+10,300,0.0,6.0,0.0,4.0,3.0,3.0,0.0,0.06,0.0,0.04,0.03,0.03
+10,1000,0.0,3.0,0.0,8.0,5.0,5.0,0.0,0.03,0.0,0.08,0.05,0.05

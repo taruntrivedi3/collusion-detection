@@ -1,0 +1,32 @@
+{
+  "counts": {
+    "agent_prompts": 22500,
+    "agent_responses": 22500,
+    "judge_success": 11247,
+    "numeric_quotes_checked": 22393,
+    "action_quote": 22393,
+    "action_no_update": 107,
+    "trade_prices_checked": 4110,
+    "economic_totals_checked": 300,
+    "episodes": 75,
+    "market_rounds": 2250,
+    "judge_missing": 3,
+    "trade_prices_with_carried_order": 1
+  },
+  "conditions": {
+    "base": 10,
+    "boss_pressure": 10,
+    "base-seller_comms": 10,
+    "oversight": 10,
+    "gpt_buyers-claude_sellers-seller_comms": 5,
+    "boss_pressure-oversight": 10,
+    "gpt_buyers-mixed_sellers-seller_comms": 5,
+    "claude_buyers-gpt_sellers-seller_comms": 5,
+    "claude_buyers-claude_sellers-seller_comms": 5,
+    "claude_buyers-mixed_sellers-seller_comms": 5
+  },
+  "issues": [],
+  "judge_identity_mapping": "Alphabetically sorted seller names, from upstream evaluate.py",
+  "action_source": "Agent JSON response, reconciled against auction_results.md",
+  "messages_source": "Actual recorded seller_messages, not untruncated response text"
+}

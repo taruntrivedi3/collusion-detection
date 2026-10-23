@@ -1,0 +1,9 @@
+{
+  "timing": "After the prespecified runs and discovery of substantial p-value saturation",
+  "addition": "Rank raw maximum statistics against the existing independent benchmark calibration set, in every state and normalization",
+  "purpose": "Distinguish Monte Carlo p-value quantization from lack of statistical signal",
+  "calibration_groups": 1000,
+  "evaluation_groups": 1000,
+  "new_simulations": 0,
+  "reported_as": "Exploratory empirical_score calibration; original nominal and empirical_p results are retained"
+}

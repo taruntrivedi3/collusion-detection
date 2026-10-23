@@ -1,0 +1,9 @@
+# Python 3.11+, Linux and g++ with C++17 support.
+numpy>=1.26,<3
+scipy>=1.14,<2
+pandas>=2.2,<3
+matplotlib>=3.8,<4
+numba>=0.60,<1
+pytest>=8,<10
+markdown-it-py>=3,<5
+requests>=2.32,<3

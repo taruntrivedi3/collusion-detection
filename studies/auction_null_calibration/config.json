@@ -1,0 +1,58 @@
+{
+  "created_utc": "2026-10-23T02:07:21.415436+00:00",
+  "states": [
+    "none",
+    "thirds",
+    "blocks5",
+    "exact_round"
+  ],
+  "real_states": [
+    "none",
+    "thirds",
+    "blocks5",
+    "phase_trade",
+    "rich_observed",
+    "exact_round"
+  ],
+  "null_draws": 999,
+  "normalization_games": 2000,
+  "calibration_games": 1000,
+  "evaluation_games": 1000,
+  "clone_games": 1000,
+  "transfer_games_per_fold": 500,
+  "folds": [
+    [
+      "20250516_211616_base-1",
+      "20250516_213304_base-2"
+    ],
+    [
+      "20250516_214741_base-3",
+      "20250516_220324_base-4"
+    ],
+    [
+      "20250516_222034_base-5",
+      "20250516_223627_base-6"
+    ],
+    [
+      "20250516_225220_base-7",
+      "20250516_230921_base-8"
+    ],
+    [
+      "20250516_232445_base-9",
+      "20250516_234023_base-10"
+    ]
+  ],
+  "chunk_size": 20,
+  "views": [
+    "direction",
+    "level"
+  ],
+  "candidates": 52,
+  "alpha": 0.05,
+  "seed_scheme": "SeedSequence([2026102307, ...])",
+  "normalizer": "Independent empirical paths, shuffled within state before fitting bank A",
+  "benchmark": "Independent whole seller paths drawn with replacement from the frozen base pool",
+  "clone": "Agents 0,1,2 copy one full random donor path; all marginal path distributions preserved",
+  "source_style": "Additional independent A bank per observed trajectory and surrogate method",
+  "live_llm_runs": 0
+}
