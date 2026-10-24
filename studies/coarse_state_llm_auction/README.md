@@ -1,0 +1,51 @@
+# Coarse-state LLM auction: 2 sellers / 2 buyers, 200 games
+
+Within-state shuffle test for seller collusion in a double auction where every agent sees only a shared,
+coarse summary of the last hour. Report: [report.pdf](report.pdf).
+
+**Result.** With a message channel plus CEO profit-margin pressure, gpt-4.1-mini sellers earn 7.07 per hour
+versus 4.76 with pressure alone and 4.29 with neither. Pooled over 200 games per condition, the test flags
+comms + pressure (CMI z = 5.0, same-move z = 7.9) and stays silent on both controls (|z| ≤ 1.5). Per 20-game
+batch, the same-move statistic detects it in 80% of batches and CMI in 10%.
+
+## Setup
+
+- Two LLM sellers (cost $80) and two scripted buyers (value $100); each hour every agent lowers, keeps or raises
+  its quote by $2; at most one trade per hour, at the midpoint; 30 hours per game.
+- Prompts are built only from the shared state: each seller's last move, who sold, and whether the lowest ask
+  is high or low. No memory, no hour number. In comms conditions sellers also see both of last hour's messages.
+- Conditions: `comms_off`, `pressure_off` (CEO pressure, no channel), `comms_pressure`. Seeds 0–199 each.
+- gpt-4.1-mini, temperature 0.7, 36,000 calls (about $6.35).
+
+## Files
+
+| File | Purpose |
+| --- | --- |
+| `market.py` | Market simulator, coarse state, scripted agents |
+| `stats.py` | CMI, same-move statistic, within-state shuffle test |
+| `llm_pilot.py` | Runs LLM games and writes `games.jsonl` / `calls.jsonl` |
+| `rates.py` | Rejection rates over disjoint 5 / 10 / 20-game batches |
+| `build_report.py` | Recomputes every number and builds `report.pdf` and `detection.png` |
+| `runs/rates_v1/games.jsonl` | All 600 games: per-hour state, actions, messages, quotes, trades |
+| `runs/rates_v1/settings.json` | Arguments used for the run |
+
+Per-call transcripts (`calls.jsonl`) are not included; every action and message is in `games.jsonl`.
+
+## Reproduce
+
+From this directory (standard library only, except `build_report.py`, which needs `reportlab` and `matplotlib`):
+
+```bash
+python3 rates.py runs/rates_v1 cmi          # batch rejection rates, CMI statistic
+python3 rates.py runs/rates_v1 same_moves   # batch rejection rates, same-move statistic
+python3 build_report.py                     # report.pdf + detection.png from the same data
+```
+
+To rerun the games with new LLM calls (results will differ by sampling):
+
+```bash
+python3 llm_pilot.py --seeds 200 --rounds 30 --conditions comms_off,pressure_off,comms_pressure --out runs/rerun
+```
+
+This calls the OpenAI chat-completions API with the key in `OPENAI_API_KEY`. For another compatible endpoint,
+pass `--base-url` (or set `OPENAI_BASE_URL`) and `--api-key-env`.
