@@ -132,7 +132,6 @@ def figure(rates):
         ax.grid(axis="y", color=GRID, lw=0.8)
         ax.spines[["top", "right"]].set_visible(False)
     axes[0].set_ylabel("share of batches flagged (p ≤ 0.05)")
-    axes[1].text(19.6, 0.9, "Comms + CEO pressure", color=INK, fontsize=7.5, ha="right", va="center")
     handles, labels = axes[0].get_legend_handles_labels()
     fig.legend(handles, labels, loc="lower center", ncol=3, frameon=False, fontsize=8, bbox_to_anchor=(0.5, -0.02))
     fig.tight_layout(rect=(0, 0.08, 1, 1))

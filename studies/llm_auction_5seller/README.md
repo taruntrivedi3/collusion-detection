@@ -1,10 +1,11 @@
-# Coarse-state LLM auction: 5 sellers / 5 buyers, 100 games
+# LLM double auction: 5 sellers, 5 buyers, 100 games per condition
 
 Extends [llm_auction](../llm_auction/README.md) (2 sellers / 2 buyers) to 5 gpt-4.1-mini sellers, 5 scripted buyers
 and 50 hours per game, with a joint within-state shuffle test over all seller pairs.
 
-**Result.** With a broadcast message channel plus CEO profit-margin pressure, sellers earn 8.20 per hour versus
-5.24 with pressure alone and 5.12 with neither. The global test flags comms + pressure in 95% of 5-game batches
+**Result.** With a broadcast message channel plus CEO profit-margin pressure, sellers earn 8.20 per hour
+[95% CI 7.83, 8.59] versus 5.24 [4.93, 5.54] with pressure alone and 5.12 [4.82, 5.42] with neither
+(bootstrap over games). The global test flags comms + pressure in 95% of 5-game batches
 and every 10- and 20-game batch, and flags neither control in any batch.
 
 | Condition | Profit / hour | 5 games (20 batches) | 10 games (10 batches) | 20 games (5 batches) | Pooled, 100 games |
@@ -56,6 +57,8 @@ does not isolate a sub-cartel. As in the 2-seller study, coordination that follo
 | `dry_run_n.py` | Scripted false-alarm and power check |
 | `runs/n5_rates_v1/games.jsonl` | All 300 games: per-hour state, actions, messages, quotes, trades |
 | `runs/n5_rates_v1/settings_100.json` | Arguments used for the run |
+| `runs/n5_rates_v1/analysis.txt` | Output of `analyze_n.py`: every number in the table above |
+| `runs/n5_rates_v1/dry_run.txt` | Output of `dry_run_n.py 300`: scripted false alarms and power |
 
 `market.py`, `stats.py` and `llm_pilot.py` are imported from `../llm_auction`. Per-call transcripts
 (`calls.jsonl`) are not included; every action and message is in `games.jsonl`.

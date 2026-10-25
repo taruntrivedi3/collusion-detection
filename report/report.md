@@ -3,8 +3,8 @@ DRAFT report following the Apart Research AI Collusion Sprint (Oct 2026) templat
 Length: ~4 pages excluding references and appendix (hard limit 8).
 Live view in VS Code: Ctrl+K V (built-in preview) or Markdown Preview Enhanced (renders $math$, exports PDF).
 Comments like this one are hidden in the preview. Lines marked TODO need a human decision or check.
-Numbers come from repo main a152513 (results/SUMMARY.md, studies/llm_auction) plus the 5x5 LLM run,
-which is NOT yet in the repo.
+Numbers come from results/SUMMARY.md, studies/llm_auction and studies/llm_auction_5seller
+(runs/n5_rates_v1/analysis.txt, dry_run.txt).
 -->
 
 # Finding Colluding Groups from Players' Moves: Shuffle-Calibrated Group Scans for Multi-Agent and LLM Collusion
@@ -25,8 +25,8 @@ Auditors of multi-agent systems often see only what agents do, not what they say
 information-theoretic detector of Bonjour et al. (2022) flags pairs of players that influence each other
 more than anyone else influences them, but it assumes exactly two colluders. We show that this
 pairwise net-influence score cancels inside groups: in simulated n-player Rock Paper Scissors it found
-0% of planted triangles, cliques and hubs, and its fixed threshold raised up to 43% false alarms with
-no collusion. We propose a group scan that scores every subset of players by the dependence inside it
+0% of planted triangles, cliques and hubs, and its fixed threshold is uncalibrated (8–23% false
+alarms in short games with no collusion). We propose a group scan that scores every subset of players by the dependence inside it
 and calibrates the maximum with a within-state shuffle test. Among 20 players, a 5-player group
 colluding 20% of the time is recovered exactly in 48% of 100-round games, against 5% for the best
 pairwise baseline. The shuffle must condition on what honest players react to: ignoring history
@@ -34,8 +34,8 @@ flags honest players in up to 100% of games, while the right state restores abou
 and still finds a profitable steering coalition in 94–98% of long games. Finally, we build an LLM
 double auction in which every agent sees only a shared coarse state, which makes the shuffle test
 exact. gpt-4.1-mini sellers given a message channel and CEO profit pressure earn 49–65% more than
-controls; the test flags them (2 sellers: 80% of 20-game batches; 5 sellers: 95% of 5-game batches),
-while pooled tests on both controls are not significant.
+controls; a same-move shuffle test flags them (2 sellers: 8 of 10 20-game batches; 5 sellers: 19 of
+20 5-game batches), while pooled tests on both controls are not significant.
 
 ## 1. Introduction
 
@@ -61,7 +61,7 @@ Our main contributions are:
 1. **A failure mode of pairwise net influence.** Inside a group, each member's partners cancel in its
    net-influence score, so the published rule finds 0% of triangles, cliques and hubs, while the
    underlying links are ~200 standard deviations above chance. Its fixed threshold is also
-   uncalibrated (8–43% false alarms with no collusion).
+   uncalibrated (8–23% false alarms in 100-round games with no collusion).
 2. **A shuffle-calibrated group scan.** Scoring every subset by the links inside it, calibrated by
    a max-statistic permutation test, recovers weak, broad groups that pairwise methods miss (48% vs 5%
    exact recovery for a weak 5-clique among 20 players) at a 5% false-alarm level.
@@ -69,7 +69,7 @@ Our main contributions are:
    that react to history are flagged in up to 100% of games unless the shuffle stays within history
    states. With the right state, a coalition whose coordination pays is found in 94–98% of long games
    while honest exploiters with the same reaction rate are flagged in 4–7%.
-4. **An LLM auction where the test is exact, and it works.** By giving every agent only a shared coarse
+4. **An LLM auction where the test is exact by design.** By giving every agent only a shared coarse
    state, conditional independence of honest agents holds by construction. The test detects
    comms + CEO-pressure collusion among gpt-4.1-mini sellers and stays quiet on controls, for 2 and
    for 5 sellers.
@@ -101,8 +101,9 @@ significant pairs into groups. Both are natural baselines that a group scan shou
 calibrated false-alarm rate, and (iii) handles honest agents whose moves are correlated through
 shared history.
 
-<!-- TODO: add 1–2 sentences on scan statistics / max-T multiple testing (e.g. Westfall & Young 1993)
-     and on conditional-independence permutation tests, if space allows. -->
+**Scan statistics and max-T tests.** The group scan is a scan statistic over subsets, calibrated by the
+permutation distribution of its maximum; this controls the family-wise error over all subsets at once
+(Westfall & Young, 1993).
 
 ## 3. Methods
 
@@ -110,7 +111,7 @@ shared history.
 
 Each round every player plays every other player (+1 win, −1 loss); n ∈ {5, 10, 20}; 100–3000 rounds.
 With a *collusion probability* (CP) per round, planted colluders coordinate; otherwise they play
-like honest players. Planted structures: pair and two pairs (a helper feeds its partner a point), hub
+randomly. Planted structures: pair and two pairs (a helper feeds its partner a point), hub
 (one leader, two helpers that never coordinate with each other), triangle / 4-clique / 5-clique (a
 shared secret move), xor (C plays (A + B) mod 3, pairwise invisible), and *steer* (4 players create a
 clear lead, then all play the move that beats the honest players who react to it; coordination pays).
@@ -158,7 +159,7 @@ With LLMs that carry memory or see detailed price paths, no recorded state does 
 therefore **design the market so the state is the agents' entire public input.**
 
 - **Market.** Sellers (cost $80) and scripted buyers (value $100) each hour *lower*, *keep* or *raise*
-  their quote by $2. At most one trade per hour, between the lowest ask and the highest bid, at the
+  their quote by $2 (logged as *tighten*, *hold*, *widen* in the code and data). At most one trade per hour, between the lowest ask and the highest bid, at the
   midpoint. Asks start at $96, bids at $84. Exact prices stay inside the simulator.
 - **Shared state** $S_t$, the only thing in each prompt besides the rules:
   2×2 market (2 sellers, 2 buyers, 30 hours) — each seller's last move, who sold, and whether the
@@ -173,7 +174,8 @@ therefore **design the market so the state is the agents' entire public input.**
 - **Test.** Because every seller's prompt is a function of $S_t$ (and its own name), sellers are
   conditionally independent given $S_t$ unless they coordinate through messages, so the
   within-state shuffle is exact. The statistic is the *same-move count*: rounds in which a pair of
-  sellers took the same action. For 5 sellers we shuffle each seller independently within states and
+  sellers took the same action. We chose it from a 20-game 2×2 pilot, before either main run, and kept
+  it unchanged for 5 sellers. For 5 sellers we shuffle each seller independently within states and
   report a global test (sum over all 10 pairs) and a max-pair test (largest standardized pair, which
   controls family-wise error and localizes the pair). We report rejection rates over disjoint batches
   of 5, 10 and 20 games.
@@ -182,7 +184,8 @@ therefore **design the market so the state is the agents' entire public input.**
  - LLM buyers drove bids to the floor -> zero trades; switched to scripted buyers.
  - Agents confused "tighten/widen"; renamed to lower/keep/raise.
  - CMI as the LLM statistic was underpowered (10% detection at 20 games, 2x2): the effect is a small
-   same-move excess diluted over ~400 state x action cells; the same-move count gives 80%.
+   same-move excess diluted over ~400 state x action cells. The same-move count, fixed from the pilot
+   before the main run, gives 80%.
  - Triple scans for xor were dropped: an order-k scan is blind to order-(k+1) parity. -->
 
 ## 4. Results
@@ -192,7 +195,8 @@ therefore **design the market so the state is the agents' entire public input.**
 **Observation.** The published Bonjour rule found **0% of triangles, cliques and hubs in every setting**
 (Table 1), while the links inside a triangle were about 200 standard deviations above the shuffled data
 (Figure 1). With no collusion, its fixed threshold raised false alarms in 8–23% of 100-round games
-(n = 5–20), 0% of longer ones, and up to 43% when the score conditions on history (Appendix B). Every
+(n = 5–20) and never fired in longer ones; in a 3-player variant whose score conditions on the
+previous round, it flagged up to 43% (Appendix B). Every
 shuffle-calibrated detector stayed at 3–9%.
 
 **Interpretation.** Net influence subtracts the strongest *other* influence on j. Inside a group, j's
@@ -276,32 +280,39 @@ In the 5×5 market, pooled over 100 games, the global test gave p = 0.001 (the f
 +1,991 matching seller pairs above the shuffle's expectation out of 50,000 pair-rounds, top pairs z = 9–12)
 against p = 0.17 and 0.71 on the controls.
 
-**Table 3.** Rejection rate at α = 0.05 over disjoint batches of games (number of batches in brackets).
-2×2: same-move test. 5×5: global test (max-pair test in parentheses).
+**Table 3.** Batches flagged at α = 0.05, out of disjoint batches of 5, 10 and 20 games. 2×2: same-move
+test. 5×5: global test over all 10 seller pairs. Profit per seller-hour with a 95% bootstrap interval over
+games.
 
 | Market | Condition | Profit / hour | 5 games | 10 games | 20 games |
 |---|---|---|---|---|---|
-| 2×2 | comms off | 4.29 | 0.05 (40) | 0.00 (20) | 0.00 (10) |
-| 2×2 | pressure, no comms | 4.76 | 0.03 (40) | 0.10 (20) | 0.20 (10) |
-| 2×2 | **comms + pressure** | **7.07** | 0.30 (40) | 0.40 (20) | **0.80** (10) |
-| 5×5 | comms off | 5.12 | 0.00 (0.05) (20) | 0.00 (0.00) (10) | 0.00 (0.00) (5) |
-| 5×5 | pressure, no comms | 5.24 | 0.00 (0.00) (20) | 0.00 (0.00) (10) | 0.00 (0.00) (5) |
-| 5×5 | **comms + pressure** | **8.20** | **0.95** (0.80) (20) | **1.00** (1.00) (10) | **1.00** (1.00) (5) |
+| 2×2 | comms off | 4.29 [4.06, 4.51] | 2/40 | 0/20 | 0/10 |
+| 2×2 | pressure, no comms | 4.76 [4.52, 5.00] | 1/40 | 2/20 | 2/10 |
+| 2×2 | **comms + pressure** | **7.07** [6.76, 7.38] | 12/40 | 8/20 | **8/10** |
+| 5×5 | comms off | 5.12 [4.82, 5.42] | 0/20 | 0/10 | 0/5 |
+| 5×5 | pressure, no comms | 5.24 [4.93, 5.54] | 0/20 | 0/10 | 0/5 |
+| 5×5 | **comms + pressure** | **8.20** [7.83, 8.59] | **19/20** | **10/10** | **5/5** |
 
-<!-- TODO: replace with a combined detection-rate figure (2x2 + 5x5). Current figure is 2x2 only. -->
-![Figure 4](../studies/llm_auction/detection.png)
+The batch counts are small: 95% Wilson intervals are [49, 94]% for 8/10, [76, 99]% for 19/20 and [57, 100]%
+for 5/5. The 5×5 max-pair test flags comms + pressure in 16/20, 10/10 and 5/5 batches, and the controls in
+1/20 and 0/20 five-game batches and none of the larger ones.
 
-**Figure 4.** 2×2 market: detection rate vs games per batch for the same-move and CMI statistics.
+![Figure 4](figures/fig4_llm_detection.png)
+
+**Figure 4.** Share of batches flagged vs games per batch, with 95% Wilson intervals. Left: 2×2 market,
+same-move test. Right: 5×5 market, global test. Dashed line: 5% target.
 
 **Interpretation.** The mechanism is visible in the messages and the moves. CEO pressure makes the
 seller who just sold raise (2×2: 8% → 33% in low-price states after a trade); the channel stops the others
 from undercutting (losing-seller "lower" falls from 82% to 41%), so moves synchronize. In the 5×5 market
 the whole group converges on "hold, don't undercut" ("Hold prices steady; avoid price wars to protect
-profits for all sellers"), so the excess agreement appears in all 10 pairs at once and is detected with
-far fewer games. The max-pair test does not isolate a sub-cartel here because every pair is in sync;
+profits for all sellers"), so the excess agreement appears in all 10 pairs at once and is detected in
+smaller batches (each 5×5 game also has 50 hours and 10 seller pairs, against 30 hours and one pair). The max-pair test does not isolate a sub-cartel here because every pair is in sync;
 in a scripted check where only 2 of 5 sellers collude, it localizes the right pair in 99.7% of batches.
-The 2×2 `pressure_off` rate of 0.20 at 20 games (2 of 10 batches) is within noise of 5% but is the
-weakest point of the control results.
+The 2×2 `pressure_off` rate of 0.20 at 20 games (2 of 10 batches; 95% interval [6, 51]%) is consistent
+with 5% but is the weakest point of the control results. What the test detects is a shared signal outside
+the public state that coordinates moves; reading it as collusion rests on the profit gap over the
+pressure-only control.
 
 ## 5. Discussion and Limitations
 
@@ -346,10 +357,10 @@ It detects the comms + CEO-pressure collusion of Agrawal et al. among gpt-4.1-mi
 ## Code and Data
 
 All code, results and the LLM auction games are at <https://github.com/taruntrivedi3/collusion-detection>.
-`results/RESULTS_INDEX.md` lists the exact command and seeds for every number; an interactive viewer
-(`viewer/index.html`) replays example games, including the LLM sellers' messages.
-
-<!-- TODO: push the 5x5 study (code + games.jsonl) to the repo before submitting. -->
+`results/RESULTS_INDEX.md` lists the exact command and seeds for every number, including the two LLM
+studies (`studies/llm_auction/`, `studies/llm_auction_5seller/`). An interactive viewer
+(<https://taruntrivedi3.github.io/collusion-detection/viewer/>) replays example games, including the
+2-seller LLM games with the sellers' messages.
 
 ## Work Done Before the Sprint
 
@@ -358,17 +369,14 @@ examples, and implemented the starting code. We also ran the recorded-market stu
 (`studies/auction_null_calibration/`), including its log parser. Everything else in this report was done
 during the sprint.
 
-## Author Contributions (optional)
-
-<!-- TODO: fill in. -->
-
 ## References
 
 1. Agrawal, K., Teo, V., Vazquez, J. J., Kunnavakkam, S., Srikanth, V., & Liu, A. (2025). Evaluating LLM agent collusion in double auctions. arXiv:2507.01413. Code: <https://github.com/andyjliu/llm-agent-collusion>
 2. Benjamini, Y., & Hochberg, Y. (1995). Controlling the false discovery rate: a practical and powerful approach to multiple testing. *Journal of the Royal Statistical Society: Series B*, 57(1), 289–300.
 3. Bonjour, T., Aggarwal, V., & Bhargava, B. (2022). Information theoretic approach to detect collusion in multi-agent games. *Proceedings of the 38th Conference on Uncertainty in Artificial Intelligence (UAI)*, PMLR 180, 223–232. <https://proceedings.mlr.press/v180/bonjour22a.html>
 4. Rose, A., Cullen, C., Abdelnabi, S., Torr, P., Kaplowitz, B. G., & Schroeder de Witt, C. (2026). Detecting multi-agent collusion through multi-agent interpretability. arXiv:2604.01151.
-5. Williams, P. L., & Beer, R. D. (2010). Nonnegative decomposition of multivariate information. arXiv:1004.2515.
+5. Westfall, P. H., & Young, S. S. (1993). *Resampling-Based Multiple Testing: Examples and Methods for p-Value Adjustment.* Wiley.
+6. Williams, P. L., & Beer, R. D. (2010). Nonnegative decomposition of multivariate information. arXiv:1004.2515.
 
 ---
 

@@ -1,0 +1,36 @@
+
+== comms_off: 100 games, 5000 rounds, trade rate 0.95, profit/round 5.12, mean best ask 81.1
+   actions: tighten 0.84, hold 0.16, widen 0.00
+   state fill: {'states_visited': 36, 'rows': 5000, 'median_rows_per_state': 30, 'rows_in_singleton_states': 6, 'rows_in_states_ge5': 4981}
+   pooled: global p=0.1668 excess=+16.3  max-pair p=0.6923
+     S3-S4: excess +6.8 z +1.32 p_adj 0.692
+     S1-S2: excess +8.2 z +1.09 p_adj 0.820
+     S2-S4: excess +4.7 z +0.94 p_adj 0.868
+     S1-S4: excess +3.9 z +0.77 p_adj 0.927
+   batches of   5 games (n=20): reject global 0.00±0.00, max-pair 0.05±0.05
+   batches of  10 games (n=10): reject global 0.00±0.00, max-pair 0.00±0.00
+   batches of  20 games (n= 5): reject global 0.00±0.00, max-pair 0.00±0.00
+
+== pressure_off: 100 games, 5000 rounds, trade rate 0.95, profit/round 5.24, mean best ask 81.3
+   actions: tighten 0.70, hold 0.21, widen 0.10
+   state fill: {'states_visited': 92, 'rows': 5000, 'median_rows_per_state': 11, 'rows_in_singleton_states': 15, 'rows_in_states_ge5': 4924}
+   pooled: global p=0.7093 excess=-25.4  max-pair p=0.8432
+     S1-S2: excess +12.9 z +0.97 p_adj 0.843
+     S1-S3: excess +9.6 z +0.73 p_adj 0.934
+     S1-S5: excess +9.8 z +0.61 p_adj 0.964
+     S2-S5: excess +7.7 z +0.50 p_adj 0.981
+   batches of   5 games (n=20): reject global 0.00±0.00, max-pair 0.00±0.00
+   batches of  10 games (n=10): reject global 0.00±0.00, max-pair 0.00±0.00
+   batches of  20 games (n= 5): reject global 0.00±0.00, max-pair 0.00±0.00
+
+== comms_pressure: 100 games, 5000 rounds, trade rate 0.90, profit/round 8.20, mean best ask 87.1
+   actions: tighten 0.21, hold 0.61, widen 0.18
+   state fill: {'states_visited': 222, 'rows': 5000, 'median_rows_per_state': 6, 'rows_in_singleton_states': 21, 'rows_in_states_ge5': 4762}
+   pooled: global p=0.0010 excess=+1991.1  max-pair p=0.0010
+     S1-S4: excess +278.9 z +11.53 p_adj 0.001
+     S2-S4: excess +249.4 z +10.89 p_adj 0.001
+     S1-S2: excess +251.4 z +10.59 p_adj 0.001
+     S1-S3: excess +211.7 z +9.38 p_adj 0.001
+   batches of   5 games (n=20): reject global 0.95±0.05, max-pair 0.80±0.09
+   batches of  10 games (n=10): reject global 1.00±0.00, max-pair 1.00±0.00
+   batches of  20 games (n= 5): reject global 1.00±0.00, max-pair 1.00±0.00

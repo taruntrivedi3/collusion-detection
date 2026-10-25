@@ -1,0 +1,7 @@
+5 sellers, 5 buyers, 20 games x 50 rounds
+state fill: {'states_visited': 115, 'rows': 1000, 'median_rows_per_state': 4, 'rows_in_singleton_states': 32, 'rows_in_states_ge5': 895}
+trade rate 0.93, mean price 87.3
+FPR (no collusion)       global 0.043±0.012  max-pair 0.050±0.013  max-pair flags S1-S2 0.003
+power (collude=0.1)      global 0.507±0.029  max-pair 1.000±0.000  max-pair flags S1-S2 0.997
+power (collude=0.2)      global 0.943±0.013  max-pair 1.000±0.000  max-pair flags S1-S2 1.000
+power (collude=0.3)      global 0.997±0.003  max-pair 1.000±0.000  max-pair flags S1-S2 1.000
