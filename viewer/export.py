@@ -1,5 +1,5 @@
 """Build viewer/data.js: a few simulated RPS games with every detector's verdict, plus sample
-LLM auction games with condition-level test results. Open viewer/index.html afterwards.
+LLM auction games (2 and 5 sellers) with condition-level test results. Open viewer/index.html afterwards.
 
   python viewer/export.py            (a few minutes)
 """
@@ -78,29 +78,67 @@ def rps_game(sid, title, text, pop, rounds, state_kind, seed):
             "results": results}
 
 
-def auction():
-    from build_report import CONDS, LABEL, load, outcomes, pooled_z
+MARKET_DESC = ("{N} gpt-4.1-mini sellers (cost $80) and {n} scripted buyers (value $100), {h} hours per game. Each "
+               "hour every agent lowers (\"tighten\"), keeps (\"hold\") or raises (\"widen\") its quote by $2; one "
+               "trade per hour at most, at the midpoint. Sellers see only a coarse summary of the last hour, plus all "
+               "sellers' messages when the channel is on.")
+
+
+def sample_games(by_seed, k=12):
     from market import SELLER_COST
+    out = []
+    for seed in sorted(by_seed)[:k]:
+        log = by_seed[seed]
+        sellers = sorted(a for a in log[0]["asks"])
+        profit = sum(r["price"] - SELLER_COST for r in log if r["price"] is not None) / len(log)
+        all_same = sum(len({r["actions"][s] for s in sellers}) == 1 for r in log)
+        out.append({"seed": seed, "profit_per_hour": round(profit, 2), "all_same": all_same, "log": log})
+    return out
+
+
+def auction():
+    """2-seller market: condition outcomes and pooled z-scores from studies/llm_auction/build_report.py."""
+    from build_report import CONDS, LABEL, load, outcomes, pooled_z
     games = load()
     oc, pz = outcomes(games), pooled_z(games)
+    conds = [{"id": c, "label": LABEL[c], "games": sample_games(games[c]),
+              "tiles": [["Seller profit per hour", f"${oc[c][2]:.2f}"], ["Trades per hour", f"{oc[c][0]:.2f}"],
+                        ["Mean trade price", f"${oc[c][1]:.2f}"], ["Same-move z", f"{pz[(c, 'same')][0]:.1f}"],
+                        ["CMI z", f"{pz[(c, 'cmi')][0]:.1f}"]]} for c in CONDS]
+    return {"id": "2", "label": "2 sellers", "hours": 30, "desc": MARKET_DESC.format(N="Two", n="two", h=30),
+            "note": "z-scores: within-state shuffle test pooled over all 200 games of the condition. Same-move = how "
+                    "often both sellers make the same move, compared with shuffles that keep each seller's behaviour "
+                    "in each state.", "conditions": conds}
+
+
+def auction5():
+    """5-seller market: outcomes and pooled global test from studies/llm_auction_5seller (analysis.txt)."""
+    import re
+    from build_report import CONDS, LABEL
+    run = ROOT / "studies" / "llm_auction_5seller" / "runs" / "n5_rates_v1"
+    games = {}
+    for line in open(run / "games.jsonl"):
+        g = json.loads(line)
+        games.setdefault(g["condition"], {})[g["seed"]] = g["log"]
+    text = (run / "analysis.txt").read_text()
     conds = []
     for c in CONDS:
-        sample = []
-        for seed in sorted(games[c])[:12]:
-            log = games[c][seed]
-            profit = sum(r["price"] - SELLER_COST for r in log if r["price"] is not None) / len(log)
-            sample.append({"seed": seed, "profit_per_hour": round(profit, 2),
-                           "same_moves": sum(r["actions"]["S1"] == r["actions"]["S2"] for r in log),
-                           "log": log})
-        conds.append({"id": c, "label": LABEL[c], "trade_rate": round(oc[c][0], 3),
-                      "mean_price": round(oc[c][1], 2), "seller_profit_per_hour": round(oc[c][2], 2),
-                      "z_cmi": round(pz[(c, "cmi")][0], 1), "z_same": round(pz[(c, "same")][0], 1),
-                      "games": sample})
-    return {"conditions": conds, "seller_cost": SELLER_COST}
+        block = text.split(f"== {c}:")[1].split("\n== ")[0]
+        trade, profit, ask = re.search(r"trade rate ([\d.]+), profit/round ([\d.]+), mean best ask ([\d.]+)", block).groups()
+        p, excess = re.search(r"pooled: global p=([\d.]+) excess=([+-][\d.]+)", block).groups()
+        conds.append({"id": c, "label": LABEL[c], "games": sample_games(games[c]),
+                      "tiles": [["Seller profit per hour", f"${float(profit):.2f}"], ["Trades per hour", trade],
+                                ["Mean best ask", f"${float(ask):.1f}"], ["Global test p (pooled)", f"{float(p):.3f}"],
+                                ["Extra same-move pairs", f"{float(excess):+,.0f}"]]})
+    return {"id": "5", "label": "5 sellers", "hours": 50, "desc": MARKET_DESC.format(N="Five", n="five", h=50),
+            "note": "Global test: same-move counts summed over all 10 seller pairs, pooled over all 100 games of the "
+                    "condition, against shuffles that keep each seller's behaviour in each state (p = 0.001 is the "
+                    "floor at 1,000 shuffles). Extra same-move pairs = observed minus the shuffles' average, out of "
+                    "50,000 pair-hours.", "conditions": conds}
 
 
 if __name__ == "__main__":
-    data = {"rps": [rps_game(*s) for s in SCENARIOS], "auction": auction()}
+    data = {"rps": [rps_game(*s) for s in SCENARIOS], "markets": [auction(), auction5()]}
     for g in data["rps"]:
         print(f'{g["id"]:14s}', {r["key"]: r["found"] for r in g["results"]})
     out = Path(__file__).with_name("data.js")

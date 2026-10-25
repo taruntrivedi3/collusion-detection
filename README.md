@@ -28,8 +28,8 @@ open viewer/index.html         # or any browser; no server needed (also live at 
 ```
 
 The viewer replays example games. You see the moves, the links between players, which group was
-planted, and what each detector reported. It also shows 2-seller LLM auction games with the sellers' messages.
-Deep links: `index.html#rps/steer`, `index.html#auction/comms_pressure`. LLM condition names:
+planted, and what each detector reported. It also shows 2- and 5-seller LLM auction games with the sellers' messages.
+Deep links: `index.html#rps/steer`, `index.html#auction/comms_pressure`, `index.html#auction/5/comms_pressure`. LLM condition names:
 `comms_off` (no messages, no pressure), `pressure_off` (CEO pressure, no messages) and `comms_pressure`
 (both).
 

@@ -9,9 +9,7 @@ Numbers come from results/SUMMARY.md, studies/llm_auction and studies/llm_auctio
 
 # Finding Colluding Groups from Players' Moves: Shuffle-Calibrated Group Scans for Multi-Agent and LLM Collusion
 
-**Tarun Trivedi**<sup>1</sup>, **Eashan Gandotra**<sup>2</sup>
-
-<sup>1</sup> TODO affiliation &nbsp;&nbsp; <sup>2</sup> TODO affiliation
+**Tarun Trivedi**, **Eashan Gandotra**
 
 *With Apart Research — research conducted at the AI Collusion Research Sprint, October 2026*
 
@@ -360,7 +358,7 @@ All code, results and the LLM auction games are at <https://github.com/taruntriv
 `results/RESULTS_INDEX.md` lists the exact command and seeds for every number, including the two LLM
 studies (`studies/llm_auction/`, `studies/llm_auction_5seller/`). An interactive viewer
 (<https://taruntrivedi3.github.io/collusion-detection/viewer/>) replays example games, including the
-2-seller LLM games with the sellers' messages.
+2- and 5-seller LLM games with the sellers' messages.
 
 ## Work Done Before the Sprint
 
@@ -420,9 +418,9 @@ explains honest behaviour, the test is not usable. Details: `studies/auction_nul
 
 ## LLM Usage Statement
 
-<!-- TODO: edit to match what the team actually did. The template expects the team to write the report
-     primarily themselves; treat this draft as a starting point. -->
-
-We used Claude Code (Anthropic) to help write simulation and analysis code, run experiments, and draft
-parts of this report, and gpt-4.1-mini (OpenAI) as the agents in the LLM auction experiments. All numbers
-in this report come from the released code and data, and all claims were checked by the authors.
+We used Claude Code (Anthropic) throughout the project: to write and refactor the simulation and analysis
+code, run the experiments, review the repository, and draft and edit this report and the documentation.
+The authors made the research decisions (what to test, which agents and conditions to use, what to keep
+or cut), directed and reviewed the work, and checked the numbers and claims. gpt-4.1-mini (OpenAI) played
+the sellers in the LLM auction experiments. All numbers in this report come from the released code and
+data.
