@@ -141,8 +141,8 @@ and rounds are exchangeable within a state, it is an exact permutation test.
 **GroupScan.** Given every player's action in every round and the history state of each round:
 
 1. **Edge statistics.** Compute $\gamma_{ij}$ for every pair of players on the observed data.
-2. **Shuffle.** Draw two independent sets of B within-state shuffles, Set A and Set B, and compute every
-   $\gamma_{ij}$ on each shuffled dataset.
+2. **Shuffle.** Choose the number of shuffles $M$ (1,000 unless stated). Draw two independent sets of $M$
+   within-state shuffles, Set A and Set B, and compute every $\gamma_{ij}$ on each shuffled dataset.
 3. **Standardize edges with Set A.** $z_{ij} = (\gamma_{ij} - \mu^A_{ij}) / \sigma^A_{ij}$, where
    $\mu^A_{ij}$ and $\sigma^A_{ij}$ are the mean and standard deviation of $\gamma_{ij}$ over Set A. The
    Set-B datasets are standardized with the same Set-A moments.
@@ -154,7 +154,7 @@ T(C) = \sum_{i \lt j \in C} z_{ij}, \qquad S(C) = \frac{T(C) - \mathbb{E}_A[T(C)
 $$
 
 5. **Calibrate with Set B.** Compute $\max_C S(C)$ on each Set-B dataset; the threshold is the 95th
-   percentile of these B maxima.
+   percentile of these $M$ maxima.
 6. **Decide.** If the observed $\max_C S(C)$ exceeds the threshold, report $\arg\max_C S(C)$ as a
    colluding group; otherwise stop.
 7. **Remove and repeat.** Drop the reported group's players and return to step 4 on the remaining
@@ -168,7 +168,7 @@ connected components. *Player score*: per-player total link strength, top player
 
 **Metrics.** *Exact recovery*: the reported group equals the planted one. *Clean recovery*: exact and
 nothing else reported. *False alarm*: any report when no collusion exists (target 5%). 95% Wilson
-intervals in brackets. B = 1000 shuffles throughout unless stated.
+intervals in brackets. $M$ = 1000 shuffles throughout unless stated.
 
 ### 3.3 LLM double auction with a coarse shared state
 
