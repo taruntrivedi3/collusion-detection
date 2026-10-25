@@ -89,9 +89,12 @@ def to_html(md_text, katex_dir):
 
     items = []
 
+    def is_math_fence(t):  # ```math blocks, which GitHub renders as display math (also inside lists)
+        return t.type == "fence" and t.info.strip() == "math"
+
     def collect(toks):
         for t in toks:
-            if t.type.startswith("math"):
+            if t.type.startswith("math") or is_math_fence(t):
                 items.append((t.content.strip(), t.type != "math_inline"))
             if t.children:
                 collect(t.children)
@@ -100,6 +103,9 @@ def to_html(md_text, katex_dir):
     rendered = iter(render_math(items, katex_dir))
     for kind in ("math_inline", "math_inline_double", "math_block", "math_block_label"):
         md.add_render_rule(kind, lambda self, toks, idx, opts, env: next(rendered))
+    default_fence = md.renderer.rules["fence"]
+    md.add_render_rule("fence", lambda self, toks, idx, opts, env: next(rendered) if is_math_fence(toks[idx])
+                       else default_fence(toks, idx, opts, env))
     body = md.renderer.render(tokens, md.options, {})
 
     body = re.sub(r"<p>(<img [^>]*>)</p>", r'<p class="figure">\1</p>', body)

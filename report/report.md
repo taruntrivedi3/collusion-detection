@@ -129,20 +129,30 @@ round: none, top (which move led), order (ranking of move counts) or full (exact
 **Within-state shuffle null.** Each player's action column is permuted independently among rounds
 that share the same state. This preserves each player's state-dependent habits and destroys any
 coordination beyond them. Under the null that players are conditionally independent given the state,
-and rounds are exchangeable within a state, it is an exact permutation test. We draw two independent
-sets of B permutations: Set A to standardize each edge,
-$z_{ij} = (\gamma_{ij} - \mu^A_{ij}) / \sigma^A_{ij}$, and Set B to calibrate the decision.
+and rounds are exchangeable within a state, it is an exact permutation test.
 
-**Group scan (ours).** For every subset C with |C| ≥ 2,
+**Group scan (ours).** Given every player's action in every round and the history state of each round:
 
-$$
-T(C) = \sum_{i \lt j \in C} z_{ij}, \qquad S(C) = \frac{T(C) - \mathbb{E}_A[T(C)]}{\sqrt{\mathrm{Var}_A[T(C)]}},
-$$
+1. **Edge statistics.** Compute $\gamma_{ij}$ for every pair of players on the observed data.
+2. **Shuffle.** Draw two independent sets of B within-state shuffles, Set A and Set B, and compute every
+   $\gamma_{ij}$ on each shuffled dataset.
+3. **Standardize edges with Set A.** $z_{ij} = (\gamma_{ij} - \mu^A_{ij}) / \sigma^A_{ij}$, where
+   $\mu^A_{ij}$ and $\sigma^A_{ij}$ are the mean and standard deviation of $\gamma_{ij}$ over Set A. The
+   Set-B datasets are standardized with the same Set-A moments.
+4. **Score every group.** For every subset C with |C| ≥ 2 (~10<sup>6</sup> subsets at n = 20),
 
-where the Set-A moments are exact quadratic forms in the edge means and covariance. We report
-$\arg\max_C S(C)$ if $\max_C S(C)$ exceeds the 95th percentile of the same maximum over Set B, then remove
-that group and repeat on the remaining players (a sequential extension of the single max-T test). The exact search covers ~10<sup>6</sup>
-subsets at n = 20.
+   ```math
+   T(C) = \sum_{i \lt j \in C} z_{ij}, \qquad S(C) = \frac{T(C) - \mathbb{E}_A[T(C)]}{\sqrt{\mathrm{Var}_A[T(C)]}},
+   ```
+
+   where the Set-A moments are exact quadratic forms in the edge means and covariance.
+5. **Calibrate with Set B.** Compute $\max_C S(C)$ on each Set-B dataset; the threshold is the 95th
+   percentile of these B maxima.
+6. **Decide.** If the observed $\max_C S(C)$ exceeds the threshold, report $\arg\max_C S(C)$ as a
+   colluding group; otherwise stop.
+7. **Remove and repeat.** Drop the reported group's players and return to step 4 on the remaining
+   players, with the threshold recomputed among them (a sequential extension of the single max-T test).
+   Stop when no group passes or fewer than two players remain.
 
 **Baselines.** *Bonjour*: the published rule (fixed 0.05). *Bonjour (calibrated)*: same rule, threshold
 from the shuffle null. *Pair test*: Benjamini–Hochberg at q = 0.05 over all pairs (p-values from a gamma
