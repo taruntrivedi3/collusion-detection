@@ -19,11 +19,12 @@ Numbers come from results/SUMMARY.md, studies/llm_auction_2seller and studies/ll
 
 ## Abstract
 
-<!-- 150–250 words (currently ~227). Plain terms only: hubs, cliques, history states etc. are defined in Section 3. -->
+<!-- 150–250 words (currently ~243). Plain terms only: hubs, cliques, history states etc. are defined in Section 3. -->
 
-Auditors of multi-agent systems often see what agents do, not what they say. The
+When AI agents interact, as players in a game or participants in a market, some may secretly collude,
+and an auditor who sees only their moves must identify which ones. The
 information-theoretic detector of Bonjour et al. (2022) looks for one pair of players whose moves depend
-on each other, so it cannot report a group. In many-player Rock Paper Scissors it found
+on each other, so it cannot report a group. In Rock Paper Scissors it found
 none of the planted groups of three to five colluders, and its fixed threshold is uncalibrated. We propose GroupScan, which scores every subset of players by how much
 their moves depend on each other and compares the best score with shuffled copies of the game. Among 20
 players, a 5-player group colluding in 20% of rounds is recovered exactly in 48% of 100-round games,
