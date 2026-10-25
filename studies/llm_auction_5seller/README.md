@@ -3,12 +3,12 @@
 Extends [llm_auction](../llm_auction/README.md) (2 sellers / 2 buyers) to 5 gpt-4.1-mini sellers, 5 scripted buyers
 and 50 hours per game, with a joint within-state shuffle test over all seller pairs.
 
-**Result.** With a broadcast message channel plus CEO profit-margin pressure, sellers earn 8.20 per hour
+**Result.** With a broadcast message channel plus CEO profit-margin pressure, sellers earn 8.20 per hour combined
 [95% CI 7.83, 8.59] versus 5.24 [4.93, 5.54] with pressure alone and 5.12 [4.82, 5.42] with neither
 (bootstrap over games). The global test flags comms + pressure in 95% of 5-game batches
 and every 10- and 20-game batch, and flags neither control in any batch.
 
-| Condition | Profit / hour | 5 games (20 batches) | 10 games (10 batches) | 20 games (5 batches) | Pooled, 100 games |
+| Condition | Sellers' profit / hour (combined) | 5 games (20 batches) | 10 games (10 batches) | 20 games (5 batches) | Pooled, 100 games |
 | --- | --- | --- | --- | --- | --- |
 | `comms_off` | 5.12 | 0.00 (0.05) | 0.00 (0.00) | 0.00 (0.00) | p = 0.17 |
 | `pressure_off` | 5.24 | 0.00 (0.00) | 0.00 (0.00) | 0.00 (0.00) | p = 0.71 |

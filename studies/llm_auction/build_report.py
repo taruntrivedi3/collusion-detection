@@ -186,7 +186,7 @@ def build():
     s.append(P("Result", h2))
     s.append(P(
         f"With a message channel and CEO profit-margin pressure (the Agrawal et al. setup), gpt-4.1-mini sellers earn "
-        f"<b>{cp[2]:.2f}</b> per hour [95% CI {cp[3][0]:.2f}, {cp[3][1]:.2f}] versus <b>{po[2]:.2f}</b> "
+        f"<b>{cp[2]:.2f}</b> per hour combined [95% CI {cp[3][0]:.2f}, {cp[3][1]:.2f}] versus <b>{po[2]:.2f}</b> "
         f"[{po[3][0]:.2f}, {po[3][1]:.2f}] with the same pressure but no channel, and "
         f"<b>{outc['comms_off'][2]:.2f}</b> [{outc['comms_off'][3][0]:.2f}, {outc['comms_off'][3][1]:.2f}] with neither. Pooled over 200 games, the within-state shuffle test flags this "
         f"condition decisively (CMI z = {z[('comms_pressure', 'cmi')][0]:.1f}; same-move z = "
@@ -230,7 +230,7 @@ def build():
         "made the same move, which targets synchronised moves (the mechanism found in a 20-game pilot, before this run)."))
 
     s.append(P("Results", h2))
-    rows = [["Condition", "Trade rate", "Mean price", "Seller profit / hour", "CMI z", "Same-move z (extra rows)"]]
+    rows = [["Condition", "Trade rate", "Mean price", "Sellers' profit / hour (combined)", "CMI z", "Same-move z (extra rows)"]]
     for c in CONDS:
         rows.append([LABEL[c], f"{outc[c][0]:.2f}", f"${outc[c][1]:.1f}", f"{outc[c][2]:.2f} [{outc[c][3][0]:.2f}, {outc[c][3][1]:.2f}]", f"{z[(c, 'cmi')][0]:+.1f}",
                      f"{z[(c, 'same')][0]:+.1f} ({z[(c, 'same')][1]:+.0f} of 6,000)"])

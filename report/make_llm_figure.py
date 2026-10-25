@@ -42,22 +42,22 @@ def main():
                          "axes.labelcolor": INK2, "xtick.color": INK2, "ytick.color": INK2})
     fig, axes = plt.subplots(1, 2, figsize=(7.0, 2.9), sharey=True)
     for ax, (title, rates) in zip(axes, panels):
-        ax.axhline(0.05, color=INK2, lw=1, ls=(0, (4, 3)))
+        ax.axhline(5, color=INK2, lw=1, ls=(0, (4, 3)))
         for k, cond in enumerate(CONDS):
             xs = [s + (k - 1) * 0.35 for s in SIZES]          # small offset so intervals don't overlap
-            ys = [rates[(cond, s)][0] for s in SIZES]
-            ci = [wilson(round(r * n), n) for r, n in (rates[(cond, s)] for s in SIZES)]
+            ys = [100 * rates[(cond, s)][0] for s in SIZES]
+            ci = [tuple(100 * v for v in wilson(round(r * n), n)) for r, n in (rates[(cond, s)] for s in SIZES)]
             err = [[y - lo for y, (lo, _) in zip(ys, ci)], [hi - y for y, (_, hi) in zip(ys, ci)]]
             ax.errorbar(xs, ys, yerr=err, color=COLOR[cond], lw=2, marker=MARKER[cond], ms=6, capsize=2,
                         markeredgecolor="white", markeredgewidth=1, label=LABEL[cond], zorder=3)
         ax.set_title(title, color=INK, fontsize=9.5, loc="left")
         ax.set_xticks(SIZES)
         ax.set_xlim(3.5, 21.5)
-        ax.set_ylim(-0.03, 1.03)
+        ax.set_ylim(-3, 103)
         ax.set_xlabel("games per batch")
         ax.grid(axis="y", color=GRID, lw=0.8)
         ax.spines[["top", "right"]].set_visible(False)
-    axes[0].set_ylabel("share of batches flagged (p ≤ 0.05)")
+    axes[0].set_ylabel("% of batches flagged (p ≤ 0.05)")
     handles, labels = axes[0].get_legend_handles_labels()
     fig.legend(handles, labels, loc="lower center", ncol=3, frameon=False, fontsize=8, bbox_to_anchor=(0.5, -0.02))
     fig.tight_layout(rect=(0, 0.08, 1, 1))

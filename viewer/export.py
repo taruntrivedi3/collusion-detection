@@ -102,7 +102,7 @@ def auction():
     games = load()
     oc, pz = outcomes(games), pooled_z(games)
     conds = [{"id": c, "label": LABEL[c], "games": sample_games(games[c]),
-              "tiles": [["Seller profit per hour", f"${oc[c][2]:.2f}"], ["Trades per hour", f"{oc[c][0]:.2f}"],
+              "tiles": [["Sellers' profit per hour (combined)", f"${oc[c][2]:.2f}"], ["Trades per hour", f"{oc[c][0]:.2f}"],
                         ["Mean trade price", f"${oc[c][1]:.2f}"], ["Same-move z", f"{pz[(c, 'same')][0]:.1f}"],
                         ["CMI z", f"{pz[(c, 'cmi')][0]:.1f}"]]} for c in CONDS]
     return {"id": "2", "label": "2 sellers", "hours": 30, "desc": MARKET_DESC.format(N="Two", n="two", h=30),
@@ -127,7 +127,7 @@ def auction5():
         trade, profit, ask = re.search(r"trade rate ([\d.]+), profit/round ([\d.]+), mean best ask ([\d.]+)", block).groups()
         p, excess = re.search(r"pooled: global p=([\d.]+) excess=([+-][\d.]+)", block).groups()
         conds.append({"id": c, "label": LABEL[c], "games": sample_games(games[c]),
-                      "tiles": [["Seller profit per hour", f"${float(profit):.2f}"], ["Trades per hour", trade],
+                      "tiles": [["Sellers' profit per hour (combined)", f"${float(profit):.2f}"], ["Trades per hour", trade],
                                 ["Mean best ask", f"${float(ask):.1f}"], ["Global test p (pooled)", f"{float(p):.3f}"],
                                 ["Extra same-move pairs", f"{float(excess):+,.0f}"]]})
     return {"id": "5", "label": "5 sellers", "hours": 50, "desc": MARKET_DESC.format(N="Five", n="five", h=50),

@@ -3,7 +3,7 @@
 Within-state shuffle test for seller collusion in a double auction where every agent sees only a shared,
 coarse summary of the last hour. Report: [report.pdf](report.pdf).
 
-**Result.** With a message channel plus CEO profit-margin pressure, gpt-4.1-mini sellers earn 7.07 per hour
+**Result.** With a message channel plus CEO profit-margin pressure, gpt-4.1-mini sellers earn 7.07 per hour combined
 [95% CI 6.76, 7.38] versus 4.76 [4.52, 5.00] with pressure alone and 4.29 [4.06, 4.51] with neither
 (bootstrap over games). Pooled over 200 games per condition, the test flags
 comms + pressure (CMI z = 5.0, same-move z = 7.9) and stays silent on both controls (|z| ≤ 1.5). Per 20-game

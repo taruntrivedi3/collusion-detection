@@ -335,7 +335,11 @@ function selectCond(c) {
   sel.innerHTML = c.games.map((g, i) => `<option value="${i}">seed ${g.seed}: $${g.profit_per_hour.toFixed(2)}/h, ` +
     `${g.all_same}/${market.hours} hours all sellers same move</option>`).join("");
   sel.onchange = () => selectAGame(c.games[+sel.value]);
-  selectAGame(c.games[0]);
+  // open on the median-profit example game, a typical game for the condition
+  const byProfit = c.games.map((g, i) => [g.profit_per_hour, i]).sort((a, b) => a[0] - b[0]);
+  const typical = byProfit[Math.floor(byProfit.length / 2)][1];
+  sel.value = typical;
+  selectAGame(c.games[typical]);
 }
 
 function selectAGame(g) {
@@ -408,7 +412,7 @@ function drawMoves() {
   const cell = Math.min(18, (QW - M.l - M.r) / (hours - 1));
   for (const r of agame.log) {
     if (new Set(sellers.map(s => r.actions[s])).size === 1)
-      el("rect", { x: qx(r.round) - cell / 2, y: 2, width: cell, height: H + 6, rx: 3, fill: css("--surface-2") }, svg);
+      el("rect", { x: qx(r.round) - cell / 2, y: 2, width: cell, height: H + 6, rx: 3, fill: css("--grid") }, svg);
     sellers.forEach((s, k) => {
       const t = el("text", { x: qx(r.round), y: top + k * ROW, "text-anchor": "middle", "font-size": sellers.length > 2 ? 10 : 12,
         fill: sellerColor(s) }, svg);

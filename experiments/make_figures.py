@@ -1,6 +1,7 @@
 """Write-up figures. Each figure saves a PNG and the CSV behind it to results/figures/.
 
   python make_figures.py A B C D E      (any subset)
+  python make_figures.py R              print-size Figures 1-3 for report/report.md -> report/figures/
 """
 import sys
 from pathlib import Path
@@ -25,6 +26,8 @@ COLOR = dict(zip(DET, SERIES))                      # fixed slot per detector, n
 SHORT = {"bonjour": "Bonjour (fixed cutoff)", "bonjour_cal": "Bonjour (calibrated)", "edge_bh": "Pair test",
          "node_score": "Player score", "subgraph": "Group scan"}
 PLOT = ["bonjour", "edge_bh", "node_score", "subgraph"]   # detectors shown in the write-up
+MARKER = {"bonjour": "o", "bonjour_cal": "v", "edge_bh": "s", "node_score": "^", "subgraph": "D"}
+REPORT_FIG = ROOT / "report" / "figures"
 
 
 def _load(sub):
@@ -40,19 +43,19 @@ def _rate(df, value, keys):
 
 
 def _errline(ax, x, g, det, **kw):
-    ax.errorbar(x, g.pct, yerr=[(g.pct - g.lo).clip(lower=0), (g.hi - g.pct).clip(lower=0)], color=COLOR[det], marker="o", ms=5,
+    ax.errorbar(x, g.pct, yerr=[(g.pct - g.lo).clip(lower=0), (g.hi - g.pct).clip(lower=0)], color=COLOR[det], marker=MARKER[det], ms=5,
                 capsize=2, lw=2, label=SHORT[det], **kw)
 
 
 # ---------------------------------------------------------------- A: cancellation
-def fig_a():
+def fig_a(kinds=(("triangle", 7), ("hub", 8)), figsize=(9.5, 8), out=FIG / "figA_cancellation.png", title=True):
     from collusion.game import Coalition, Population, simulate
     from collusion.null import build_context
     from collusion.estimate import net_influence
     style()
-    fig, axs = plt.subplots(2, 2, figsize=(9.5, 8))
+    fig, axs = plt.subplots(len(kinds), 2, figsize=figsize, squeeze=False)
     rows = []
-    for r, (kind, seed) in enumerate((("triangle", 7), ("hub", 8))):
+    for r, (kind, seed) in enumerate(kinds):
         pop = Population(5, [Coalition(kind, [0, 1, 2], 0.5)])
         a = simulate(pop, 1000, np.random.default_rng(seed))
         ctx = build_context(a, np.zeros(1000, dtype=np.int64), B=1000, seed=seed)
@@ -75,12 +78,14 @@ def fig_a():
             ax.grid(False)
             who = "triangle {0,1,2}" if kind == "triangle" else "hub: leader 0, helpers 1, 2"
             ax.set_title(f"{name}\n{who}; players 3, 4 honest", fontsize=9)
-    fig.suptitle("Inside a group, the published score cancels to about 0 while the links stay strong\n"
-                 "(5 players, collusion probability 0.5, 1000 rounds; the rule flags a pair only if the score ≥ 0.05 both ways)",
-                 fontsize=10)
+    if title:
+        fig.suptitle("Inside a group, the published score cancels to about 0 while the links stay strong\n"
+                     "(5 players, collusion probability 0.5, 1000 rounds; the rule flags a pair only if the score ≥ 0.05 both ways)",
+                     fontsize=10)
     fig.tight_layout()
-    fig.savefig(FIG / "figA_cancellation.png", dpi=150)
-    pd.DataFrame(rows).to_csv(FIG / "figA_cancellation.csv", index=False)
+    fig.savefig(out, dpi=200 if not title else 150)
+    if title:
+        pd.DataFrame(rows).to_csv(FIG / "figA_cancellation.csv", index=False)
 
 
 # ---------------------------------------------------------------- B: dilution vs n
@@ -109,13 +114,13 @@ def fig_b():
 
 
 # ---------------------------------------------------------------- C: weak broad cliques
-def fig_c():
+def fig_c(figsize=(10, 4), out=FIG / "figC_weak_cliques.png", title=True):
     df = _load("step4_final/cells")
     df = df[df.structure.isin(["clique4", "clique5"]) & (df.n == 20) & (df.rounds == 100)]
     g = _rate(df, "recovered", ["structure", "detector", "cp"])
     g.to_csv(FIG / "figC_weak_cliques.csv", index=False)
     style()
-    fig, axs = plt.subplots(1, 2, figsize=(10, 4), sharey=True)
+    fig, axs = plt.subplots(1, 2, figsize=figsize, sharey=True)
     for ax, s in zip(axs, ("clique4", "clique5")):
         for det in PLOT:
             d = g[(g.structure == s) & (g.detector == det)]
@@ -124,10 +129,11 @@ def fig_c():
     axs[0].set_ylabel("% of planted groups recovered exactly")
     axs[0].set_ylim(0, 100)
     axs[1].legend(fontsize=8)
-    fig.suptitle("Weak, broad groups in short games (100 rounds): the group scan recovers more\n"
-                 "(1000 shuffles, 100 games per point, 95% CI)", fontsize=10)
+    if title:
+        fig.suptitle("Weak, broad groups in short games (100 rounds): the group scan recovers more\n"
+                     "(1000 shuffles, 100 games per point, 95% CI)", fontsize=10)
     fig.tight_layout()
-    fig.savefig(FIG / "figC_weak_cliques.png", dpi=150)
+    fig.savefig(out, dpi=200 if not title else 150)
 
 
 # ---------------------------------------------------------------- D: null false alarms
@@ -155,33 +161,41 @@ def fig_d():
 
 
 # ---------------------------------------------------------------- E: state definition
-def fig_e():
+def fig_e(grid=(1, 4), figsize=(14, 4), out=FIG / "figE_state_false_alarms.png", title=True):
     df = _load("step5/partA_n10")
     g = _rate(df, "detected", ["mix", "rounds", "state", "detector"])
     g.to_csv(FIG / "figE_state_false_alarms.csv", index=False)
     style()
     mixes = ["uniform", "leader", "margin", "mixed"]
     states = ["none", "top", "order", "full"]
-    fig, axs = plt.subplots(1, 4, figsize=(14, 4), sharey=True)
+    fig, axs = plt.subplots(*grid, figsize=figsize, sharey=True, squeeze=False)
+    axs = axs.ravel()
     off = np.linspace(-0.25, 0.25, len(PLOT))
-    for ax, mix in zip(axs, mixes):
+    for i, (ax, mix) in enumerate(zip(axs, mixes)):
         d0 = g[(g.mix == mix) & (g.rounds == 1000)]
         for k, det in enumerate(PLOT):
             d = d0[d0.detector == det].set_index("state").loc[states]
-            ax.errorbar(np.arange(4) + off[k], d.pct, yerr=[(d.pct - d.lo).clip(lower=0), (d.hi - d.pct).clip(lower=0)], fmt="o",
-                        ms=5, capsize=2, color=COLOR[det], label=SHORT[det])
+            ax.errorbar(np.arange(4) + off[k], d.pct, yerr=[(d.pct - d.lo).clip(lower=0), (d.hi - d.pct).clip(lower=0)],
+                        fmt=MARKER[det], ms=5, capsize=2, color=COLOR[det], label=SHORT[det])
         ax.axhline(5, color=INK2, lw=1, ls="--")
         ax.set_xticks(range(4)); ax.set_xticklabels(states)
-        ax.set_xlabel("history state the detector conditions on")
+        if i >= len(axs) - grid[1]:
+            ax.set_xlabel("history state the detector conditions on")
         ax.set_title({"uniform": "all honest players random", "leader": "half leader-reactive",
                       "margin": "half margin-reactive", "mixed": "leader + margin + random"}[mix], fontsize=9)
-    axs[0].set_ylabel("% of games with any report")
-    axs[0].legend(fontsize=7.5)
-    fig.suptitle("False alarms among honest players who react to history depend on the state\n"
-                 "(10 players, 1000 rounds, no colluders, 1000 shuffles, 200 games per point, 95% CI; dashed = 5%)",
-                 fontsize=10)
-    fig.tight_layout()
-    fig.savefig(FIG / "figE_state_false_alarms.png", dpi=150)
+    for i in range(0, len(axs), grid[1]):
+        axs[i].set_ylabel("% of games with any report")
+    if title:
+        axs[0].legend(fontsize=7.5)
+        fig.suptitle("False alarms among honest players who react to history depend on the state\n"
+                     "(10 players, 1000 rounds, no colluders, 1000 shuffles, 200 games per point, 95% CI; dashed = 5%)",
+                     fontsize=10)
+        fig.tight_layout()
+    else:
+        h, l = axs[0].get_legend_handles_labels()
+        fig.legend(h, l, loc="lower center", ncol=4, fontsize=8, bbox_to_anchor=(0.5, 0))
+        fig.tight_layout(rect=(0, 0.07, 1, 1))
+    fig.savefig(out, dpi=200 if not title else 150)
 
 
 # ---------------------------------------------------------------- T: structure x n table
@@ -198,7 +212,15 @@ def table_t():
     print(t.to_string())
 
 
+def report_figures():
+    """Figures 1-3 of report/report.md at print width (7 in), no suptitles (the captions carry them)."""
+    REPORT_FIG.mkdir(parents=True, exist_ok=True)
+    fig_a(kinds=(("triangle", 7),), figsize=(7, 3.3), out=REPORT_FIG / "fig1_cancellation.png", title=False)
+    fig_c(figsize=(7, 2.9), out=REPORT_FIG / "fig2_weak_cliques.png", title=False)
+    fig_e(grid=(2, 2), figsize=(7, 4.5), out=REPORT_FIG / "fig3_state_false_alarms.png", title=False)
+
+
 if __name__ == "__main__":
     for k in sys.argv[1:]:
-        {"A": fig_a, "B": fig_b, "C": fig_c, "D": fig_d, "E": fig_e, "T": table_t}[k]()
+        {"A": fig_a, "B": fig_b, "C": fig_c, "D": fig_d, "E": fig_e, "T": table_t, "R": report_figures}[k]()
         print("fig", k, "done")

@@ -97,7 +97,7 @@ player score; Bonjour stays at 0.
 helpers are not linked to each other. The pair test, which joins both edges, does better there
 (58% vs 34% at collusion probability 0.2 and 300 rounds). The pair test also wins narrowly on
 two separate weak pairs in a short game (58% vs 52%), because the group scan pays for searching
-about a million groups (Table 2).
+about a thousand groups at 10 players (Table 2).
 
 ## Finding 3 — The test must condition on what honest players react to
 
