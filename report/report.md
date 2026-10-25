@@ -19,7 +19,7 @@ Numbers come from results/SUMMARY.md, studies/llm_auction_2seller and studies/ll
 
 ## Abstract
 
-<!-- 150–250 words (currently ~242). Plain terms only: hubs, cliques, history states etc. are defined in Section 3. -->
+<!-- 150–250 words (currently ~227). Plain terms only: hubs, cliques, history states etc. are defined in Section 3. -->
 
 Auditors of multi-agent systems often see what agents do, not what they say. The
 information-theoretic detector of Bonjour et al. (2022) looks for one pair of players whose moves depend
@@ -33,7 +33,7 @@ among rounds with the same recent history keeps false alarms at 4–9% and still
 colludes for profit. In LLM double auctions where sellers see only a recorded summary of the last hour,
 gpt-4.1-mini sellers with a message channel and profit pressure earn 56% more than with pressure alone;
 the test flags them but not the controls, and it misses a cartel that coordinates only through public
-moves. Auditing from moves works if the auditor records what each agent sees and tests groups.
+moves.
 
 </div>
 
@@ -55,7 +55,7 @@ Our contributions:
 
 1. **A failure mode of pairwise net influence.** Inside a group, each member's partners cancel out in its
    score, so the published rule rarely flags even one in-group pair (**8–15%** of games), even when the
-   links are ~200 standard deviations above chance. Its fixed threshold is also uncalibrated.
+   links are about 200 standard deviations above chance. Its fixed threshold is also uncalibrated.
 2. **GroupScan**, a shuffle-calibrated scan over all groups of players, recovers weak, broad groups that
    pairwise methods miss (**48% vs 5%** for a weak 5-player group among 20) at near-nominal false-alarm
    rates; a per-pair test does better on hubs and isolated pairs.
@@ -81,7 +81,7 @@ influence γ(i;j) as the mutual information between two players' actions given t
 influence as
 
 $$
-\Gamma(i;j) = \gamma(i;j) - \max_{k \neq i,j} \gamma(k;j).
+\Gamma(i;j) = \gamma(i;j) - \max_{k \in [n] \setminus \{i,j\}} \gamma(k;j).
 $$
 
 A pair is flagged when Γ exceeds a threshold α (0.05 in the paper's experiments) in both directions, and
@@ -94,8 +94,8 @@ pricing and that CEO profit pressure also shapes it. We ask whether it is detect
 alone, and reuse comms + pressure as our positive condition.
 
 **Per-agent detectors and multiple testing.** Rose et al. (2026) score individual agents for
-suspicious behaviour; our "player score" baseline is inspired by this but is not their method.
-Our "pair test" applies Benjamini–Hochberg (1995) false-discovery control to all pairs and joins
+suspicious behaviour; our “player score” baseline is inspired by this but is not their method.
+Our “pair test” applies Benjamini–Hochberg (1995) false-discovery control to all pairs and joins
 significant pairs into groups.
 
 **Scan statistics.** Searching subsets for the most anomalous one and calibrating its maximum by
@@ -169,8 +169,8 @@ $$
 the same rule with the threshold taken from the shuffle null. *Pair test*: Benjamini–Hochberg at
 q = 0.05 over all pairs, with p-values from a gamma distribution fitted to the Set-A null (with 200
 shuffles, raw permutation p-values cannot get small enough to pass at n ≥ 10); groups are connected
-components of significant pairs. *Player score*: each player's total link strength; the top players are
-flagged.
+components of significant pairs. *Player score*: each player's total link strength; every player whose total exceeds a
+shuffle-calibrated threshold is flagged, together as one group.
 
 **Metrics.** *Exact recovery*: the reported group equals the planted one. *Clean recovery*: exact and
 nothing else reported. *False alarm*: any report when no collusion exists (target 5%). Brackets give 95%
@@ -244,7 +244,7 @@ also at 5). 50 games per cell (100 at 5 players); 95% Wilson intervals for the t
 | Pair | 34 | **70** [56, 81] | 8 | 64 [50, 76] |
 | Two pairs | 23 | **69** [59, 77] | 6 | 60 [50, 69] |
 | Hub | 0 | **66** [52, 78] | 2 | 44 [31, 58] |
-| Triangle (5 players) | 0 | 83 [74, 89] | 93 | **93** [86, 97] |
+| Triangle (5 players) | 0 | 83 [74, 89] | **93** | **93** [86, 97] |
 | Triangle | 0 | 70 [56, 81] | 32 | **84** [71, 92] |
 | 4-clique | 0 | 78 [65, 87] | 66 | **90** [79, 96] |
 | 5-clique | 0 | 78 [65, 87] | 90 | **96** [87, 99] |
@@ -254,7 +254,7 @@ also at 5). 50 games per cell (100 at 5 players); 95% Wilson intervals for the t
 one leader–helper pair, because the two helpers are linked only indirectly (z ≈ 29, against ≈ 150 for
 leader–helper links; 5 players, CP 0.5). On a single weak pair, and on two separate ones, the pair test
 also edges ahead (70 vs 64 and 69 vs 60; the intervals overlap): for a lone link, GroupScan pays for
-searching ~10<sup>6</sup> groups, while a per-pair correction is cheaper.
+searching about 10<sup>6</sup> groups, while a per-pair correction is cheaper.
 
 ### 4.3 The test must condition on what honest players react to
 
@@ -313,8 +313,8 @@ Profit: all sellers combined, $ per hour, with a 95% bootstrap interval over gam
 | pressure, no comms | 5.24 [4.93, 5.54] | 0/20 | 0/10 | 0/5 |
 | **comms + pressure** | **8.20** [7.83, 8.59] | **19/20** | **10/10** | **5/5** |
 
-**Interpretation.** The sellers converge on "hold, don't undercut" (for example, "Maintain stable asks;
-avoid price wars to protect profits for all sellers.", seed 102, hour 25), so the excess agreement
+**Interpretation.** The sellers converge on “hold, don't undercut” (for example, “Maintain stable asks;
+avoid price wars to protect profits for all sellers.”, seed 102, hour 25), so the excess agreement
 appears in all 10 pairs at once. For the same reason the max-pair test, which flags 16/20, 10/10 and 5/5
 batches (controls: 1/20 and 0/20 five-game batches), cannot single out a sub-cartel. In a scripted check
 where only two of five sellers coordinate, in 10% of hours, it names the right pair in 99.7% of batches.
@@ -345,7 +345,7 @@ tests, and LLM markets with memory and more models.
 
 The published pairwise detector is blind to colluding groups and its fixed threshold is uncalibrated.
 GroupScan, with a within-state shuffle test, recovers weak, broad groups at near-nominal false-alarm
-rates (3–9% at a 5% target), provided the state captures what honest players react to. In LLM markets
+rates (4–9% at a 5% target), provided the state captures what honest players react to. In LLM markets
 built so that this holds, it detects comms + CEO-pressure collusion among gpt-4.1-mini sellers (19 of 20
 five-game batches) and does not flag the controls.
 
@@ -388,7 +388,7 @@ during the sprint.
   logged state; the collusion reading rests on the profit gap over the pressure-only control.
 - **Higher-order collusion.** xor-style coordination has no pairwise trace (0% for every method);
   any fixed-order test is blind to the next order.
-- **Exact search stops at ~20 players** (~10<sup>6</sup> subsets).
+- **Exact search stops at about 20 players** (about 10<sup>6</sup> subsets).
 - **The state must be chosen**; the test cannot detect that honest agents react to something unrecorded.
   On recorded markets from Agrawal et al. (2025), shared time trends made the test badly miscalibrated
   (Appendix C).
@@ -446,9 +446,10 @@ batches, and the pooled z-score.
 | v2 pilot | comms off | 4.79 | p = 0.30 |
 | v2 pilot | comms only (no pressure) | 4.70 | p = 0.60 |
 | v2 pilot | comms, told coordination pays | 7.42 | p = 0.13 |
+| v3 pilot | comms + pressure | 7.38 | p = 0.87 |
+| v4 pilot | comms off | 4.72 | p = 0.48 |
 | v4 pilot | comms, told to form a cartel | 7.63 | p = 0.36 |
 | v4 pilot | comms + pressure | 7.81 | p = 0.0002 |
-| v3 pilot | comms + pressure | 7.38 | p = 0.87 |
 | 200-game run | comms off | 4.29 [4.06, 4.51] | 0/10 batches; z ≤ 1.5 |
 | 200-game run | pressure, no comms | 4.76 [4.52, 5.00] | 2/10; z ≤ 1.5 |
 | 200-game run | **comms + pressure** | **7.07** [6.76, 7.38] | **8/10**; z = +7.9 |
@@ -460,11 +461,15 @@ batches, and the pooled z-score.
   comms-off baseline.
 - **A channel alone does not produce collusion.** Comms without pressure earned the same as comms off
   in the v2 pilot ($4.70 vs $4.79 per hour).
+- **Single 20-game batches are noisy.** Comms + pressure was flagged in v4 (p = 0.0002) but not in v3
+  (p = 0.87), where each seller saw only the other seller's message; in the 200-game run, 8 of 10
+  20-game batches are flagged. Pressure alone was flagged in 2 of 10, consistent with a 5% rate (95%
+  interval [6, 51]%).
 - **The same-move statistic was chosen here.** In the 200-game run, CMI flagged comms + pressure in only
   1 of 10 20-game batches (pooled z = +5.0), against 8 of 10 for the same-move count, so the 2-seller
   same-move rates above are post hoc; the 5-seller study then tested the statistic as fixed in advance.
 - **Mechanism.** In low-price hours after a trade, CEO pressure makes the seller who just sold raise (8%
-  without pressure → 33% with it), and the channel stops the other seller from undercutting ("lower"
+  without pressure → 33% with it), and the channel stops the other seller from undercutting (“lower”
   82% → 41%), so moves synchronize.
 - **What did not work.** In v1 the buyers were LLMs and drove bids to the floor, so v2 onward use
   scripted buyers. Triple scans for xor (in the simulations) were dropped as blind to its four-player

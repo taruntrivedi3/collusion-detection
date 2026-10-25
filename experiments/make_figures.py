@@ -65,14 +65,15 @@ def fig_a(kinds=(("triangle", 7), ("hub", 8)), figsize=(9.5, 8), out=FIG / "figA
         z = edge_z(ctx)[0]
         np.fill_diagonal(z, np.nan)
         for name, M, ax, norm, fmt in (
-            ("Published score: net influence (bits)", G, axs[r, 0], TwoSlopeNorm(0, -0.45, 0.45), "{:+.3f}"),
+            ("Published score: net influence (bits)", G, axs[r, 0], TwoSlopeNorm(0, -0.45, 0.45),
+             "{:+.3f}" if title else "{:+.2f}"),
             ("Link strength (z-score vs shuffles)", z, axs[r, 1], SymLogNorm(2, vmin=-250, vmax=250), "{:.1f}"),
         ):
             ax.imshow(M, cmap=DIVERGING, norm=norm)
             for i in range(5):
                 for j in range(5):
                     if i != j:
-                        ax.text(j, i, fmt.format(M[i, j]), ha="center", va="center", fontsize=7.5,
+                        ax.text(j, i, fmt.format(M[i, j]), ha="center", va="center", fontsize=7.5 if title else 9,
                                 color="white" if abs(norm(M[i, j]) - 0.5) > 0.35 else "#0b0b0b")
                         rows.append(dict(structure=kind, matrix=name, i=i, j=j, value=M[i, j]))
             ax.set_xticks(range(5)); ax.set_yticks(range(5))
