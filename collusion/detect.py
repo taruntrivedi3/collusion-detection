@@ -248,7 +248,7 @@ def detect_subgraph(ctx: NullContext, level=0.95, cache=None) -> Result:
 
 # Keys are stored in every results CSV, so they keep their original names. In the report and
 # figures: bonjour = "Bonjour (fixed cutoff)", bonjour_cal = "Bonjour (calibrated)",
-# edge_bh = "pair test", node_score = "player score", subgraph = "group scan".
+# edge_bh = "pair test", node_score = "player score", subgraph = "GroupScan".
 DETECTORS = {
     "bonjour": detect_bonjour,
     "bonjour_cal": detect_bonjour_calibrated,

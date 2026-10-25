@@ -9,7 +9,7 @@ coarse summary of the last hour. Report: [report.pdf](report.pdf).
 comms + pressure (CMI z = 5.0, same-move z = 7.9) and stays silent on both controls (|z| ≤ 1.5). Per 20-game
 batch, the same-move statistic detects it in 80% of batches and CMI in 10%.
 
-**Limits.** With two sellers this is a pairwise test; the group scan is not used here. Coordination that is a
+**Limits.** With two sellers this is a pairwise test; GroupScan is not used here. Coordination that is a
 function of the public state (for example "copy S1's last move") is invisible by construction; an
 explicit-cartel prompt produced exactly that and was missed (pilots below). The market is designed for
 detectability: the prompt contains nothing but the recorded state. The same-move statistic was chosen after

@@ -52,7 +52,7 @@ last round), order (ranking of last round's move counts) or full (exact counts).
 | Bonjour (calibrated) | Same rule, with the pass mark taken from the shuffle test. |
 | Pair test | Tests every pair, controlling false discoveries (Benjamini & Hochberg 1995); a group is players joined by significant pairs. |
 | Player score | Scores each player by total link strength and flags the top players. Inspired by Rose et al. (2026); not their method. |
-| **Group scan (ours)** | Scores every group of 2+ players by the links inside it and reports the best group if it beats the shuffle test; repeats on the remaining players. |
+| **GroupScan** | Scores every group of 2+ players by the links inside it and reports the best group if it beats the shuffle test; repeats on the remaining players. |
 
 *Exact recovery* = the detector reports exactly the planted group. *Clean recovery* = exact
 recovery and nothing else reported. *False alarm* = a report when no collusion exists; the
@@ -74,32 +74,32 @@ published score for each ordered pair (it must reach 0.05 both ways). Right: lin
 z-score against shuffled data. Inside the triangle the score is about 0 while the links are
 about 200. In the hub the score passes only from leader to helper.
 
-## Finding 2 — The group scan finds weak, broad groups
+## Finding 2 — GroupScan finds weak, broad groups
 
 Scoring a group as a whole adds up evidence that is too weak in any single pair. With 20
-players, 100 rounds and a 5-player group colluding 20% of the time, the group scan found the
+players, 100 rounds and a 5-player group colluding 20% of the time, GroupScan found the
 exact group in **48% of games, against 5% for the best other method** (Figure C, Table 2). It
 also holds up as players are added. For a triangle, the player score falls from 71% to 52% exact
-recovery between 5 and 20 players, while the group scan falls from 77% to 71% (Figure B, Table 1).
+recovery between 5 and 20 players, while GroupScan falls from 77% to 71% (Figure B, Table 1).
 
 ![Figure C: exact recovery vs collusion probability for 4- and 5-cliques among 20 players](figures/figC_weak_cliques.png)
 
 **Figure C.** 20 players, 100 rounds, 1000 shuffles, 100 games per point. At collusion
-probability 0.2–0.3 the group scan finds the group far more often than the pair test or the
+probability 0.2–0.3 GroupScan finds the group far more often than the pair test or the
 player score; Bonjour stays at 0.
 
-![Figure B: exact recovery vs number of players, player score vs group scan](figures/figB_dilution.png)
+![Figure B: exact recovery vs number of players, player score vs GroupScan](figures/figB_dilution.png)
 
 **Figure B.** Triangle and 4-clique, averaged over all collusion probabilities and round counts
-(200 shuffles). By 20 players the player score has lost about 20 points; the group scan, about 5.
+(200 shuffles). By 20 players the player score has lost about 20 points; GroupScan, about 5.
 
-**Weak spots.** The group scan often reports a hub as one leader–helper pair, because the two
+**Weak spots.** GroupScan often reports a hub as one leader–helper pair, because the two
 helpers are not linked to each other. The pair test, which joins both edges, does better there
 (58% vs 34% at collusion probability 0.2 and 300 rounds). The pair test also wins narrowly on
-two separate weak pairs in a short game (58% vs 52%), because the group scan pays for searching
+two separate weak pairs in a short game (58% vs 52%), because GroupScan pays for searching
 about a thousand groups at 10 players (Table 2).
 
-**Very large groups.** With 18 of 20 players colluding, the group scan recovers the exact group in
+**Very large groups.** With 18 of 20 players colluding, GroupScan recovers the exact group in
 96–100% of games from collusion probability 0.2 (300 rounds) or 0.3 (100 rounds). The player score keeps
 up at weak collusion (76–100% at 0.1 with 300 rounds and at 0.2) but levels off at 76–92% at 0.3–0.5;
 the pair test stays at 32–42% from 0.1 (300 rounds) up. Details: `large_group/summary.txt`.
@@ -115,7 +115,7 @@ costs power in short games: a planted triangle among reactors is found cleanly i
 
 The same holds when collusion pays. A steer group earns **0.21 points per round each, 2.6 times
 what four exploiters earn** reacting to the same lead on their own, and the margin-reactive
-players pay for it. With the full state, the group scan finds the steer group cleanly in 94–98%
+players pay for it. With the full state, GroupScan finds the steer group cleanly in 94–98%
 of games of 1000+ rounds when it colludes 20–30% of the time. **The honest exploiters are
 flagged in only 4–7% of games.** With coarser states the exploiters look like colluders as
 games get longer: 66–71% under "top" and 96–100% with no state at 3000 rounds (Table 7).
@@ -147,7 +147,7 @@ target.
 - **Reproducing the published method** (3 players). Our average scores match the paper's
   Figure 3 in bits. Our accuracy matches its Table 2 only if the score conditions on the previous
   round's moves, which the paper does not state. One paper number stays unexplained (Table 8).
-- **The group scan's 8% false alarms at 20 players and 300 rounds** (Table 3) did not reproduce
+- **GroupScan's 8% false alarms at 20 players and 300 rounds** (Table 3) did not reproduce
   on 3,000 fresh games: 5.1% [4.4, 6.0], against 5.4% expected for this test design, with evenly
   spread p-values. Details: `investigate_scan_fpr/`, `WRITEUP_NOTES.md`.
 
@@ -164,7 +164,7 @@ that group (12–15 settings at 50–100 games each, 4 settings for pair, hub an
 intervals would be too narrow, so none are shown; 10-player rows for pair, two pairs and hub are
 in `figures/table_structure_by_n_ci.csv`.
 
-| Planted group | Players | Bonjour | Pair test | Player score | Group scan |
+| Planted group | Players | Bonjour | Pair test | Player score | GroupScan |
 |---|---|---|---|---|---|
 | Pair | 5 | 72 | 91 | 86 | 96 |
 | Pair | 20 | 70 | 89 | 72 | 91 |
@@ -182,11 +182,11 @@ in `figures/table_structure_by_n_ci.csv`.
 | 5-clique | 20 | 0 | 46 | 51 | 63 |
 | xor | 5–20 | 0 | 0 | 0 | 0 |
 
-### Table 2 — Where the group scan wins and loses
+### Table 2 — Where GroupScan wins and loses
 
 20 players unless noted, 1000 shuffles, 100 games per row (two pairs: 2 pairs in each of 100 games). Exact recovery.
 
-| Setting (group, collusion prob., rounds) | Group scan | Pair test | Player score |
+| Setting (group, collusion prob., rounds) | GroupScan | Pair test | Player score |
 |---|---|---|---|
 | 5-clique, 0.2, 100 | 48 [38, 58] | 5 [2, 11] | 4 [2, 10] |
 | 4-clique, 0.3, 100 | 91 [84, 95] | 54 [44, 63] | 36 [27, 46] |
@@ -201,7 +201,7 @@ in `figures/table_structure_by_n_ci.csv`.
 All players random; 1000 shuffles, 500 games per row. Other settings (5 and 10 players at 300
 and 1000 rounds): shuffle-calibrated detectors 3–6%.
 
-| Players | Rounds | Bonjour | Bonjour (cal.) | Pair test | Player score | Group scan |
+| Players | Rounds | Bonjour | Bonjour (cal.) | Pair test | Player score | GroupScan |
 |---|---|---|---|---|---|---|
 | 5 | 100 | 8 [6, 11] | 5 [3, 7] | 4 [3, 7] | 3 [2, 5] | 5 [3, 7] |
 | 10 | 100 | 14 [11, 17] | 5 [3, 7] | 6 [5, 9] | 6 [4, 8] | 6 [4, 9] |
@@ -222,7 +222,7 @@ round's three moves.
 
 ### Table 5 — False alarms among honest players who react to history
 
-Group scan, 10 players, 1000 rounds, no colluders, 200 games per cell. The other calibrated
+GroupScan, 10 players, 1000 rounds, no colluders, 200 games per cell. The other calibrated
 detectors behave the same way (`step5/summary.txt`).
 
 | Honest players | none | top | order | full |
@@ -234,7 +234,7 @@ detectors behave the same way (`step5/summary.txt`).
 
 ### Table 6 — Finding a planted group among honest players who react to history
 
-Group scan, clean recovery. Leader + margin + random honest players, collusion probability 0.3,
+GroupScan, clean recovery. Leader + margin + random honest players, collusion probability 0.3,
 10 players, 200 games per cell. With no state, honest players are always flagged too.
 
 | Planted group | Rounds | none | top | order | full |
@@ -251,7 +251,7 @@ Group scan, clean recovery. Leader + margin + random honest players, collusion p
 4 steer colluders, or 4 exploiters reacting at the same rate on their own, among 3
 margin-reactive and 3 random players; 200 games per cell. *Payoff* = mean points per round for
 each of the 4 (the margin-reactive players' payoff in brackets), averaged over 300–3000 rounds.
-Recovery and false alarms are for the group scan with the full state, at 300 / 1000 / 3000
+Recovery and false alarms are for GroupScan with the full state, at 300 / 1000 / 3000
 rounds.
 
 | Collusion prob. | Steer payoff | Exploiter payoff | Steer clean recovery | Exploiter false alarms |
@@ -260,7 +260,7 @@ rounds.
 | 0.2 | 0.15 (−0.20) | 0.06 (−0.07) | 76 / 98 / 94 | 5 / 4 / 6 |
 | 0.3 | 0.21 (−0.27) | 0.08 (−0.10) | 92 / 94 / 94 | 5 / 6 / 6 |
 
-At 3000 rounds the group scan flags the exploiters in 66–71% of games under "top", 40–50% under
+At 3000 rounds GroupScan flags the exploiters in 66–71% of games under "top", 40–50% under
 "order" and 96–100% with no state. All detectors and states: `step5/partC_detection_ci_n10.csv`.
 
 ### Table 8 — Reproducing the published method (3 players, 1000 games per row)

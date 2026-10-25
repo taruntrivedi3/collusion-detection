@@ -25,20 +25,33 @@ CSS = """
 @font-face { font-family: Body; font-style: italic; src: url(KATEX/fonts/KaTeX_Main-Italic.woff2); }
 @font-face { font-family: Body; font-weight: bold; font-style: italic; src: url(KATEX/fonts/KaTeX_Main-BoldItalic.woff2); }
 @page { size: Letter; margin: 1in;
+        @top-center { content: "AI Collusion Research Sprint, October 2026  ·  Apart Research";
+                      font-family: Body; font-size: 8.5pt; color: #666; }
         @bottom-center { content: counter(page); font-family: Body; font-size: 9pt; color: #444; } }
+@page :first { @top-center { content: none; } }
 html { font-size: 10.5pt; }
 body { font-family: Body, "KaTeX_Math", "DejaVu Sans", serif; line-height: 1.32; color: #000; margin: 0;
        text-align: justify; hyphens: auto; }
-h1 { font-size: 16pt; text-align: center; line-height: 1.2; margin: 0 0 8pt; hyphens: none; }
+h1 { font-size: 16pt; text-align: center; line-height: 1.2; margin: 0 0 10pt; hyphens: none;
+     border-top: 1pt solid #000; border-bottom: 1pt solid #000; padding: 7pt 0; }
 h1 ~ p.front { text-align: center; margin: 2pt 0; }
+.authors { display: flex; justify-content: center; gap: 48pt; text-align: center; margin: 4pt 0 6pt; }
+p.with { text-align: center; margin: 4pt 0 2pt; }
+.fn { float: footnote; font-size: 8.5pt; text-align: left; }
+::footnote-call { font-size: 7pt; vertical-align: super; line-height: 0; }
+::footnote-marker { font-size: 7pt; vertical-align: super; }
+.abstract { margin: 4pt 0.4in 6pt; font-size: 10pt; }
+.abstract h2 { text-align: center; font-size: 11pt; margin: 6pt 0 3pt; }
+h2.appendix-start { break-before: page; }
 h2 { font-size: 12.5pt; margin: 13pt 0 4pt; break-after: avoid; }
 h3 { font-size: 11pt; margin: 9pt 0 3pt; break-after: avoid; }
 p { margin: 5pt 0; orphans: 3; widows: 3; }
 ul, ol { margin: 4pt 0; padding-left: 16pt; }
-li { margin: 1.5pt 0; }
+li { margin: 1.5pt 0; text-align: left; }
 li > p { margin: 1.5pt 0; }
 hr { border: 0; border-top: 0.5pt solid #888; margin: 10pt 0; }
-code { font-family: "Source Code Pro", "DejaVu Sans Mono", monospace; font-size: 0.85em; }
+code { font-family: "Source Code Pro", "DejaVu Sans Mono", monospace; font-size: 0.85em; hyphens: none;
+       overflow-wrap: anywhere; }
 pre { background: #f5f5f5; padding: 6pt; font-size: 0.85em; break-inside: avoid; white-space: pre-wrap; }
 a { color: #1a4fa0; text-decoration: none; }
 table { border-collapse: collapse; margin: 4pt auto 9pt; font-size: 9.5pt; break-inside: avoid;
@@ -50,6 +63,7 @@ th { font-weight: bold; }
 td:nth-child(-n+2) { white-space: nowrap; }
 p.figure { text-align: center; margin: 8pt 0 2pt; break-inside: avoid; break-after: avoid; }
 p.figure img { max-width: 100%; max-height: 4in; }
+p.figure img[src*="fig1_cancellation"] { max-height: 2.5in; }
 p.caption { font-size: 9.5pt; break-after: avoid; }
 .katex-display { margin: 7pt 0; text-align: center; }
 .katex { font-size: 1.05em; text-indent: 0; }
@@ -111,7 +125,8 @@ def to_html(md_text, katex_dir):
     body = re.sub(r"<p>(<img [^>]*>)</p>", r'<p class="figure">\1</p>', body)
     # WeasyPrint ignores <ol start>; set the counter explicitly so a list resumed after an equation continues
     body = re.sub(r'<ol start="(\d+)">', lambda m: f'<ol start="{m[1]}" style="counter-reset: list-item {int(m[1]) - 1}">', body)
-    body = re.sub(r"<p>(<strong>(?:Figure|Table) \d+\.</strong>)", r'<p class="caption">\1', body)
+    body = re.sub(r"<p>(<strong>(?:Figure|Table) [A-Z]?\d+\.)", r'<p class="caption">\1', body)
+    body = body.replace("<h2>Appendix A.", '<h2 class="appendix-start">Appendix A.', 1)
     head, sep, rest = body.partition("<hr")  # title block: everything before the first rule
     head = re.sub(r"<p>", '<p class="front">', head)
     return head + sep + rest, len(items)

@@ -12,7 +12,7 @@ colluding LLM sellers and stays quiet on the controls.
 | | Finding | Evidence |
 |---|---|---|
 | 1 | **The pairwise method fails on groups.** Inside a group its score cancels out: 0% of triangles, cliques and hubs found. Its fixed cutoff is also uncalibrated: with no collusion it flags 8–23% of short (100-round) games and never fires in longer ones. | [Fig. A](results/figures/figA_cancellation.png), [Fig. D](results/figures/figD_null_false_alarms.png) |
-| 2 | **A group scan finds weak, broad groups.** 5 colluders among 20 players, 100 rounds, coordinating 20% of the time: 48% exact recovery vs 5% for the best pairwise baseline. It loses where the colluders aren't all linked: on hubs (one leader, two helpers) the pair test does better (58% vs 34%). Collusion with no pairwise trace (xor) is invisible to every method here. | [Fig. C](results/figures/figC_weak_cliques.png), [Table 2](results/SUMMARY.md#table-2--where-the-group-scan-wins-and-loses) |
+| 2 | **GroupScan finds weak, broad groups.** 5 colluders among 20 players, 100 rounds, coordinating 20% of the time: 48% exact recovery vs 5% for the best pairwise baseline. It loses where the colluders aren't all linked: on hubs (one leader, two helpers) the pair test does better (58% vs 34%). Collusion with no pairwise trace (xor) is invisible to every method here. | [Fig. C](results/figures/figC_weak_cliques.png), [Table 2](results/SUMMARY.md#table-2--where-groupscan-wins-and-loses) |
 | 3 | **The test must condition on what honest players react to.** Ignore it and honest players are flagged in up to 100% of games; condition on it and false alarms return to about 5%. This holds for collusion that pays: a 4-player group that steers reacting players earns 2.6× what 4 honest exploiters earn, and, colluding 20–30% of the time, is found in 94–98% of 1000+-round games while the exploiters are flagged in 4–7%. | [Fig. E](results/figures/figE_state_false_alarms.png), [Table 7](results/SUMMARY.md#table-7--profitable-collusion-steer-group-vs-honest-exploiters) |
 | 4 | **The requirement carries over to LLM agents.** In double auctions where every prompt is built only from a recorded coarse state, gpt-4.1-mini sellers with a message channel and profit pressure earn 49–65% more than the controls: 7.07 [6.76, 7.38] per hour, all sellers combined, vs 4.29–4.76 with 2 sellers, 8.20 [7.83, 8.59] vs 5.12–5.24 with 5 sellers. A history-conditioned shuffle test on how often sellers make the same move flags them in 8 of 10 20-game batches (2 sellers) and 19 of 20 5-game batches (5 sellers), and flags the controls in at most 2 of 10 and 0 of 20. The general CMI test has little power per batch (10% with 2 sellers), and coordination keyed to public moves, as in an explicit-cartel prompt, is invisible by construction. | [2 sellers](studies/llm_auction_2seller/README.md), [5 sellers](studies/llm_auction_5seller/README.md) |
 
@@ -48,7 +48,7 @@ tests/          unit tests for collusion/
 scripts/        reproduce.py for the recorded-market study
 ```
 
-**Appendix study, and why it isn't a main finding.** We ran our group scan and
+**Appendix study, and why it isn't a main finding.** We ran GroupScan and
 shuffle test on 75 recorded 5-seller markets from
 [andyjliu/llm-agent-collusion](https://github.com/andyjliu/llm-agent-collusion/tree/2bb2a7e22860160d1fddb5d2e5cb460cc6ec6aff).
 Their recorded paths share strong time trends that no available state captures without leaving nothing to

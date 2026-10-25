@@ -9,30 +9,33 @@ Numbers come from results/SUMMARY.md, studies/llm_auction_2seller and studies/ll
 
 # Beyond Pairs: Detecting Colluding Groups of Agents from Their Moves
 
-**Tarun Trivedi** (Independent), **Eashan Gandotra** (Independent)
+<div class="authors"><span><b>Tarun Trivedi</b><br>Independent</span><span><b>Eashan Gandotra</b><br>Independent</span></div>
 
-*With Apart Research — research conducted at the AI Collusion Research Sprint, October 2026*
+<p class="with">With<br><b>Apart Research</b><span class="fn">Research conducted at the AI Collusion Research Sprint (Apart Research), October 23–25, 2026.</span></p>
 
 ---
 
+<div class="abstract">
+
 ## Abstract
 
-<!-- 150–250 words (currently ~247). Plain terms only: hubs, cliques, history states etc. are defined in Section 3. -->
+<!-- 150–250 words (currently ~234). Plain terms only: hubs, cliques, history states etc. are defined in Section 3. -->
 
-Auditors of multi-agent systems often see what agents do, not what they say to each other. The
+Auditors of multi-agent systems often see what agents do, not what they say. The
 information-theoretic detector of Bonjour et al. (2022) looks for one pair of players whose moves depend
-on each other, so it cannot report a colluding group: in simulated many-player Rock Paper Scissors it found
+on each other, so it cannot report a group: in simulated many-player Rock Paper Scissors it found
 none of the planted groups of three to five colluders, and its fixed threshold raised 8–23% false alarms
-in short games without collusion. We propose a group scan that scores every subset of players by how much
-their moves depend on each other and judges the best score against shuffled copies of the game. Among 20
+in short games without collusion. We propose GroupScan, which scores every subset of players by how much
+their moves depend on each other, judged against shuffled copies of the game. Among 20
 players, a 5-player group colluding in 20% of rounds is found exactly in 48% of 100-round games, against
-5% for the best pairwise method. The shuffle must respect what honest players react to: honest players who
-respond to the previous round look like colluders in up to 100% of games unless rounds with the same
-recent history are shuffled together, which keeps false alarms at 4–9% while still catching a group that
+5% for the best pairwise method. The shuffle must respect what honest players react to: otherwise honest
+players who respond to the previous round look like colluders in up to 100% of games. Shuffling only
+among rounds with the same recent history keeps false alarms at 4–9% and still catches a group that
 colludes for profit. In LLM double auctions where sellers see only a recorded summary of the last hour,
-gpt-4.1-mini sellers given a message channel and profit pressure earn 56% more than with pressure
-alone; the test flags them but not the controls, and it misses sellers who coordinate only by following
-public moves. Moves-only auditing works if the auditor records what each agent sees and tests groups.
+gpt-4.1-mini sellers given a message channel and profit pressure earn 56% more than with pressure alone;
+the test flags them but not the controls, and misses sellers who only follow public moves. Auditing from moves works if the auditor records what agents see and tests groups.
+
+</div>
 
 ## 1. Introduction
 
@@ -51,17 +54,23 @@ et al., 2022) is built for one colluding pair; real coordination may involve a g
 Our contributions:
 
 1. **A failure mode of pairwise net influence.** Inside a group each member's partners cancel in its
-   score, so the published rule rarely flags even one in-group pair (8–15% of games), although the links
+   score, so the published rule rarely flags even one in-group pair (**8–15%** of games), although the links
    are ~200 standard deviations above chance; its fixed threshold is also uncalibrated.
-2. **A shuffle-calibrated group scan** that recovers weak, broad groups pairwise methods miss (48% vs 5%
-   for a weak 5-player group among 20) at near-nominal false-alarm rates; a per-pair test does better
-   on hubs and isolated pairs.
+2. **GroupScan**, a shuffle-calibrated scan over all groups of players, recovers weak, broad groups that
+   pairwise methods miss (**48% vs 5%** for a weak 5-player group among 20) at near-nominal false-alarm
+   rates; a per-pair test does better on hubs and isolated pairs.
 3. **History conditioning is necessary.** Honest players who react to history are flagged in up to 100%
    of games unless the shuffle stays within history states; with the right state, a coalition whose
-   coordination pays is found while honest exploiters are not.
+   coordination pays is found (**94–98%**) while honest exploiters are not (**4–7%**).
 4. **An LLM market where the null holds by design.** Each seller's prompt is built only from a logged
    coarse state, and a within-state same-move test detects comms + CEO-pressure collusion among
-   five gpt-4.1-mini sellers while staying quiet on the controls.
+   five gpt-4.1-mini sellers (**19/20** batches) while staying quiet on the controls (**0/20**).
+
+![Figure 1](figures/fig2_weak_cliques.png)
+
+**Figure 1. A weak, broad group is found by GroupScan and missed by pairwise methods.** Exact
+recovery of a planted 4- or 5-player group among 20 players vs the share of rounds in which it colludes
+(CP), 100 rounds, 1000 shuffles, 100 games per point, 95% Wilson intervals. Bonjour's rule stays at 0.
 
 ## 2. Related Work
 
@@ -105,7 +114,7 @@ With a *collusion probability* (CP) per round, planted colluders coordinate; oth
 randomly. Colluders sit at random seats unknown to the detectors. Table 1 defines the planted groups and
 the honest player types used throughout.
 
-**Table 1.** Planted colluding groups and honest player types.
+**Table 1. Planted colluding groups and honest player types.**
 
 | Kind | Name | What the players do |
 |---|---|---|
@@ -129,7 +138,7 @@ that share the same state. This preserves each player's state-dependent habits a
 coordination beyond them. Under the null that players are conditionally independent given the state,
 and rounds are exchangeable within a state, it is an exact permutation test.
 
-**Group scan (ours).** Given every player's action in every round and the history state of each round:
+**GroupScan.** Given every player's action in every round and the history state of each round:
 
 1. **Edge statistics.** Compute $\gamma_{ij}$ for every pair of players on the observed data.
 2. **Shuffle.** Draw two independent sets of B within-state shuffles, Set A and Set B, and compute every
@@ -137,8 +146,8 @@ and rounds are exchangeable within a state, it is an exact permutation test.
 3. **Standardize edges with Set A.** $z_{ij} = (\gamma_{ij} - \mu^A_{ij}) / \sigma^A_{ij}$, where
    $\mu^A_{ij}$ and $\sigma^A_{ij}$ are the mean and standard deviation of $\gamma_{ij}$ over Set A. The
    Set-B datasets are standardized with the same Set-A moments.
-4. **Score every group.** For every subset C with |C| ≥ 2 (~10<sup>6</sup> subsets at n = 20), compute
-   T(C) and S(C) below, where the Set-A moments are exact quadratic forms in the edge means and covariance.
+4. **Score every group.** For every subset $C$ with $\lvert C\rvert \ge 2$ ($\sim 10^6$ subsets at
+   $n = 20$), compute $T(C)$ and $S(C)$ below, where the Set-A moments are exact quadratic forms in the edge means and covariance.
 
 $$
 T(C) = \sum_{i \lt j \in C} z_{ij}, \qquad S(C) = \frac{T(C) - \mathbb{E}_A[T(C)]}{\sqrt{\mathrm{Var}_A[T(C)]}}.
@@ -198,7 +207,7 @@ triples is blind to the same construction with four players.
 more by construction (0% in Table 2). More telling, it rarely flags even one in-group pair: 15% of
 triangle games, 12% of 4- and 5-clique games and 8% of hub games (5–20 players), close to its
 false-alarm rate, while the links inside a triangle are about 200 standard deviations above the shuffled
-data (Figure 1). With no collusion its fixed threshold raised false alarms in 8–23% of 100-round games
+data (Figure 2). With no collusion its fixed threshold raised false alarms in 8–23% of 100-round games
 and never fired in longer ones (up to 43% in a 3-player variant that conditions on the previous round;
 Appendix B). Every shuffle-calibrated detector stayed at 3–9%.
 
@@ -206,29 +215,30 @@ Appendix B). Every shuffle-calibrated detector stayed at 3–9%.
 other partners are as strong as i, so Γ ≈ 0 for every member. A fixed threshold on an estimator whose
 bias depends on rounds and state cannot be calibrated.
 
-![Figure 1](figures/fig1_cancellation.png)
+![Figure 2](figures/fig1_cancellation.png)
 
-**Figure 1.** 5 players, CP 0.5, 1000 rounds; players 0–2 form a triangle, 3–4 are honest. Each cell is
+**Figure 2. Inside a group the published score cancels while the links stay strong.** 5 players, CP 0.5, 1000 rounds; players 0–2 form a triangle, 3–4 are honest. Each cell is
 row player i → column player j. Left: Bonjour net influence (a pair is flagged only if it reaches 0.05 in
 both directions). Right: link strength as a z-score against shuffled data. Inside the triangle the score
 is ≈ 0 while the links are ≈ 200. The dark cells from honest to colluding players are negative because
 each colluder's strongest influence comes from another colluder.
 
-### 4.2 The group scan finds weak, broad groups
+### 4.2 GroupScan finds weak, broad groups
 
 Scoring the group as a whole adds up evidence too weak in any single pair. With 20 players, 100 rounds
-and a 5-clique at CP 0.2, the group scan recovered the exact group in **48% [38, 58]** of games, against
-5% [2, 11] for the pair test and 4% [2, 10] for the player score (Figure 2). It also degrades less as
+and a 5-clique at CP 0.2, GroupScan recovered the exact group in **48% [38, 58]** of games, against
+5% [2, 11] for the pair test and 4% [2, 10] for the player score (Figure 1). It also degrades less as
 players are added: for a triangle at CP 0.2 and 300 rounds, the player score falls from 93% to 32% between
-5 and 20 players, the group scan from 93% to 84% (Table 2). We plant groups of 3–5 because larger groups have more linked pairs and
+5 and 20 players, GroupScan from 93% to 84% (Table 2). We plant groups of 3–5 because larger groups have more linked pairs and
 are easier for every method; the scan searches all sizes, and recovers even an 18-of-20 cartel in 96–100%
 of games from CP 0.3 (`results/SUMMARY.md`).
 
-**Table 2.** Exact recovery (%) at one setting every group was run at: CP 0.2, 300 rounds, 200 shuffles,
+**Table 2. GroupScan wins on groups; the pair test wins on hubs and isolated pairs.** Exact recovery
+(%) at one setting every group was run at: CP 0.2, 300 rounds, 200 shuffles,
 20 players (triangle also at 5), 50 games per cell at 20 players and 100 at 5; 95% Wilson intervals for the
 two strongest methods.
 
-| Planted group | Bonjour | Pair test | Player score | Group scan |
+| Planted group | Bonjour | Pair test | Player score | GroupScan |
 |---|---|---|---|---|
 | Pair | 34 | **70** [56, 81] | 8 | 64 [50, 76] |
 | Two pairs | 23 | **69** [59, 77] | 6 | 60 [50, 69] |
@@ -239,11 +249,6 @@ two strongest methods.
 | 5-clique | 0 | 78 [65, 87] | 90 | **96** [87, 99] |
 | xor | 0 | 0 | 0 | 0 |
 
-![Figure 2](figures/fig2_weak_cliques.png)
-
-**Figure 2.** Exact recovery vs CP for 4- and 5-cliques among 20 players (100 rounds, 1000 shuffles,
-100 games per point, 95% Wilson intervals). Bonjour stays at 0.
-
 **Where it loses.** On hubs the pair test does better (66% vs 44%, Table 2): the scan often reports one
 leader–helper pair, because the two helpers are linked only indirectly (z ≈ 29, against ≈ 150 for
 leader–helper links; 5 players, CP 0.5). On single and two separate weak pairs the pair test also edges
@@ -253,27 +258,29 @@ groups, while a per-pair correction is cheaper.
 ### 4.3 The test must condition on what honest players react to
 
 **Observation.** Honest players who react to last round's moves are correlated with each other. With no
-state, the group scan flagged them in **up to 100%** of 1000-round games (Figure 3). Leader-reactive
+state, GroupScan flagged them in **up to 100%** of 1000-round games (Figure 3). Leader-reactive
 players need at least the *top* state, margin-reactive players *full*; with the right state, false alarms
 are 4–9%.
 
 ![Figure 3](figures/fig3_state_false_alarms.png)
 
-**Figure 3.** False-alarm rate by history state (coarse → fine) for four mixes of honest players; 10
+**Figure 3. Honest players who react to history look like colluders unless the shuffle conditions on what
+they react to.** False-alarm rate by history state (coarse → fine) for four mixes of honest players; 10
 players, 1000 rounds, no colluders, 200 games per point, 95% Wilson intervals. Dashed line: 5% target.
 Bonjour's fixed rule (grey) sits at 0 because its cutoff never fires at 1000 rounds, not because it is
 calibrated.
 
 **Profitable collusion.** A 4-player steer group earns 0.21 points per round each at CP 0.3, **2.6×**
 what four independent exploiters earn reacting at the same rate; the margin-reactive players pay for it
-(Table 3). With the full state, the group scan finds the steer group cleanly in 94–98% of 1000+-round
+(Table 3). With the full state, GroupScan finds the steer group cleanly in 94–98% of 1000+-round
 games at CP 0.2–0.3, while the honest exploiters are flagged in 4–7%. With coarser states the
 exploiters look like colluders as games get longer (66–71% under *top*, 96–100% with no state at 3000 rounds).
 
-**Table 3.** Steer group vs honest exploiters. Each game has either 4 steer colluders or 4 exploiters, plus
+**Table 3. Collusion that pays is found; honest players reacting to the same signal are not.** Steer group
+vs honest exploiters. Each game has either 4 steer colluders or 4 exploiters, plus
 3 margin-reactive and 3 random players; 200 games per cell. Payoff = points per round per member, averaged
 over 300–3000 rounds (random play earns 0; margin-reactive players' payoff in brackets). Recovery and false
-alarms: group scan, full state, at 300 / 1000 / 3000 rounds.
+alarms: GroupScan, full state, at 300 / 1000 / 3000 rounds.
 
 | CP | Steer payoff | Exploiter payoff | Steer clean recovery (%) | Exploiter false alarms (%) |
 |---|---|---|---|---|
@@ -295,7 +302,7 @@ p = 0.17 and 0.71 on the controls. Raw agreement alone would not show this: comm
 the same move in 66.8% of pair-hours against 62.8% expected within states, while sellers with no channel
 and no pressure agreed more often (68.6%) because they all lowered together.
 
-**Table 4.** Batches flagged by the global test at α = 0.05, out of disjoint batches of 5, 10 and 20 games
+**Table 4. Only comms + pressure is flagged.** Batches flagged by the global test at α = 0.05, out of disjoint batches of 5, 10 and 20 games
 (95% Wilson intervals: 19/20 → [76, 99]%, 5/5 → [57, 100]%). Profit: all sellers combined, $ per hour,
 95% bootstrap interval over games.
 
@@ -320,7 +327,7 @@ agent is shown; the test is then valid when decisions depend only on what is log
 signal outside the log, collusive or not, so calling a flag collusion needs an outcome check such as the
 profit gap.
 
-**An auditor's recipe.** (1) Log what each agent observes each round. (2) Run the group scan with a shuffle
+**An auditor's recipe.** (1) Log what each agent observes each round. (2) Run GroupScan with a shuffle
 that stays within those logged states. (3) Before calling a flagged group collusion, compare its payoff
 with a comparable honest baseline.
 
@@ -338,8 +345,8 @@ harmful coordination of any order, and LLM markets with memory and more models.
 ## 6. Conclusion
 
 The pairwise information-theoretic detector for collusion is blind to groups: its net-influence score
-cancels inside them and its fixed threshold is uncalibrated. A group scan with a within-state shuffle
-test recovers weak, broad colluding groups at near-nominal false-alarm rates (3–9% at a 5% target),
+cancels inside them and its fixed threshold is uncalibrated. GroupScan, with a within-state shuffle
+test, recovers weak, broad colluding groups at near-nominal false-alarm rates (3–9% at a 5% target),
 provided the state captures what honest players react to. In LLM markets where each seller's prompt is
 built only from a logged state, the same-move version of the test detects comms + CEO-pressure collusion
 among gpt-4.1-mini sellers (19 of 20 five-game batches) and
@@ -391,7 +398,7 @@ during the sprint.
 - **The state must be chosen**; the test cannot detect that honest agents react to something unrecorded.
   On recorded markets from Agrawal et al. (2025), shared time trends made the test badly miscalibrated
   (Appendix C).
-- **False-alarm rates are near, not exactly, nominal.** The group scan's highest cell, 8% [6, 11] at
+- **False-alarm rates are near, not exactly, nominal.** GroupScan's highest cell, 8% [6, 11] at
   20 players and 300 rounds, came out at 5.1% [4.4, 6.0] on 3,000 fresh games. The pair test runs slightly
   high (7.7% [6.8, 8.7] on those games) because its gamma-fit tail is generous.
 - **LLM scope.** One model (gpt-4.1-mini), scripted buyers, coarse states and no agent memory. Richer
@@ -421,7 +428,7 @@ score, the fixed threshold flags a pair among 3 random players in 43.4% of 100-r
 
 ## Appendix C. Recorded markets from Agrawal et al. (2025)
 
-We ran the group scan on 75 recorded 5-seller markets from the original study. The recorded price paths
+We ran GroupScan on 75 recorded 5-seller markets from the original study. The recorded price paths
 share strong time trends (high early, lower later) that no available state captures without leaving
 nothing to shuffle. On independently resampled seller paths, the within-state scan flagged 88.5% of
 groups at nominal 5% (circular shifts: 37.2%). A same-pool empirical calibration reached 4.1% false
@@ -435,7 +442,7 @@ Before the 5-seller study we developed the market with 2 LLM sellers and 2 scrip
 game, the state being each seller's last move, who sold, and the ask level (`studies/llm_auction_2seller/`). Four
 20-game pilots per condition (v1–v4) were followed by a 200-game run of the three final conditions.
 
-**Table D1.** Seller profit (all sellers combined, $ per hour) and same-move shuffle-test results. Pilots:
+**Table D1. Explicit cartels raise profit but are missed; comms + pressure is detected.** Seller profit (all sellers combined, $ per hour) and same-move shuffle-test results. Pilots:
 p-value of one 20-game batch. 200-game run: batches flagged at α = 0.05 out of 10 disjoint 20-game
 batches, and the pooled z-score.
 

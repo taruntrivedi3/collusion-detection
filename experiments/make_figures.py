@@ -26,7 +26,7 @@ DIVERGING = LinearSegmentedColormap.from_list("bgr", ["#104281", "#3987e5", "#f0
 DET = list(DETECTORS)
 COLOR = dict(zip(DET, SERIES))                      # fixed slot per detector, never re-ordered
 SHORT = {"bonjour": "Bonjour (fixed cutoff)", "bonjour_cal": "Bonjour (calibrated)", "edge_bh": "Pair test",
-         "node_score": "Player score", "subgraph": "Group scan"}
+         "node_score": "Player score", "subgraph": "GroupScan"}
 PLOT = ["bonjour", "edge_bh", "node_score", "subgraph"]   # detectors shown in the write-up
 MARKER = {"bonjour": "o", "bonjour_cal": "v", "edge_bh": "s", "node_score": "^", "subgraph": "D"}
 REPORT_FIG = ROOT / "report" / "figures"
@@ -111,7 +111,7 @@ def fig_b():
     axs[0].set_ylabel("% of planted groups recovered exactly")
     axs[0].set_ylim(0, 100)
     axs[0].legend(loc="lower left")
-    fig.suptitle("The player score loses power as players are added; the group scan holds\n"
+    fig.suptitle("The player score loses power as players are added; GroupScan holds\n"
                  "(averaged over collusion probabilities and rounds; 200 shuffles; 100 games per setting at 5–10 players, 50 at 20; 95% CI)",
                  fontsize=10)
     fig.tight_layout()
@@ -135,7 +135,7 @@ def fig_c(figsize=(10, 4), out=FIG / "figC_weak_cliques.png", title=True):
     axs[0].set_ylim(0, 100)
     axs[1].legend(fontsize=8)
     if title:
-        fig.suptitle("Weak, broad groups in short games (100 rounds): the group scan recovers more\n"
+        fig.suptitle("Weak, broad groups in short games (100 rounds): GroupScan recovers more\n"
                      "(1000 shuffles, 100 games per point, 95% CI)", fontsize=10)
     fig.tight_layout()
     fig.savefig(out, dpi=200 if not title else 150)

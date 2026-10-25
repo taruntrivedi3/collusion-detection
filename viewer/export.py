@@ -22,7 +22,7 @@ N, B = 8, 300
 DETECTORS = [("bonjour", "Bonjour et al. (pairs only, fixed cutoff)", detect_bonjour),
              ("edge_bh", "Pair test", detect_edge_bh),
              ("node_score", "Player score", detect_node_score),
-             ("subgraph", "Group scan (ours)", detect_subgraph)]
+             ("subgraph", "GroupScan", detect_subgraph)]
 
 # (id, title, explanation, population, rounds, detector state, seed)
 SCENARIOS = [
@@ -36,7 +36,7 @@ SCENARIOS = [
      Population(10, [Coalition("clique", [0, 3, 4, 7, 9], 0.25)]), 100, "none", 7),
     ("hub", "Hub: one leader, two helpers",
      "Helpers 3 and 6 each feed leader 1 a point; the helpers never coordinate with each other. This is the "
-     "group scan's weak spot: it reports one leader-helper pair, while the pair test joins both edges.",
+     "GroupScan's weak spot: it reports one leader-helper pair, while the pair test joins both edges.",
      Population(N, [Coalition("hub", [1, 3, 6], 0.2)]), 300, "none", 0),
     ("reactive_none", "No collusion, but honest players react to history (history ignored)",
      "Half the players counter last round's most common move. The detector shuffles moves across all rounds, "
