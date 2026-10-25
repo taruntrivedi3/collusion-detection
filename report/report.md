@@ -32,8 +32,8 @@ players who react to the previous round look like colluders in up to 100% of gam
 among rounds with the same recent history keeps false alarms at 4–9% and still catches a group that
 colludes for profit. In LLM double auctions where sellers see only a recorded summary of the last hour,
 gpt-4.1-mini sellers with a message channel and profit pressure earn 56% more than with pressure alone;
-the test flags them but not the controls, and it misses a cartel that coordinates only through public
-moves.
+the test flags them but not the controls. By design, it cannot see coordination carried entirely through
+public moves.
 
 </div>
 
