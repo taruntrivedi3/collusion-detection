@@ -22,8 +22,8 @@ markets. Flags on the real markets therefore do not establish collusion. No new 
 From the repository root:
 
 ```bash
-python scripts/reproduce.py auction --output /path/to/new/auction-check     # build + validation
-python scripts/reproduce.py auction --mode full --workers 8 --output /path/to/new/auction-run
+python scripts/reproduce.py --output /path/to/new/auction-check     # build + validation
+python scripts/reproduce.py --mode full --workers 8 --output /path/to/new/auction-run
 ```
 
 Prepared inputs (`results/cases.json`, `pool.npz`, `pool_provenance.json`, `state_audit.json`) are

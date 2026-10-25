@@ -19,7 +19,7 @@ import numpy as np  # noqa: E402
 import pandas as pd  # noqa: E402
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from collusion.game import simulate  # noqa: E402
+from collusion.game import random_seats, simulate  # noqa: E402
 from collusion.null import build_context  # noqa: E402
 from collusion.detect import DETECTORS, run_all  # noqa: E402
 from collusion.metrics import score, wilson  # noqa: E402
@@ -48,7 +48,7 @@ def run_one(task):
     seed = int(np.random.SeedSequence([n, STRUCTS.index(kind), round(cp * 100), rounds, rep, FINAL_TAG])
                .generate_state(1)[0])
     rng = np.random.default_rng(seed)
-    pop = population(kind, n, cp)
+    pop = random_seats(population(kind, n, cp), np.random.default_rng([seed, 1]))
     a = simulate(pop, rounds, rng)
     ctx = build_context(a, np.zeros(rounds, dtype=np.int64), B=B, seed=seed)
     return [dict(n=n, structure=kind, cp=cp, rounds=rounds, rep=rep, seed=seed, B=B, detector=m,

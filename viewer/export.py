@@ -12,19 +12,16 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 AUCTION = ROOT / "studies" / "llm_auction"
 sys.path[:0] = [str(ROOT), str(AUCTION)]
-from collusion.detect import (detect_bonjour, detect_edge_bh, detect_node_score, detect_subgraph,  # noqa: E402
-                              detect_synergy_scan, detect_tc_scan, edge_z)
+from collusion.detect import detect_bonjour, detect_edge_bh, detect_node_score, detect_subgraph, edge_z  # noqa: E402
 from collusion.estimate import encode_states  # noqa: E402
-from collusion.game import Coalition, LeaderReactive, Population, simulate  # noqa: E402
+from collusion.game import Coalition, LeaderReactive, MarginReactive, Population, payoff_round_robin, simulate  # noqa: E402
 from collusion.null import build_context  # noqa: E402
 
 N, B = 8, 300
 DETECTORS = [("bonjour", "Bonjour et al. (pairs only, fixed cutoff)", detect_bonjour),
              ("edge_bh", "Pair test", detect_edge_bh),
              ("node_score", "Player score", detect_node_score),
-             ("subgraph", "Group scan (ours)", detect_subgraph),
-             ("tc_scan", "Triple scan: total correlation (ours)", detect_tc_scan),
-             ("synergy_scan", "Triple scan: third-order part (ours)", detect_synergy_scan)]
+             ("subgraph", "Group scan (ours)", detect_subgraph)]
 
 # (id, title, explanation, population, rounds, detector state, seed)
 SCENARIOS = [
@@ -34,18 +31,12 @@ SCENARIOS = [
      Population(N, [Coalition("triangle", [1, 4, 6], 0.3)]), 300, "none", 1),
     ("clique5", "5-player clique among 10, weak signal, short game",
      "Players 0, 3, 4, 7 and 9 coordinate in only 25% of 100 rounds. Each pair is weakly linked, so the pair "
-     "test and player score miss or split the group; scoring the group as a whole adds the evidence up. "
-     "In 40 games like this, exact recovery was 80% for the group scan vs 40% (pair test) and 57% (player score).",
+     "test and player score miss or split the group; scoring the group as a whole adds the evidence up.",
      Population(10, [Coalition("clique", [0, 3, 4, 7, 9], 0.25)]), 100, "none", 7),
     ("hub", "Hub: one leader, two helpers",
      "Helpers 3 and 6 each feed leader 1 a point; the helpers never coordinate with each other. This is the "
-     "group scan's weak spot: it reports one leader-helper pair, while the pair test joins both edges. "
-     "In 16 games like this, the group scan split the hub in 9.",
+     "group scan's weak spot: it reports one leader-helper pair, while the pair test joins both edges.",
      Population(N, [Coalition("hub", [1, 3, 6], 0.2)]), 300, "none", 0),
-    ("xor", "xor: only visible three at a time",
-     "Player 5 plays (move of 0 + move of 2) mod 3 in 60% of rounds. Every pair looks independent, so all "
-     "pairwise methods are blind; the triple scans find it.",
-     Population(N, [Coalition("xor", [0, 2, 5], 0.6)]), 1000, "none", 5),
     ("reactive_none", "No collusion, but honest players react to history (history ignored)",
      "Half the players counter last round's most common move. The detector shuffles moves across all rounds, "
      "so this honest reaction looks like coordination: a false alarm.",
@@ -54,13 +45,24 @@ SCENARIOS = [
      "Identical moves, but the detector shuffles only within rounds that share the same leading move. "
      "The honest reaction is explained away and nothing is flagged.",
      Population(N, honest={i: LeaderReactive(0.6) for i in range(0, N, 2)}), 300, "top", 5),
+    ("steer", "Profitable collusion: steering the honest players",
+     "Players 0, 3 and 7 counter last round's most common move, but only when it leads by 3 or more. "
+     "Colluders 1, 4, 6 and 8 sometimes all play the same move to create that lead, then all play the move that "
+     "beats the reaction. In this game they earn {group_pay:+.2f} points per round each, and the reacting "
+     "players {reactive_pay:+.2f}. With the full last-round counts as history, only the colluders are flagged.",
+     Population(10, [Coalition("steer", [1, 4, 6, 8], 0.3)], {i: MarginReactive(0.5, 3) for i in (0, 3, 7)}),
+     300, "full", 0),
 ]
 
 
 def rps_game(sid, title, text, pop, rounds, state_kind, seed):
     actions = simulate(pop, rounds, np.random.default_rng(seed))
+    pay = payoff_round_robin(actions)
+    members = [m for c in pop.coalitions for m in c.members]
+    text = text.format(group_pay=pay[:, members].mean() if members else 0,
+                       reactive_pay=pay[:, sorted(pop.honest)].mean() if pop.honest else 0)
     states = encode_states(actions, state_kind)
-    ctx = build_context(actions, states, B=B, seed=seed, triples=True)
+    ctx = build_context(actions, states, B=B, seed=seed)
     z = edge_z(ctx)[0]
     results = []
     for key, label, f in DETECTORS:

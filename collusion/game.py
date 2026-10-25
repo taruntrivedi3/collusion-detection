@@ -80,11 +80,21 @@ class MarginReactive:
     reactive = True
 
 
+@dataclass
+class Exploiter:
+    """With prob p, play the move that beats what LeaderReactive agents play next (the move
+    that loses to last round's most common move); else uniform. Honest, no coordination."""
+    p: float
+    reactive = True
+
+
 def _react(agent, counts, rng):
     """Action of a reactive honest agent given last round's counts [3]."""
     if rng.random() >= agent.p:
         return rng.integers(3)
     top = counts.max()
+    if isinstance(agent, Exploiter):
+        return loses_to(rng.choice(np.flatnonzero(counts == top)))
     if isinstance(agent, MarginReactive):
         second = np.sort(counts)[-2]
         if top - second < agent.m:
@@ -105,6 +115,11 @@ class Coalition:
       triangle  members = [c0, c1, ...]     shared event w.p. cp -> all play same uniform move
       clique    alias of triangle for k >= 4 members
       xor       members = [A, B, C]         C plays (A + B) % 3 w.p. cp
+      steer     members = [c0, c1, ...]     w.p. cp all play the same uniform move M (a clear
+                                            majority); next round all play loses_to(M), which
+                                            beats the honest players who react to M. Profitable
+                                            against MarginReactive players; uses only the
+                                            coalition's own private memory, not public history.
     Members not driven by the collusion event play uniform.
     """
     kind: str
@@ -128,6 +143,17 @@ def _coalition_actions(c: Coalition, rounds, rng):
         fire = rng.random(rounds) < c.cp
         shared = rng.integers(3, size=rounds)
         a[fire] = shared[fire, None]
+    elif c.kind == "steer":
+        t = 0
+        while t < rounds:
+            if rng.random() < c.cp:
+                m = rng.integers(3)
+                a[t] = m
+                if t + 1 < rounds:
+                    a[t + 1] = loses_to(m)
+                t += 2
+            else:
+                t += 1
     elif c.kind == "xor":
         assert k == 3
         fire = rng.random(rounds) < c.cp
@@ -156,6 +182,13 @@ class Population:
     @property
     def true_sets(self):
         return [c.true_set for c in self.coalitions]
+
+
+def random_seats(pop: Population, rng: np.random.Generator) -> Population:
+    """Same population with agents moved to uniformly random seats."""
+    perm = rng.permutation(pop.n)
+    return Population(pop.n, [Coalition(c.kind, [int(perm[m]) for m in c.members], c.cp) for c in pop.coalitions],
+                      {int(perm[i]): ag for i, ag in pop.honest.items()})
 
 
 def simulate(pop: Population, rounds: int, rng: np.random.Generator):

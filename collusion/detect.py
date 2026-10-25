@@ -251,36 +251,6 @@ def detect_subgraph(ctx: NullContext, level=0.95, max_rounds=None, cache=None) -
     return Result(found, {"trace": trace})
 
 
-# ---------------------------------------------------------------- 5. triple scans (Step 6)
-
-def _triple_scan(real, A, B, n, level):
-    """Max-z scan over triples: z_t = (x_t - mean_A) / sd_A per triple; threshold = `level`
-    quantile over Set B of max_t z_t (family-wise error over all triples)."""
-    from .triples import triple_index
-    mu, sd = A.mean(0), np.maximum(A.std(0), EPS)
-    z = (real - mu) / sd
-    thr = float(np.quantile(((B - mu) / sd).max(1), level))
-    tri = triple_index(n)
-    k = int(np.argmax(z))
-    best = frozenset(tri[k].tolist())
-    above = [frozenset(tri[t].tolist()) for t in np.flatnonzero(z > thr)]
-    return Result([best] if z[k] > thr else [], {"z": z, "threshold": thr, "z_max": float(z[k]),
-                                                  "argmax": best, "above": above})
-
-
-def detect_tc_scan(ctx: NullContext, level=0.95) -> Result:
-    """Total-correlation scan over triples (TC captures pairwise + higher-order dependence)."""
-    return _triple_scan(ctx.tc_real, ctx.tc_A, ctx.tc_B, ctx.n, level)
-
-
-def detect_synergy_scan(ctx: NullContext, level=0.95) -> Result:
-    """Scan over triples of E = third-order (beyond-pairwise) part of TC."""
-    return _triple_scan(ctx.e_real, ctx.e_A, ctx.e_B, ctx.n, level)
-
-
-TRIPLE_DETECTORS = {"tc_scan": detect_tc_scan, "synergy_scan": detect_synergy_scan}
-
-
 # ---------------------------------------------------------------- unified interface
 
 DETECTORS = {
@@ -298,8 +268,6 @@ DETECTOR_LABELS = {
     "edge_bh": "Per-edge BH (Benjamini & Hochberg 1995)",
     "node_score": "Node score (per-agent, inspired by Rose et al.)",
     "subgraph": "Subset scan (ours)",
-    "tc_scan": "Total-correlation triple scan (ours)",
-    "synergy_scan": "Third-order (synergy) triple scan (ours)",
 }
 
 

@@ -8,6 +8,7 @@ Grid (per n):
   cliques  clique4, clique5 (n >= 10)      CP {0.05, 0.1, 0.2, 0.3, 0.5} rounds {100, 300, 1000}
   reduced  pair, hub, xor                  CP {0.2, 0.5}                 rounds {300, 1000}
   null     none                                                          rounds {100, 300, 1000}
+Colluders sit at random seats (seed [seed, 1]).
 Reps: 100 for n <= 10, 50 for n = 20. Permutations B = 200 per set (dev setting).
 Edge-BH uses gamma-fit permutation p-values (see detect.edge_pvalues).
 """
@@ -24,10 +25,11 @@ import numpy as np  # noqa: E402
 import pandas as pd  # noqa: E402
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from collusion.game import Coalition, Population, simulate  # noqa: E402
+from collusion.game import Coalition, Population, random_seats, simulate  # noqa: E402
 from collusion.null import build_context  # noqa: E402
 from collusion.detect import DETECTOR_LABELS, DETECTORS, run_all  # noqa: E402
 from collusion.metrics import score  # noqa: E402
+from common import WORKERS  # noqa: E402
 
 OUT = Path(__file__).resolve().parents[1] / "results" / "step4"
 OUT.mkdir(parents=True, exist_ok=True)
@@ -68,7 +70,7 @@ def run_one(task):
     seed = int(np.random.SeedSequence([n, STRUCTS.index(kind), round(cp * 100), rounds, rep])
                .generate_state(1)[0])
     rng = np.random.default_rng(seed)
-    pop = population(kind, n, cp)
+    pop = random_seats(population(kind, n, cp), np.random.default_rng([seed, 1]))
     a = simulate(pop, rounds, rng)
     ctx = build_context(a, np.zeros(rounds, dtype=np.int64), B=B, seed=seed)
     rows = []
@@ -79,7 +81,7 @@ def run_one(task):
     return rows
 
 
-def run_n(n, workers=8):
+def run_n(n, workers=WORKERS):
     reps = 100 if n <= 10 else 50
     tasks = [(n, *cell, rep) for cell in grid(n) for rep in range(reps)]
     with Pool(workers) as pool:
@@ -124,7 +126,7 @@ def summarize():
     rev = rec[(rec[["node_score", "edge_bh"]].max(axis=1) - rec["subgraph"]) > 10].round(1)
     rev.to_csv(OUT / "scan_loses_cells.csv")
     with pd.option_context("display.width", 250, "display.max_rows", 500):
-        print("Detector key:", "; ".join(f"{SHORT[k]} = {v}" for k, v in DETECTOR_LABELS.items()))
+        print("Detector key:", "; ".join(f"{SHORT[k]} = {v}" for k, v in DETECTOR_LABELS.items() if k in SHORT))
         print("\n% planted coalitions recovered exactly, mean over CP x rounds cells:")
         print(sxn.rename(columns=SHORT).to_string())
         print("\nNull (no collusion): % runs with any detection | mean false coalitions per run")

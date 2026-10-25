@@ -15,7 +15,7 @@ import numpy as np
 import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from common import load_cells, run_cells  # noqa: E402
+from common import WORKERS, load_cells, run_cells  # noqa: E402
 from collusion.game import Population, simulate  # noqa: E402
 from collusion.null import build_context, permute_within_states  # noqa: E402
 from collusion.detect import detect_edge_bh, subset_scores  # noqa: E402
@@ -93,6 +93,6 @@ def summary():
 
 if __name__ == "__main__":
     if sys.argv[1] == "run":
-        run_cells([(f"{v}", [(v, r) for r in range(k)]) for v, k in CELLS], one, OUT, 16)
+        run_cells([(f"{v}", [(v, r) for r in range(k)]) for v, k in CELLS], one, OUT, WORKERS)
     else:
         summary()

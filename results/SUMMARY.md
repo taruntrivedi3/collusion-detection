@@ -1,259 +1,200 @@
-# Finding colluding groups from players' moves — experiment summary
+# Finding colluding groups from players' moves — simulation results
 
-For the Apart Research AI Collusion Research Sprint (2026-10-23 to 2026-10-25, America/Chicago),
-research question 1.4.
+Apart Research AI Collusion Research Sprint (2026-10-23 to 2026-10-25), research question 1.4.
+This file covers findings 1–3 of the [README](../README.md): simulated Rock Paper Scissors. The
+LLM experiment (finding 4) is in [studies/llm_auction](../studies/llm_auction/README.md).
 
-## The problem and what we built
+## Question
 
-Players in a repeated game can secretly coordinate. An auditor sees only their moves. A 2022
-method (Bonjour, Aggarwal & Bhargava, UAI 2022) flags two players who influence each other more
-than anyone else influences them. It assumes exactly two colluders.
+Players in a repeated game can secretly coordinate, and an auditor sees only their moves. The
+information-theoretic detector of Bonjour, Aggarwal & Bhargava (UAI 2022) flags two players who
+influence each other more than anyone else influences them. It assumes exactly two colluders.
+**Can a search over groups of players find colluding groups that this pairwise method misses,
+without flagging honest players?**
 
-We asked one question: **can a search over groups of players find colluding groups that the
-pairwise method misses?**
+## Setup
 
-We built a simulator for Rock Paper Scissors with up to 20 players, with honest players and
-planted colluding groups. We then compared the detectors below on the same simulated games.
+**Game.** n-player Rock Paper Scissors (n = 5, 10 or 20). Each round every player plays every
+other: +1 for a win, −1 for a loss. Honest players are random unless stated otherwise. Colluders
+sit at random seats. Each setting is run over many games (50–500), and we report the percentage
+of games in which a detector gets it right.
 
-## Key terms
+**Planted groups.** In each round the colluders coordinate with a set probability (the
+*collusion probability*); otherwise they play randomly.
 
-| Term | Meaning |
-|------|----------------------------|
-| n | Number of players in the game (5, 10 or 20). |
-| Rounds | Number of times the game is played. More rounds give more evidence. |
-| Collusion probability | Share of rounds in which the colluders coordinate. 0.2 = 20% of rounds; in other rounds they play randomly. Low values mean weak, hard-to-see collusion. |
-| Link | How much two players' moves in the same round depend on each other (mutual information, in bits). |
-| Shuffle test | We shuffle each player's moves across rounds. This keeps each player's habits but destroys coordination. A link or group counts as real only if it beats the shuffled versions. |
-| History state | What honest players may react to from the previous round. The shuffle stays inside rounds with the same state. From coarse to fine: none, top (which move led), order (ranking of the three move counts), full (exact move counts). |
-| Exact recovery | The detector reports exactly the planted group: no member missing, no extra player. |
-| Clean recovery | Exact recovery, and the detector reports nothing else. |
-| False alarm | The detector reports a group when no collusion exists. A well-calibrated detector does this in about 5% of games. |
-| [a, b] | 95% confidence interval for a percentage. |
+| Group | What the colluders do |
+|---|---|
+| Pair, two pairs | A helper plays the move that loses to its partner, feeding the partner a point. |
+| Hub | One leader, two helpers that each feed the leader and never coordinate with each other. |
+| Triangle, 4-clique, 5-clique | 3–5 players share a secret signal and all play the same move. |
+| xor | Player C plays (A + B) mod 3: every pair looks independent. |
+| Steer | 4 players all play one move to create a clear lead, then all play the move that beats the honest players who react to that lead. |
 
-## The planted groups
+Against random opponents no strategy wins on average. Pair and hub collusion moves points to one
+player (rank boosting, as in Bonjour et al.). The triangle, cliques and xor are detection
+benchmarks: a shared signal with no payoff motive. The steer group is the case where
+coordination itself pays.
 
-| Name | How the colluders behave |
-|------|----------------------------|
-| Pair | A helper plays the move that loses to its partner, feeding the partner a point. |
-| Two pairs | Two separate pairs. |
-| Hub | One leader, two helpers. Each helper feeds the leader; the helpers never coordinate directly. |
-| Triangle, 4-clique, 5-clique | 3, 4 or 5 players share a secret signal and all play the same move. |
-| xor | Player C plays (A + B) mod 3. Every pair of these players looks independent; only the three together show the pattern. |
+**Honest players who react to history.** *Leader-reactive* players play what beats last
+round's most common move, with probability 0.5. *Margin-reactive* players do the same, but only
+when that move led by 3 or more. *Exploiters* play the move that beats the leader-reactive
+response, each on their own, without coordinating.
 
-## The detectors
+**Detectors.** All but Bonjour's published rule use the same shuffle test. Each player's moves
+are shuffled across rounds, which keeps that player's habits but destroys coordination. A link
+or group counts only if it beats 95% of the shuffled versions. With history-reacting players,
+the shuffle stays within rounds that share the same *history state*: none, top (which move led
+last round), order (ranking of last round's move counts) or full (exact counts).
 
-| Name used below | What it does |
-|---------|----------------------------|
-| Bonjour | The published rule: a pair passes a fixed score of 0.05 in both directions, and exactly one pair must pass. |
-| Bonjour (calibrated) | The same rule, but the pass mark comes from the shuffle test. |
-| Pair test | Tests every pair with the shuffle test and controls false discoveries (Benjamini & Hochberg 1995). A group = players joined by significant pairs. |
-| Player score | Scores each player by its total link strength and flags the top players. Inspired by Rose et al. (2026); not their method. |
-| Group scan (ours) | Scores every group of 2 or more players by the links inside it; reports the best group if it beats the shuffle test. Repeats on the remaining players. |
-| Triple scans (ours, Step 6) | Test every set of 3 players for any joint dependence ("total correlation") or for dependence that pairs cannot explain ("third-order part"). |
+| Detector | What it does |
+|---|---|
+| Bonjour | Published rule: a pair passes a fixed score of 0.05 in both directions, and exactly one pair must pass. |
+| Bonjour (calibrated) | Same rule, with the pass mark taken from the shuffle test. |
+| Pair test | Tests every pair, controlling false discoveries (Benjamini & Hochberg 1995); a group is players joined by significant pairs. |
+| Player score | Scores each player by total link strength and flags the top players. Inspired by Rose et al. (2026); not their method. |
+| **Group scan (ours)** | Scores every group of 2+ players by the links inside it and reports the best group if it beats the shuffle test; repeats on the remaining players. |
 
-## Findings
+*Exact recovery* = the detector reports exactly the planted group. *Clean recovery* = exact
+recovery and nothing else reported. *False alarm* = a report when no collusion exists; the
+target is 5%. Brackets are 95% confidence intervals.
 
-1. **The published rule cannot see groups of 3 or more.** Inside a group, each member's partners
-   cancel each other out in its score. It found 0% of triangles, cliques and hubs in every setting
-   (Figure A, Table 3).
-2. **The group scan finds weak, broad coalitions that pairwise methods miss.** With 20 players,
-   100 rounds and a 5-player group colluding 20% of the time, the group scan found the exact group
-   in 44% of games; the best other method found it in 6% (Figure C, Table 4).
-3. **The player score gets worse as players are added; the group scan barely does.** For a
-   triangle, the player score falls from 72% to 52% exact recovery between 5 and 20 players; the
-   group scan falls from 77% to 72% (Figure B, Table 3).
-4. **The group scan has two weak spots.** It often splits a hub (one leader, helpers that never
-   coordinate with each other) into one leader–helper pair, so the pair test does better there.
-   It is also weaker than the pair test on two separate weak pairs in a short game, because it must
-   search about a million groups (Table 4).
-5. **The published rule's fixed pass mark is not calibrated.** With no collusion at all, it
-   raised false alarms in up to 43% of games, depending on game length, players and history state.
-   Every shuffle-calibrated detector stayed near 5% (Figure D, Tables 2 and 5).
-6. **With honest players who react to history, the detector must account for what they react
-   to.** A too-coarse history state makes honest players look like colluders (up to 100% false
-   alarms). A fine state removes false alarms but needs more rounds (Figure E, Tables 6 and 7).
-7. **Triple scans catch xor collusion, which every pairwise method misses** (80–100% vs chance
-   level). No fixed-size test catches everything: a 4-player version of xor is invisible to triple
-   scans (Table 8).
+## Finding 1 — The pairwise method cannot see groups
 
-## Figures
-
-### Figure A — Inside a group, the published score cancels while the links stay strong
+Inside a group, each member's partners cancel each other out in its score, so the published rule
+found **0% of triangles, cliques and hubs in every setting** (Figure A, Table 1). The links
+themselves stay strong: about 200 standard deviations above the shuffled data inside a triangle.
+Its fixed pass mark is also uncalibrated. With no collusion it raised false alarms in 8–23% of
+100-round games and 0% of longer ones, and in up to 43% with history (Tables 3–4). Every
+shuffle-calibrated detector stayed near 5%.
 
 ![Figure A: published score vs link strength for a triangle and a hub](figures/figA_cancellation.png)
 
-5 players, collusion probability 0.5, 1000 rounds. **Left:** the published score for each ordered
-pair (row player i, column player j). **Right:** link strength as a z-score against shuffled data.
-Players 0–2 are the colluders; 3 and 4 are honest. **Read it:** inside the triangle the published
-score is about 0 (it must reach 0.05 both ways to flag a pair), while the links score about 200.
-In the hub, the score passes only from leader to helper, never back.
+**Figure A.** 5 players, collusion probability 0.5, 1000 rounds; players 0–2 collude. Left: the
+published score for each ordered pair (it must reach 0.05 both ways). Right: link strength as a
+z-score against shuffled data. Inside the triangle the score is about 0 while the links are
+about 200. In the hub the score passes only from leader to helper.
 
-### Figure B — The player score loses power as players are added
+## Finding 2 — The group scan finds weak, broad groups
 
-![Figure B: exact recovery vs number of players, player score vs group scan](figures/figB_dilution.png)
-
-Triangle (left) and 4-clique (right), averaged over all collusion probabilities and round counts
-in Step 4 (200 shuffles). **Read it:** both lines start close at 5 players; by 20 players the
-player score has dropped about 20 points, while the group scan has dropped about 5.
-
-### Figure C — Weak, broad groups in short games
+Scoring a group as a whole adds up evidence that is too weak in any single pair. With 20
+players, 100 rounds and a 5-player group colluding 20% of the time, the group scan found the
+exact group in **48% of games, against 5% for the best other method** (Figure C, Table 2). It
+also holds up as players are added. For a triangle, the player score falls from 71% to 52% exact
+recovery between 5 and 20 players, while the group scan falls from 77% to 71% (Figure B, Table 1).
 
 ![Figure C: exact recovery vs collusion probability for 4- and 5-cliques among 20 players](figures/figC_weak_cliques.png)
 
-20 players, 100 rounds, 1000 shuffles, 100 games per point; bars are 95% intervals. **Read it:**
-at collusion probability 0.2–0.3 the group scan (pink) finds the group far more often than the
-pair test (green) and player score (yellow). Bonjour sits at 0.
+**Figure C.** 20 players, 100 rounds, 1000 shuffles, 100 games per point. At collusion
+probability 0.2–0.3 the group scan finds the group far more often than the pair test or the
+player score; Bonjour stays at 0.
 
-### Figure D — False alarms with no collusion
+![Figure B: exact recovery vs number of players, player score vs group scan](figures/figB_dilution.png)
 
-![Figure D: false-alarm rate vs rounds for 5, 10 and 20 honest players](figures/figD_null_false_alarms.png)
+**Figure B.** Triangle and 4-clique, averaged over all collusion probabilities and round counts
+(200 shuffles). By 20 players the player score has lost about 20 points; the group scan, about 5.
 
-All players honest and random; 1000 shuffles, 500 games per point. The dashed line is the 5%
-target. **Read it:** Bonjour's fixed rule (blue) gives 8–23% false alarms at 100 rounds and 0%
-later; every shuffle-calibrated detector stays near 5%.
+**Weak spots.** The group scan often reports a hub as one leader–helper pair, because the two
+helpers are not linked to each other. The pair test, which joins both edges, does better there
+(58% vs 34% at collusion probability 0.2 and 300 rounds). The pair test also wins narrowly on
+two separate weak pairs in a short game (58% vs 52%), because the group scan pays for searching
+about a million groups (Table 2).
 
-### Figure E — False alarms depend on the history state
+## Finding 3 — The test must condition on what honest players react to
+
+Honest players who react to last round's moves are correlated with each other. If the shuffle
+ignores that history, they look like colluders: **up to 100% false alarms** (Figure E, Table 5).
+Conditioning on a state that captures what they react to brings false alarms back to about 5%.
+Leader-reactive players need at least "top"; margin-reactive players need "full". A finer state
+costs power in short games: a planted triangle among reactors is found cleanly in 50% of
+300-round games with "full", rising to 94–95% from 1000 rounds (Table 6).
+
+The same holds when collusion pays. A steer group earns **0.21 points per round each, 2.6 times
+what four exploiters earn** reacting to the same lead on their own, and the margin-reactive
+players pay for it. With the full state, the group scan finds the steer group cleanly in 94–98%
+of games of 1000+ rounds when it colludes 20–30% of the time. **The honest exploiters are
+flagged in only 4–7% of games.** With coarser states the exploiters look like colluders as
+games get longer: 66–71% under "top" and 96–100% with no state at 3000 rounds (Table 7).
 
 ![Figure E: false-alarm rate by history state for four mixes of honest players](figures/figE_state_false_alarms.png)
 
-10 players, 1000 rounds, no colluders, 200 games per point. Each panel is a mix of honest players;
-the x-axis is the history state the detector accounts for, coarse (none) to fine (full).
-**Read it:** points near the dashed 5% line are well calibrated. With random players every state
-works. Leader-reactive players need at least "top". Margin-reactive players need "full".
+**Figure E.** 10 players, 1000 rounds, no colluders, 200 games per point. Each panel is a mix of
+honest players; the x-axis is the history state, coarse to fine. The dashed line is the 5%
+target.
 
-## How each experiment was run
+## Limits
 
-- **Step 1 — reproduce the published method** (3 players). Our average scores match the paper's
-  Figure 3, and confirm its scores are in bits. Our accuracy matches the paper's Table 2 only if
-  the score accounts for the previous round's moves, which the paper does not state. One paper
-  number stays unexplained (Table 1).
-- **Step 2 — smallest failing case** (5 players: a triangle or a hub, plus 2 honest players).
-  Shows the cancellation directly (Figure A).
-- **Step 4 — planted groups, 5 to 20 players,** no history. Collusion probability 0.05–0.5,
-  100–1000 rounds. Full grid with 200 shuffles per test; the most informative settings rerun with
-  1000 shuffles and 100 games each.
-- **Step 5 — honest players that react to history** (10 players). Honest types: random;
-  "leader-reactive" (plays what beats last round's most common move); "margin-reactive" (same,
-  only when that move led by 3 or more). Part A: no colluders. Part B: a triangle or 4-clique
-  planted at collusion probability 0.3.
-- **Step 6 — triple scans** vs the group scan, 5 to 20 players, 300–3000 rounds, 200 shuffles.
+- **Collusion with no pairwise trace is invisible.** In xor every pair of colluders looks
+  independent, so every method here finds 0% (Table 1). A test of all triples catches this case,
+  but the same construction with 4 players leaves every triple independent too, so no
+  fixed-size test generalizes. We leave higher-order collusion open.
+- **Scripted players.** The agents follow fixed rules; the LLM experiment (finding 4) tests real
+  agents.
+- **Exact search stops at about 20 players** (about a million groups).
+- **The history state must be chosen.** The test is only as good as the recorded state; it
+  cannot detect that honest players react to something unrecorded.
+- **The pair test runs slightly high:** 7.7% [6.8, 8.7] false alarms on 3,000 fresh null games
+  (20 players, 300 rounds). Its p-values come from a gamma fit to the shuffled values (a plain
+  shuffle p-value cannot go low enough to pass its correction at 10+ players), and that fit is a
+  little too generous far in the tail.
 
-## Caveats
+## Checks
 
-- Simulated Rock Paper Scissors with scripted players, not learned agents.
-- Exact search stops at about 20 players (about a million groups).
-- The pair test needed a fix. A shuffle-based p-value cannot go below 1 ÷ (shuffles + 1), so the
-  test could never fire with 10 or more players. We now fit a gamma distribution to the shuffled
-  values. Its error rates are within about ±5% of nominal for p below 0.05 and 0.01, and slightly
-  too high far in the tail. Details: WRITEUP_NOTES.md.
-- Table 3 pools games across settings, so its confidence intervals would be too narrow; we omit
-  them there.
-
-## Checks on the results
-
-- **The group scan's 8% false alarms at 20 players and 300 rounds is not a bug.** We reran that
-  setting on 3,000 fresh games: the group scan gave 5.1% [4.4, 6.0], against an expected 5.4%
-  for this test design. Its p-values were evenly spread, as they should be. The original 500
-  games are an unusual sample (about a 1-in-1,000 pattern), and the code treats real and shuffled
-  data identically. Details: `results/investigate_scan_fpr/`, WRITEUP_NOTES.md.
-- **The pair test runs slightly high:** 7.7% [6.8, 8.7] false alarms on those 3,000 games. This
-  comes from the gamma-fit approximation of its p-values, which is a little too generous far in
-  the tail. We report it as is.
-- **The triple scans' false-alarm rates (Table 8) rest on 50–100 games per setting.** A larger
-  rerun was skipped. They use the same calibration design that the check above confirmed.
+- **Reproducing the published method** (3 players). Our average scores match the paper's
+  Figure 3 in bits. Our accuracy matches its Table 2 only if the score conditions on the previous
+  round's moves, which the paper does not state. One paper number stays unexplained (Table 8).
+- **The group scan's 8% false alarms at 20 players and 300 rounds** (Table 3) did not reproduce
+  on 3,000 fresh games: 5.1% [4.4, 6.0], against 5.4% expected for this test design, with evenly
+  spread p-values. Details: `investigate_scan_fpr/`, `WRITEUP_NOTES.md`.
 
 ---
 
-## Appendix: data tables
+## Data tables
 
 All values are percentages of simulated games.
 
-### Table 1 — Reproducing the published method (Step 1, 3 players, 1000 games per row)
+### Table 1 — Exact recovery by planted group and number of players
 
-**Compares:** our version of the published rule with the paper's reported accuracy.
-**Columns:** *No state* = our score using no history; *27-state* = our score conditioned on the
-previous round's three moves; *Paper* = the paper's Table 2. Each value = % of games where exactly
-the true pair was flagged.
-**Read it:** the 27-state column is close to the paper, so the paper most likely conditioned on
-history.
-
-| Collusion probability | Rounds | No state | 27-state | Paper |
-|---|---|---|---|---|
-| 0.3 | 100 | 80 | 40 | 37 |
-| 0.3 | 300 | 97 | 76 | 71 |
-| 0.3 | 500 | 100 | 93 | 90 |
-| 0.4 | 100 | 98 | 63 | 58 |
-| 0.4 | 300 | 100 | 98 | 96 |
-| 0.1 | average of 100–1000 | 2 | 7 | ≈8 |
-| 0.2 | 1000 | 58 | 49 | 24 (unexplained) |
-
-### Table 2 — False alarms of the published fixed pass mark (Step 1, 3 honest players)
-
-**Compares:** the fixed pass mark of 0.05 with a shuffle-calibrated pass mark, with no collusion.
-**Columns:** *Fixed* = published rule, with no state or with the 27-state history; *Calibrated* =
-same rule with the pass mark from the shuffle test. Each value = % of 1000 games with any pair
-flagged.
-**Read it:** the target is 5%. The fixed mark swings from 0% to 43%.
-
-| Rounds | Fixed, no state | Fixed, 27-state | Calibrated |
-|---|---|---|---|
-| 100 | 8.5 | 43.4 | 5–6 |
-| 300 | 0.3 | 19.2 | 5–6 |
-| 1000 | 0.0 | 0.1 | 5–6 |
-
-### Table 3 — Exact recovery by planted group and number of players (Step 4, 200 shuffles)
-
-**Compares:** the four main detectors on every planted group, at 5, 10 and 20 players.
-**Columns:** one per detector. Each value = % of planted groups recovered exactly, averaged over
-all collusion probabilities and round counts tried for that group (12–15 settings, 50–100 games
-each).
-**Read it:** higher is better. Watch how each column changes as players increase.
+200 shuffles. Each value is averaged over all collusion probabilities and round counts tried for
+that group (12–15 settings at 50–100 games each, 4 settings for pair, hub and xor). Pooled
+intervals would be too narrow, so none are shown; 10-player rows for pair, two pairs and hub are
+in `figures/table_structure_by_n_ci.csv`.
 
 | Planted group | Players | Bonjour | Pair test | Player score | Group scan |
 |---|---|---|---|---|---|
-| Pair | 5 | 71 | 90 | 86 | 96 |
-| Pair | 20 | 70 | 89 | 72 | 90 |
-| Two pairs | 5 | 9 | 68 | 4 | 75 |
-| Two pairs | 20 | 7 | 63 | 2 | 62 |
-| Hub | 5 | 0 | 85 | 86 | 76 |
-| Hub | 20 | 0 | 88 | 70 | 75 |
-| Triangle | 5 | 0 | 66 | 72 | 77 |
-| Triangle | 10 | 0 | 64 | 61 | 75 |
-| Triangle | 20 | 0 | 62 | 52 | 72 |
+| Pair | 5 | 72 | 91 | 86 | 96 |
+| Pair | 20 | 70 | 89 | 72 | 91 |
+| Two pairs | 5 | 8 | 69 | 4 | 74 |
+| Two pairs | 20 | 7 | 63 | 3 | 62 |
+| Hub | 5 | 0 | 89 | 87 | 75 |
+| Hub | 20 | 0 | 86 | 68 | 78 |
+| Triangle | 5 | 0 | 67 | 71 | 77 |
+| Triangle | 10 | 0 | 64 | 62 | 75 |
+| Triangle | 20 | 0 | 64 | 52 | 71 |
 | 4-clique | 5 | 0 | 56 | 62 | 65 |
-| 4-clique | 10 | 0 | 49 | 54 | 63 |
-| 4-clique | 20 | 0 | 48 | 46 | 61 |
-| 5-clique | 10 | 0 | 46 | 58 | 64 |
-| 5-clique | 20 | 0 | 46 | 52 | 62 |
+| 4-clique | 10 | 0 | 49 | 55 | 63 |
+| 4-clique | 20 | 0 | 48 | 45 | 62 |
+| 5-clique | 10 | 0 | 46 | 58 | 65 |
+| 5-clique | 20 | 0 | 46 | 51 | 63 |
 | xor | 5–20 | 0 | 0 | 0 | 0 |
 
-10-player rows for pair, two pairs and hub are in `figures/table_structure_by_n_ci.csv`.
+### Table 2 — Where the group scan wins and loses
 
-### Table 4 — Where the group scan wins and loses most (Step 4 rerun, 20 players, 1000 shuffles)
+20 players unless noted, 1000 shuffles, 100 games per row (two pairs: 2 pairs in each of 100 games). Exact recovery.
 
-**Compares:** the group scan with the two strongest other methods in single settings.
-**Columns:** *Setting* = planted group, collusion probability, rounds. Detector columns = % of
-100 games with exact recovery, with 95% interval.
-**Read it:** the top five rows are weak, broad groups (scan wins). The last two are the scan's
-weak spots.
+| Setting (group, collusion prob., rounds) | Group scan | Pair test | Player score |
+|---|---|---|---|
+| 5-clique, 0.2, 100 | 48 [38, 58] | 5 [2, 11] | 4 [2, 10] |
+| 4-clique, 0.3, 100 | 91 [84, 95] | 54 [44, 63] | 36 [27, 46] |
+| 5-clique, 0.3, 100 | 93 [86, 97] | 58 [48, 67] | 62 [52, 71] |
+| 4-clique, 0.2, 300 | 96 [90, 98] | 76 [67, 83] | 61 [51, 70] |
+| Triangle, 0.2, 300 | 92 [85, 96] | 71 [61, 79] | 31 [23, 41] |
+| Hub, 0.2, 300 | 34 [25, 44] | 58 [48, 67] | 1 [0, 5] |
+| Two pairs, 0.3, 100 (10 players) | 52 [46, 59] | 58 [51, 64] | 4 [2, 8] |
 
-| Setting | Group scan | Pair test | Player score |
-|--------------|-------|-------|-------|
-| 5-clique, 0.2, 100 rounds | 44 [35, 54] | 6 [3, 12] | 6 [3, 12] |
-| 4-clique, 0.3, 100 rounds | 91 [84, 95] | 59 [49, 68] | 37 [28, 47] |
-| 5-clique, 0.3, 100 rounds | 91 [84, 95] | 61 [51, 70] | 52 [42, 62] |
-| 4-clique, 0.2, 300 rounds | 97 [92, 99] | 77 [68, 84] | 61 [51, 70] |
-| Triangle, 0.2, 300 rounds | 91 [84, 95] | 68 [58, 76] | 35 [26, 45] |
-| Hub, 0.2, 300 rounds | 36 [27, 46] | 56 [46, 65] | 3 [1, 8] |
-| Two pairs, 0.3, 100 rounds | 36 [30, 43] | 50 [43, 56] | 2 [1, 4] |
+### Table 3 — False alarms with no collusion
 
-### Table 5 — False alarms with no collusion (Step 4 rerun, 1000 shuffles, 500 games each)
-
-**Compares:** how often each detector reports a group when every player is honest and random.
-**Columns:** *Players*, *Rounds*, then % of games with any report, with 95% interval.
-**Read it:** the target is 5%. Bonjour's fixed rule drifts; the others stay close. The 8–9% for
-the group scan and pair test at 20 players and 300 rounds did not reproduce on fresh games for
-the group scan (5.1%); see "Checks on the results".
+All players random; 1000 shuffles, 500 games per row. Other settings (5 and 10 players at 300
+and 1000 rounds): shuffle-calibrated detectors 3–6%.
 
 | Players | Rounds | Bonjour | Bonjour (cal.) | Pair test | Player score | Group scan |
 |---|---|---|---|---|---|---|
@@ -263,74 +204,79 @@ the group scan (5.1%); see "Checks on the results".
 | 20 | 300 | 0 [0, 1] | 7 [5, 10] | 9 [6, 11] | 5 [3, 7] | 8 [6, 11] |
 | 20 | 1000 | 0 [0, 1] | 4 [3, 6] | 5 [3, 7] | 6 [4, 8] | 5 [4, 8] |
 
-All other settings (5 and 10 players at 300 and 1000 rounds): shuffle-calibrated detectors 3–6%.
+### Table 4 — The published fixed pass mark with history (3 random players)
 
-### Table 6 — False alarms among honest players who react to history (Step 5 Part A)
+1000 games per row; % with any pair flagged. *27-state* = the score conditioned on the previous
+round's three moves.
 
-**Compares:** the group scan's false alarms under four history states, for four mixes of honest
-players. No colluders. 10 players, 1000 rounds, 200 games per cell.
-**Columns:** *Honest players* = the mix; *none / top / order / full* = the history state the
-detector accounts for, coarse to fine. Each value = % of games with any report.
-**Read it:** about 5% means the state captures what the honest players react to. Values far
-above 5% mean the state is too coarse, and honest reactions look like collusion.
+| Rounds | Fixed, no state | Fixed, 27-state | Calibrated |
+|---|---|---|---|
+| 100 | 8.5 | 43.4 | 5–6 |
+| 300 | 0.3 | 19.2 | 5–6 |
+| 1000 | 0.0 | 0.1 | 5–6 |
+
+### Table 5 — False alarms among honest players who react to history
+
+Group scan, 10 players, 1000 rounds, no colluders, 200 games per cell. The other calibrated
+detectors behave the same way (`step5/summary.txt`).
 
 | Honest players | none | top | order | full |
 |---|---|---|---|---|
 | All random | 4 | 4 | 2 | 6 |
-| Half leader-reactive | 100 | 4 | 4 | 4 |
-| Half margin-reactive | 92 | 45 | 30 | 6 |
-| Leader + margin + random | 100 | 20 | 10 | 8 |
+| Half leader-reactive | 100 | 4 | 6 | 9 |
+| Half margin-reactive | 94 | 47 | 30 | 4 |
+| Leader + margin + random | 100 | 16 | 10 | 4 |
 
-The other calibrated detectors behave the same way (see `step5/summary.txt`).
+### Table 6 — Finding a planted group among honest players who react to history
 
-### Table 7 — Finding a planted group among history-reacting honest players (Step 5 Part B)
-
-**Compares:** how often the group scan finds the planted group cleanly, under each history state.
-Honest players: leader + margin + random mix. Collusion probability 0.3, 10 players, 200 games
-per cell.
-**Columns:** *Planted group*, *Rounds*, then the history state. Each value = % of games with
-clean recovery (planted group found, nothing else reported).
-**Read it:** "none" always fails because honest players get flagged too. Coarse states (top,
-order) fail more as games get longer. "Full" is weaker in short games but best from 1000 rounds.
+Group scan, clean recovery. Leader + margin + random honest players, collusion probability 0.3,
+10 players, 200 games per cell. With no state, honest players are always flagged too.
 
 | Planted group | Rounds | none | top | order | full |
 |---|---|---|---|---|---|
-| Triangle | 300 | 4 | 92 | 86 | 57 |
-| Triangle | 1000 | 0 | 90 | 93 | 98 |
-| Triangle | 3000 | 0 | 42 | 61 | 93 |
-| 4-clique | 300 | 2 | 96 | 95 | 72 |
-| 4-clique | 1000 | 0 | 86 | 90 | 96 |
-| 4-clique | 3000 | 0 | 34 | 59 | 95 |
+| Triangle | 300 | 4 | 95 | 86 | 50 |
+| Triangle | 1000 | 0 | 90 | 92 | 94 |
+| Triangle | 3000 | 0 | 41 | 68 | 95 |
+| 4-clique | 300 | 2 | 92 | 91 | 70 |
+| 4-clique | 1000 | 0 | 90 | 92 | 93 |
+| 4-clique | 3000 | 0 | 34 | 56 | 94 |
 
-### Table 8 — Triple scans vs the group scan (Step 6, 200 shuffles)
+### Table 7 — Profitable collusion: steer group vs honest exploiters
 
-**Compares:** the two triple scans with the pairwise group scan.
-**Columns:** *Planted group* and setting; then the range of results over 5–20 players and the
-listed rounds (100 games per setting at 5 and 10 players, 50 at 20). What each value counts
-depends on the row:
+4 steer colluders, or 4 exploiters reacting at the same rate on their own, among 3
+margin-reactive and 3 random players; 200 games per cell. *Payoff* = mean points per round for
+each of the 4 (the margin-reactive players' payoff in brackets), averaged over 300–3000 rounds.
+Recovery and false alarms are for the group scan with the full state, at 300 / 1000 / 3000
+rounds.
 
-- *xor* and *triangle* rows: % of games where the planted triple was recovered exactly.
-- *Pair* row: % of games whose first report contains the pair. A triple scan can only report
-  triples, so this asks whether it at least points at the pair.
-- *No collusion* row: % of games with any report (target 5%).
+| Collusion prob. | Steer payoff | Exploiter payoff | Steer clean recovery | Exploiter false alarms |
+|---|---|---|---|---|
+| 0.1 | 0.08 (−0.11) | 0.03 (−0.04) | 7 / 84 / 95 | 6 / 6 / 7 |
+| 0.2 | 0.15 (−0.20) | 0.06 (−0.07) | 76 / 98 / 94 | 5 / 4 / 6 |
+| 0.3 | 0.21 (−0.27) | 0.08 (−0.10) | 92 / 94 / 94 | 5 / 6 / 6 |
 
-**Read it:** the third-order scan reacts to xor but not to a plain pair. That is what separates
-group-level from pairwise coordination.
+At 3000 rounds the group scan flags the exploiters in 66–71% of games under "top", 40–50% under
+"order" and 96–100% with no state. All detectors and states: `step5/partC_detection_ci_n10.csv`.
 
-| Planted group | Group scan | Total-correlation scan | Third-order scan |
-|-----------------|------|------|------|
-| xor, prob. 0.3–1.0, 300–3000 rounds | 0–4 | 80–100 | 94–100 |
-| Triangle, prob. 0.2–0.5, 300 rounds | 86–100 | 96–100 | 2–68 |
-| Triangle, prob. 0.2–0.5, 1000–3000 rounds | 100 | 100 | 70–100 |
-| Pair, prob. 0.3 (contains the pair) | 100 | 98–100 | 0–4 |
-| No collusion (false alarm) | 3–7 | 4–12 | 4–10 |
+### Table 8 — Reproducing the published method (3 players, 1000 games per row)
 
-On shuffled data both triple statistics follow theory: chi-square with 20 degrees of freedom for
-total correlation, and 8 for the third-order part. False-alarm rates use 50–100 games per setting.
+% of games where exactly the true pair was flagged. *No state* / *27-state* = our score without
+history / conditioned on the previous round's three moves; *Paper* = Bonjour et al., Table 2.
+
+| Collusion prob. | Rounds | No state | 27-state | Paper |
+|---|---|---|---|---|
+| 0.3 | 100 | 80 | 40 | 37 |
+| 0.3 | 300 | 97 | 76 | 71 |
+| 0.3 | 500 | 100 | 93 | 90 |
+| 0.4 | 100 | 98 | 63 | 58 |
+| 0.4 | 300 | 100 | 98 | 96 |
+| 0.1 | average of 100–1000 | 2 | 7 | ≈8 |
+| 0.2 | 1000 | 58 | 49 | 24 (unexplained) |
 
 ## Where things are
 
-- **Figures** (shown above; each PNG has the CSV behind it): `results/figures/`.
-- **Per-step outputs:** `results/step1/` to `results/step6/`, plus `results/step4_final/`.
-- **Method notes, derivations, validation checks:** `results/WRITEUP_NOTES.md`.
-- **Code:** `collusion/` (library), `experiments/` (one script per step), `tests/`.
+- Figures and the CSV behind each: `figures/`. Figure D (false alarms vs rounds with no
+  collusion) is there too, with the data in Table 3.
+- Per-step outputs: `step1/` (reproduction), `step2/` (Figure A), `step4/` and `step4_final/`
+  (planted groups), `step5/` (history), `investigate_scan_fpr/`.
+- Commands and seeds for every number: `RESULTS_INDEX.md`. Method notes: `WRITEUP_NOTES.md`.

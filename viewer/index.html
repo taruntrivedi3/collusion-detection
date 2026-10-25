@@ -176,15 +176,15 @@ for (const b of document.querySelectorAll(".tabs button")) b.onclick = () => {
 
 // ---------------------------------------------------------------- RPS
 const WINDOW = 40, CELL = 16, LABEL_W = 64;
-const SHORT = { triangle: "Triangle", clique5: "Weak 5-clique", hub: "Hub", xor: "xor",
-  reactive_none: "Honest reactors: history ignored", reactive_top: "Honest reactors: history used" };
+const SHORT = { triangle: "Triangle", clique5: "Weak 5-clique", hub: "Hub",
+  reactive_none: "Honest reactors: history ignored", reactive_top: "Honest reactors: history used",
+  steer: "Profitable steering" };
 const IDX = { R: 0, P: 1, S: 2 };
 // Rounds where a planted coalition's rule held (it also holds by chance in some rounds).
 function ruleHeld(c, t) {
   const m = c.members.map(i => IDX[game.moves[i][t]]);
-  if (c.kind === "triangle" || c.kind === "clique") return m.every(x => x === m[0]);
+  if (c.kind === "triangle" || c.kind === "clique" || c.kind === "steer") return m.every(x => x === m[0]);
   if (c.kind === "pair" || c.kind === "hub") return m.slice(1).some(x => x === (m[0] + 2) % 3);
-  if (c.kind === "xor") return m[2] === (m[0] + m[1]) % 3;
   return false;
 }
 let game = null, playTimer = null;
@@ -288,7 +288,6 @@ function verdict(found, truth, key) {
   if (T.size === F.size && [...T].every(t => F.has(t))) return ["✓ exact", "v-good"];
   const planted = new Set(truth.flat());
   if (found.flat().every(i => !planted.has(i))) return ["⚠ wrong players", "v-bad"];
-  if (key.endsWith("scan") && key !== "subgraph" && truth.some(t => t.length !== 3)) return ["◐ part of the group (triples only)", "v-mid"];
   return ["◐ partly right", "v-mid"];
 }
 
@@ -428,7 +427,7 @@ function drawHourTable() {
 
 selectGame(D.rps[0]);
 selectCond(D.auction.conditions[0]);
-// Deep links: #auction, #auction/comms_pressure, #rps/xor
+// Deep links: #auction, #auction/comms_pressure, #rps/steer
 const [tab, sub] = location.hash.slice(1).split("/");
 if (tab) document.querySelector(`.tabs button[data-tab="${tab}"]`)?.click();
 if (tab === "auction" && sub) [...condBox.children][D.auction.conditions.findIndex(c => c.id === sub)]?.click();

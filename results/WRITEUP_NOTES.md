@@ -45,7 +45,7 @@
   BH rejects the smallest p only if p <= q / m (m = number of edges). At B = 200, q = 0.05:
   n = 5 (m = 10) -> bar 0.005 ≈ floor 0.00498, barely possible; n = 10 (m = 45) -> bar 0.0011,
   impossible; n = 20 (m = 190) would need B >= 3800 just to reject at all. First-pass Step 4
-  edge-BH was 0% recovery and 0% false alarms at n >= 10, and the grow step never fired.
+  edge-BH was 0% recovery and 0% false alarms at n >= 10.
 - Fix: per edge, fit a gamma distribution by moments (mean, variance) to the Set-A permutation
   null of gamma and use its upper tail. Justification: under independence with no state, the
   G-statistic 2N * MI_nats = 2N ln2 * gamma_bits is asymptotically chi2 with (3-1)(3-1) = 4
@@ -96,10 +96,10 @@ order 13, full 48-63 (n = 10).
   liberal, consistent with the far-tail gamma-fit excess noted above). Node score's earlier
   12% (50 reps) is 6% [4, 8] at 500 reps. Fixed-alpha Bonjour: 8 / 14 / 23% at 100 rounds
   for n = 5 / 10 / 20, 0% at 300+ rounds.
-- Scan beats max(node, edge-BH) by >= 20 points (100 reps): clique4 n=20 CP 0.3/100: 91 vs 59;
-  clique5 n=20 CP 0.2/100: 44 vs 6; clique5 n=20 CP 0.3/100: 91 vs 61; triangle n=20 CP 0.2/300:
-  91 vs 68. Scan loses: hub CP 0.2 (scan+grow closes it); two_pairs CP 0.3/100 rounds
-  (edge-BH 58 vs 50 at n=10, 50 vs 36 at n=20).
+- Scan beats max(node, edge-BH) by >= 20 points (100 reps): clique4 n=20 CP 0.3/100: 91 vs 54;
+  clique5 n=20 CP 0.2/100: 48 vs 5; clique5 n=20 CP 0.3/100: 93 vs 62; triangle n=20 CP 0.2/300:
+  92 vs 71. Scan loses: hub CP 0.2 (edge-BH 58-94 vs scan 34-71); two_pairs n=10 CP 0.3/100
+  rounds (edge-BH 58 vs 52).
 - Table "structure x n" (table_structure_by_n_ci.csv) pools runs across a structure's CP x rounds
   cells; its Wilson CIs treat pooled runs as exchangeable and so understate between-cell
   heterogeneity. Per-cell CIs: results/step4_final/recovered_ci_wide.csv.
@@ -108,44 +108,40 @@ order 13, full 48-63 (n = 10).
 - Part A (no colluders). Uniform honest agents: all calibrated detectors ~5% under every state.
   Leader-reactive: state none -> 100% false alarms (edge-BH, node, scan); top/order/full ~5%
   (top is sufficient for leader_reactive). Margin-reactive: none, top and order are too coarse;
-  false alarms grow with rounds (scan: top 12 / 45 / 100%, order 8 / 30 / 100% at
-  300 / 1000 / 3000 rounds); full ~5%. Mixed: like margin.
+  false alarms grow with rounds (scan: top 12 / 47 / 100%, order 6 / 30 / 100% at
+  300 / 1000 / 3000 rounds); full 4%. Mixed: like margin.
 - Fixed-alpha Bonjour reports few false alarms here (0-10%) for a structural reason: several
   mutually correlated honest agents cancel in Gamma, the same cancellation that hides coalitions.
   Calibrated Bonjour inflates (up to 70% with state none).
 - Part B (triangle / clique4, CP 0.3, among mixed honest agents). "Recovered" alone hides the
   spurious honest coalitions; report "clean recovery" = planted found and no false coalition.
   Scan clean recovery: none 0-4%; top/order high at 300-1000 rounds, falling at 3000
-  (triangle top 42%, order 61%) as power to detect unmodelled honest reactions grows;
-  full 57-72% at 300 rounds, 93-98% at 1000+. This is the bias-variance trade-off of the state.
+  (triangle top 41%, order 68%) as power to detect unmodelled honest reactions grows;
+  full 50-70% at 300 rounds, 93-95% at 1000+. This is the bias-variance trade-off of the state.
+- Part C (profitable collusion, among margin-reactive honest agents). Steer coalition of 4:
+  w.p. CP all play one shared move (often the lead of >= 3 that MarginReactive(0.5, 3) needs);
+  next round all play loses_to of it, beating the reaction. It uses only the coalition's private
+  memory. Payoff per member per round 0.08 / 0.15 / 0.21 at CP 0.1 / 0.2 / 0.3, vs 0.03 / 0.06 /
+  0.08 for 4 honest Exploiters (play loses_to(last round's top) w.p. CP / (1 + CP), the steer
+  group's exploit rate). Against LeaderReactive players coordination does not pay (independent
+  exploiters earn as much), so Part C uses margin-reactive players. Full state: scan clean
+  recovery 7 / 84 / 95% (CP 0.1, 300 / 1000 / 3000 rounds), 76-98% at CP 0.2-0.3; exploiter
+  false alarms 4-7%. Coarser states flag the exploiters as rounds grow (scan, 3000 rounds: top
+  66-71%, order 40-50%, none 96-100%).
 
-## Step 6: triple scans (no state, B = 200; results/step6/summary.txt)
-- Null matches chi2 theory on the G scale G = 2N ln2 x stat (chi2_df has mean df, variance 2 df).
-  Implied df (B = 200): TC 20.0-20.4 from the mean, 20.0-20.9 from the variance (theory df = 20
-  = 27 - 1 - 3 x 2); third-order component E 8.0-8.3 from the mean, 8.0-8.6 from the variance
-  (theory df = 8 = (3 - 1)^3). B = 1000 values: see "Step 6 null rerun" below. False alarms 4-12%
-  (100 reps; one cell at 12% [7, 20], TC n = 10, 300 rounds).
-- xor: edge scan 0-4% (false-alarm level); TC scan 80-100%; synergy scan 94-100%.
-- triangle: TC scan >= edge scan (96-100 vs 86-100%); synergy scan weak at 300 rounds (2-68%),
-  70-100% at 1000, 100% at 3000. The shared-signal triangle has real third-order structure:
-  median E 0.024-0.071 bits (7-18% of TC), z up to 53.
-- pair: TC scan returns a triple containing the pair in 98-100% of runs (expected: TC includes
-  pairwise dependence); synergy scan 0-4% (correctly ignores pairwise-only structure).
-- Framing correction: the TC scan did NOT lose power to the edge scan on triangles here. The cost
-  is in the synergy scan (needs ~1000+ rounds) and in triples-only reporting (cannot return an
-  exact pair or a 4+ coalition).
-- Limitation: an order-k scan is blind to order-(k+1) parity. D = (A + B + C) mod 3 has every
-  triple mutually independent (TC = E = 0). Detecting k-sparse parity needs search over C(n, k)
-  groups with 3^k-cell tables; no general catch-all exists with finite data. Future work: Amari's
-  full decomposition, partial information decomposition (Williams & Beer 2010), and
+## Higher-order collusion (xor): out of scope
+- xor (C plays (A + B) mod 3) has every pair independent, so all pairwise detectors are at the
+  false-alarm level (Step 4: 0%). A scan over triples (total correlation, or its third-order
+  part after IPF on the three pairwise margins) catches it, but an order-k scan is blind to
+  order-(k+1) parity: D = (A + B + C) mod 3 leaves every triple mutually independent. No
+  fixed-order test generalizes, so the triple scans were removed. Future work:
+  Amari's full decomposition, partial information decomposition (Williams & Beer 2010), and
   payoff-based tests that target harmful coordination of any order.
 
 ## Compute note
-- Container memory limit is 24 GB (cgroup memory.max) and CPU quota 50 cores (the environment
-  presets OMP_NUM_THREADS = 8, which makes `nproc` report 8). An n = 20 scan worker at B = 1000
-  used ~4 GB with cached membership matrices; 44 such workers most likely exceeded the limit and
-  restarted the container. Fixed: uncached 32 MB chunks (0.51 GB peak per worker), one resumable
-  CSV per cell (experiments/common.py), 16 workers.
+- An n = 20 scan worker at B = 1000 uses ~0.5 GB (uncached 32 MB chunks). One resumable CSV per
+  cell (experiments/common.py). All results produced with 64 workers
+  (`WORKERS=64`); colluders at random seats in Steps 4-5.
 
 ## Investigation: subset scan 8% false alarms at n = 20, 300 rounds (results/investigate_scan_fpr/)
 - Observed (Step 4 final): 40/500 = 8.0% [5.9, 10.7]; edge-BH 8.6% on the same games.
@@ -176,9 +172,3 @@ order 13, full 48-63 (n = 10).
 - Edge-BH excess is real and B-dependent: 7.7% pooled at B = 200, 5-9% at B = 1000. Consistent
   with the liberal far tail of the gamma-fit p-values (moment estimates noisier at small B).
   Left as is, per decision; report it.
-
-## Step 6 null rerun: skipped (decision 2026-10-19)
-- The B = 1000 / 500-rep rerun of the Step 6 null cells was cancelled before it started. Step 6
-  false-alarm rates stand at B = 200, 100 reps (50 at n = 20): 4-12%, consistent with 5%. The
-  triple scans use the same max-over-Set-B calibration whose exactness the investigation above
-  confirmed for the subset scan. The code path remains (step6_triples.py --null-final).
