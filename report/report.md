@@ -109,13 +109,23 @@ permutation distribution of its maximum; this controls the family-wise error ove
 
 Each round every player plays every other player (+1 win, −1 loss); n ∈ {5, 10, 20}; 100–3000 rounds.
 With a *collusion probability* (CP) per round, planted colluders coordinate; otherwise they play
-randomly. Planted structures: pair and two pairs (a helper feeds its partner a point), hub
-(one leader, two helpers that never coordinate with each other), triangle / 4-clique / 5-clique (a
-shared secret move), xor (C plays (A + B) mod 3, pairwise invisible), and *steer* (4 players create a
-clear lead, then all play the move that beats the honest players who react to it; coordination pays).
-Honest players are random, *leader-reactive* (beat last round's most common move w.p. 0.5),
-*margin-reactive* (same, only when the lead is ≥ 3), or *exploiters* (independently beat the
-leader-reactive response). Colluders sit at random seats unknown to the detectors.
+randomly. Colluders sit at random seats unknown to the detectors. Table 1 defines the planted groups and
+the honest player types used throughout.
+
+**Table 1.** Planted colluding groups and honest player types.
+
+| Kind | Name | What the players do |
+|---|---|---|
+| Colluders | Pair | A helper plays the move that loses to its partner, feeding the partner a point. |
+| Colluders | Two pairs | Two separate pairs, as above. |
+| Colluders | Hub | One leader and two helpers; each helper feeds the leader, and the helpers never coordinate with each other. |
+| Colluders | Triangle, *k*-clique | *k* = 3, 4 or 5 players share a secret signal and all play the same move (a 3-clique is a triangle). |
+| Colluders | xor | Player C plays (A + B) mod 3, so every pair looks independent. |
+| Colluders | Steer | 4 players all play one move to create a clear lead, then all play the move that beats the honest players who react to that lead; coordination pays. |
+| Honest | Random | Plays uniformly at random. |
+| Honest | Leader-reactive | With probability 0.5, plays the move that beats last round's most common move. |
+| Honest | Margin-reactive | Same, but only when that move led by 3 or more. |
+| Honest | Exploiter | Plays the move that beats the leader-reactive response, on its own, without coordinating. |
 
 ### 3.2 Detectors
 
@@ -191,7 +201,7 @@ therefore **design the market so the state is the agents' entire public input.**
 ### 4.1 Pairwise net influence cannot see groups
 
 **Observation.** The published Bonjour rule found **0% of triangles, cliques and hubs in every setting**
-(Table 1), while the links inside a triangle were about 200 standard deviations above the shuffled data
+(Table 2), while the links inside a triangle were about 200 standard deviations above the shuffled data
 (Figure 1). With no collusion, its fixed threshold raised false alarms in 8–23% of 100-round games
 (n = 5–20) and never fired in longer ones; in a 3-player variant whose score conditions on the
 previous round, it flagged up to 43% (Appendix B). Every
@@ -209,13 +219,13 @@ Inside the triangle the score is ≈ 0 while the links are ≈ 200; in the hub i
 
 ### 4.2 The group scan finds weak, broad groups
 
-Scoring the group as a whole adds up evidence too weak in any single pair (Table 1, Figure 2). With 20
+Scoring the group as a whole adds up evidence too weak in any single pair (Table 2, Figure 2). With 20
 players, 100 rounds and a 5-clique at CP 0.2, the group scan recovered the exact group in **48% [38, 58]**
 of games, against 5% [2, 11] for the pair test and 4% [2, 10] for the player score. It also degrades
 less as players are added: for a triangle, the player score falls from 71% to 52% between n = 5 and 20,
 the group scan from 77% to 71%.
 
-**Table 1.** Exact recovery (%) by planted group and number of players. Averaged over the CP and round
+**Table 2.** Exact recovery (%) by planted group and number of players. Averaged over the CP and round
 settings tried for each group (200 shuffles).
 
 | Planted group | n | Bonjour | Pair test | Player score | Group scan |
@@ -251,11 +261,11 @@ players, 1000 rounds, no colluders, 200 games per point. Dashed line: 5% target.
 
 **Profitable collusion.** A 4-player steer group earns 0.21 points per round each at CP 0.3, **2.6×**
 what four independent exploiters earn reacting at the same rate; the margin-reactive players pay for it
-(Table 2). With the full state, the group scan finds the steer group cleanly in 94–98% of 1000+-round
+(Table 3). With the full state, the group scan finds the steer group cleanly in 94–98% of 1000+-round
 games at CP 0.2–0.3, while the honest exploiters are flagged in 4–7%. With coarser states the
 exploiters look like colluders as games get longer (66–71% under *top*, 96–100% with no state at 3000 rounds).
 
-**Table 2.** Steer group vs honest exploiters (4 of each type among 3 margin-reactive and 3 random players;
+**Table 3.** Steer group vs honest exploiters (4 of each type among 3 margin-reactive and 3 random players;
 200 games per cell). Payoff = points per round per member (margin-reactive players' payoff in brackets).
 Recovery and false alarms: group scan, full state, at 300 / 1000 / 3000 rounds.
 
@@ -272,13 +282,13 @@ rounds with *full*, 94–95% from 1000 rounds).
 ### 4.4 LLM sellers: comms + CEO pressure is detected, controls are not
 
 **Observation.** In both markets, comms + pressure raised seller profit by 49–65% over the controls and
-was the only condition the test flagged consistently (Table 3). Pooled over 200 games, the 2×2 same-move
+was the only condition the test flagged consistently (Table 4). Pooled over 200 games, the 2×2 same-move
 statistic gave z = +7.9 for comms + pressure and |z| ≤ 1.5 for both controls (CMI: +5.0 vs |z| ≤ 0.8).
 In the 5×5 market, pooled over 100 games, the global test gave p = 0.001 (the floor at 1000 shuffles;
 +1,991 matching seller pairs above the shuffle's expectation out of 50,000 pair-rounds, top pairs z = 9–12)
 against p = 0.17 and 0.71 on the controls.
 
-**Table 3.** Batches flagged at α = 0.05, out of disjoint batches of 5, 10 and 20 games. 2×2: same-move
+**Table 4.** Batches flagged at α = 0.05, out of disjoint batches of 5, 10 and 20 games. 2×2: same-move
 test. 5×5: global test over all 10 seller pairs. Profit per seller-hour with a 95% bootstrap interval over
 games.
 
