@@ -54,7 +54,7 @@ et al., 2022) is built for one colluding pair; real coordination may involve a g
 Our contributions:
 
 1. **A failure mode of pairwise net influence.** The published score for a pair subtracts each player's
-   strongest dependence on anyone else, so inside a group the members cancel each other out. The rule
+   strongest dependence on any third player, so inside a group the members cancel each other out. The rule
    rarely flags even one in-group pair (**8–15%** of games), even when the dependence between members is
    about 200 standard deviations above chance. Its fixed threshold is also uncalibrated.
 2. **GroupScan**, a shuffle-calibrated scan over all groups of players, recovers weak, broad groups (many
@@ -75,8 +75,8 @@ Our contributions:
 **Figure 1. GroupScan finds weak, broad groups that pairwise methods miss.** Share of games in which each
 method reports exactly the planted 4- or 5-player group, among 20 players, against the collusion
 probability CP (the share of rounds in which the group coordinates); 100 rounds, 1,000 shuffles, 100 games
-per point, 95% Wilson intervals. The pair test and player score are pairwise baselines and Bonjour is the
-published rule (§3.2); Bonjour stays at 0.
+per point, 95% Wilson intervals. The pair test and the player score (a per-player score built from
+pairwise links) are baselines, and Bonjour is the published rule (§3.2); Bonjour stays at 0.
 
 ## 2. Related Work
 
@@ -98,7 +98,8 @@ pricing and that CEO profit pressure also shapes it. We ask whether it is detect
 alone, and reuse comms + pressure as our positive condition.
 
 **Per-agent detectors and multiple testing.** Rose et al. (2026) score individual agents for
-suspicious behaviour; our “player score” baseline is inspired by this but is not their method.
+suspicious behaviour; our “player score” baseline, a per-player score built from pairwise links, is
+inspired by this but is not their method.
 Our “pair test” applies Benjamini–Hochberg (1995) false-discovery control to all pairs and joins
 significant pairs into groups.
 
@@ -127,7 +128,7 @@ the honest player types used throughout.
 |---|---|---|
 | Colluders | Pair; two pairs | A helper plays the move that loses to its partner's, feeding it a point. |
 | Colluders | Hub | One leader and two helpers, who each feed the leader and never coordinate with each other. |
-| Colluders | Triangle, *k*-clique | *k* = 3–5 players share a secret signal and play the same move. |
+| Colluders | Triangle, *k*-clique | *k* = 3–5 players (18 in one check) share a secret signal and play the same move. |
 | Colluders | xor | C plays (A + B) mod 3, so every pair looks independent. |
 | Colluders | Steer | 4 players all play one move to create a clear lead, then all beat the honest players who react to it. |
 | Honest | Random | Plays uniformly at random. |
@@ -239,10 +240,11 @@ players are added: for a triangle at CP 0.2 and 300 rounds, the player score fal
 larger groups have more linked pairs and are easier for every method. GroupScan searches all sizes and
 recovers even an 18-of-20 cartel (96%, Table 2), although there the simpler player score does as well.
 
-**Table 2. GroupScan wins on weak groups of 3–5; simpler baselines win on hubs, isolated pairs and a
-near-total cartel.** Exact recovery (%) at the one setting every group was run at: CP 0.2, 300 rounds,
+**Table 2. GroupScan wins on weak groups of 3–5; simpler baselines match or beat it on hubs, isolated
+pairs and a near-total cartel.** Exact recovery (%) at the one setting every group was run at: CP 0.2, 300 rounds,
 200 shuffles, 20 players (the triangle also at 5). 50 games per cell (100 at 5 players); 95% Wilson
-intervals for the two strongest methods. †Separate run: 1,000 shuffles, 100 games (`results/large_group/`).
+intervals for the pair test and GroupScan. †Separate run at the same CP 0.2 and 300 rounds, with 1,000
+shuffles and 100 games (`results/large_group/`).
 
 | Planted group | Bonjour | Pair test | Player score | GroupScan |
 |---|---|---|---|---|
