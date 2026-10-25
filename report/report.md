@@ -23,12 +23,12 @@ Numbers come from results/SUMMARY.md, studies/llm_auction_2seller and studies/ll
 
 Auditors of multi-agent systems often see what agents do, not what they say. The
 information-theoretic detector of Bonjour et al. (2022) looks for one pair of players whose moves depend
-on each other, so it cannot report a group: in simulated many-player Rock Paper Scissors it found
+on each other, so it cannot report a group. In simulated many-player Rock Paper Scissors it found
 none of the planted groups of three to five colluders, and its fixed threshold raised 8–23% false alarms
 in short games without collusion. We propose GroupScan, which scores every subset of players by how much
 their moves depend on each other, judged against shuffled copies of the game. Among 20
 players, a 5-player group colluding in 20% of rounds is found exactly in 48% of 100-round games, against
-5% for the best pairwise method. The shuffle must respect what honest players react to: otherwise honest
+5% for the best pairwise method. The shuffle must respect what honest players react to. Otherwise honest
 players who respond to the previous round look like colluders in up to 100% of games. Shuffling only
 among rounds with the same recent history keeps false alarms at 4–9% and still catches a group that
 colludes for profit. In LLM double auctions where sellers see only a recorded summary of the last hour,
