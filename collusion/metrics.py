@@ -1,4 +1,5 @@
 """Scoring detected coalitions against planted ones."""
+import numpy as np
 
 
 def jaccard(a, b):
@@ -19,22 +20,22 @@ def score(detected, truth):
     false_disjoint  : # reported sets that overlap no planted coalition
     """
     det, tru = [frozenset(d) for d in detected], {frozenset(t) for t in truth}
+    dset = set(det)
     nan = float("nan")
     best = [max((jaccard(t, d) for d in det), default=0.0) for t in tru]
     return {
         "detected": bool(det),
-        "exact": set(det) == tru,
+        "exact": dset == tru,
         "exact_first": float(bool(det) and det[0] in tru) if tru else nan,
-        "recovered": sum(t in set(det) for t in tru) / len(tru) if tru else nan,
+        "recovered": sum(t in dset for t in tru) / len(tru) if tru else nan,
         "best_jacc": sum(best) / len(best) if best else nan,
         "false_coal": sum(d not in tru for d in det),
-        "false_disjoint": sum(1 for d in det if not any(d & t for t in tru)),
+        "false_disjoint": sum(not any(d & t for t in tru) for d in det),
     }
 
 
 def wilson(k, n, z=1.96):
     """95% Wilson score interval for k successes out of n trials -> (lo, hi) as fractions."""
-    import numpy as np
     k, n = np.asarray(k, dtype=float), np.asarray(n, dtype=float)
     p = np.where(n > 0, k / np.maximum(n, 1), np.nan)
     den = 1 + z * z / n

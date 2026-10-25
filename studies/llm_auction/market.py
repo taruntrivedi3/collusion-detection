@@ -6,7 +6,6 @@ State is the entire public input and actions are conditionally independent given
 sellers coordinate through the message channel.
 """
 from dataclasses import dataclass, asdict
-import random
 
 ACTIONS = ("tighten", "hold", "widen")
 SELLERS = ("S1", "S2")
@@ -71,36 +70,22 @@ def draw(rng, probs):
     return rng.choices(ACTIONS, weights=probs)[0]
 
 
-class ScriptedPolicy:
-    """Stand-in agents that read only the State. With probability `collude` per round the two
-    sellers take one jointly drawn action (models a plan agreed over messages last round)."""
+def seller_probs(state, me):
+    """Scripted seller: (tighten, hold, widen) probabilities given the State (used by dry runs)."""
+    if state.sold == me:
+        p = (0.15, 0.5, 0.35)
+    elif state.sold == "none":
+        p = (0.6, 0.3, 0.1)
+    else:
+        p = (0.7, 0.2, 0.1)
+    if state.ask_level == "low":
+        p = (p[0] * 0.5, p[1] + p[0] * 0.5, p[2])
+    return p
 
-    COLLUDE_PROBS = (0.1, 0.4, 0.5)
 
-    def __init__(self, rng, collude=0.0):
-        self.rng, self.collude = rng, collude
-
-    def seller_probs(self, state, me):
-        if state.sold == me:
-            p = (0.15, 0.5, 0.35)
-        elif state.sold == "none":
-            p = (0.6, 0.3, 0.1)
-        else:
-            p = (0.7, 0.2, 0.1)
-        if state.ask_level == "low":
-            p = (p[0] * 0.5, p[1] + p[0] * 0.5, p[2])
-        return p
-
-    def buyer_probs(self, state):
-        return (0.6, 0.3, 0.1) if state.sold == "none" else (0.2, 0.5, 0.3)
-
-    def decide(self, state, inbox, t):
-        out = {s: (draw(self.rng, self.seller_probs(state, s)), "") for s in SELLERS}
-        if self.collude and self.rng.random() < self.collude:
-            joint = draw(self.rng, self.COLLUDE_PROBS)
-            out = {s: (joint, "") for s in SELLERS}
-        out.update({b: (draw(self.rng, self.buyer_probs(state)), "") for b in BUYERS})
-        return out
+def buyer_probs(state):
+    """Scripted buyer: raise the bid after no trade, lean to keep / lower after a trade."""
+    return (0.6, 0.3, 0.1) if state.sold == "none" else (0.2, 0.5, 0.3)
 
 
 def seller_rows(games):

@@ -7,29 +7,24 @@
 Usage: python step4_final.py run [workers]   -> results/step4_final/cells/*.csv (resumable)
        python step4_final.py summary         -> tables with 95% Wilson CIs
 """
-import os
+from common import WORKERS, load_cells, run_cells  # first: sets single-threaded BLAS before numpy is imported
 
-for v in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
-    os.environ[v] = "1"
+import sys
+from pathlib import Path
 
-import sys  # noqa: E402
-from pathlib import Path  # noqa: E402
-
-import numpy as np  # noqa: E402
-import pandas as pd  # noqa: E402
+import numpy as np
+import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from collusion.game import random_seats, simulate  # noqa: E402
 from collusion.null import build_context  # noqa: E402
-from collusion.detect import DETECTORS, run_all  # noqa: E402
+from collusion.detect import run_all  # noqa: E402
 from collusion.metrics import score, wilson  # noqa: E402
-from common import WORKERS, load_cells, run_cells  # noqa: E402
-from step4_planted import OUT as DEV, SHORT, STRUCTS, population  # noqa: E402
+from step4_planted import DET_ORDER, OUT as DEV, SHORT, STRUCTS, population  # noqa: E402
 
 OUT = DEV.parent / "step4_final"
 OUT.mkdir(parents=True, exist_ok=True)
 B = 1000
-DET_ORDER = list(DETECTORS)
 FINAL_TAG = 1
 
 

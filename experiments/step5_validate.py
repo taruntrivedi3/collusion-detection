@@ -7,17 +7,14 @@
     (b2) out-of-sample: Set-A closed-form mean / sd vs the empirical mean / sd of T(C) on Set B.
 Output: results/step5/validate_shortcuts.csv
 """
-import os
+from common import WORKERS  # first: sets single-threaded BLAS before numpy is imported
 
-for v in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
-    os.environ[v] = "1"
+import sys
+from multiprocessing import Pool
+from pathlib import Path
 
-import sys  # noqa: E402
-from multiprocessing import Pool  # noqa: E402
-from pathlib import Path  # noqa: E402
-
-import numpy as np  # noqa: E402
-import pandas as pd  # noqa: E402
+import numpy as np
+import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from collusion.game import simulate  # noqa: E402
@@ -56,15 +53,14 @@ def one(task):
     TA, TB = Xp @ vA.T, Xp @ vB.T
     row["b1_max_rel_err_sd"] = np.max(np.abs(sd_cf - TA.std(1)) / TA.std(1))
     row["b1_max_abs_err_mean"] = np.max(np.abs(mu_cf - TA.mean(1)))
-    rel_sd = sd_cf / TB.std(1) - 1
     row["b2_sd_ratio_median"] = np.median(sd_cf / TB.std(1))
-    row["b2_sd_ratio_max_dev"] = np.max(np.abs(rel_sd))
+    row["b2_sd_ratio_max_dev"] = np.max(np.abs(sd_cf / TB.std(1) - 1))
     row["b2_mean_shift_in_sd_max"] = np.max(np.abs(mu_cf - TB.mean(1)) / TB.std(1))
     return row
 
 
 if __name__ == "__main__":
-    workers = int(sys.argv[1]) if len(sys.argv) > 1 else 1
+    workers = int(sys.argv[1]) if len(sys.argv) > 1 else WORKERS
     tasks = [(m, s, r, k) for m in MIXES for s in STATE_DEFS for r in (300, 1000, 3000) for k in range(RUNS)]
     with Pool(workers) as pool:
         rows = pool.map(one, tasks, chunksize=1)

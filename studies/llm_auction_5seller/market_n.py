@@ -5,14 +5,14 @@ the shared State reports how many sellers lowered / kept / raised, who sold, and
 high or low. Every agent's prompt is a function of that State only (plus the broadcast messages in comms
 conditions), so any pair of sellers is conditionally independent given it unless they coordinate.
 """
+import sys
 from dataclasses import dataclass, asdict
 from pathlib import Path
-import random
-import sys
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "llm_auction"))  # market.py, stats.py, llm_pilot.py
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "llm_auction"))  # market.py
 
-from market import ACTIONS, SELLER_COST, BUYER_VALUE, TICK, ASK_START, BID_START, ASK_BOUNDS, BID_BOUNDS, HIGH_ASK, clamp, draw
+from market import (TICK, ASK_START, BID_START, ASK_BOUNDS, BID_BOUNDS, HIGH_ASK, buyer_probs,  # noqa: E402
+                    clamp, draw, seller_probs)
 
 
 def names(prefix, n):
@@ -73,27 +73,12 @@ class ScriptedPolicy:
     def __init__(self, rng, sellers, buyers, collude=0.0, ring=()):
         self.rng, self.sellers, self.buyers, self.collude, self.ring = rng, sellers, buyers, collude, ring
 
-    def seller_probs(self, state, me):
-        if state.sold == me:
-            p = (0.15, 0.5, 0.35)
-        elif state.sold == "none":
-            p = (0.6, 0.3, 0.1)
-        else:
-            p = (0.7, 0.2, 0.1)
-        if state.ask_level == "low":
-            p = (p[0] * 0.5, p[1] + p[0] * 0.5, p[2])
-        return p
-
-    @staticmethod
-    def buyer_probs(state):
-        return (0.6, 0.3, 0.1) if state.sold == "none" else (0.2, 0.5, 0.3)
-
     def decide(self, state, inbox, t):
-        out = {s: (draw(self.rng, self.seller_probs(state, s)), "") for s in self.sellers}
+        out = {s: (draw(self.rng, seller_probs(state, s)), "") for s in self.sellers}
         if self.collude and self.rng.random() < self.collude:
             joint = draw(self.rng, self.COLLUDE_PROBS)
             out.update({s: (joint, "") for s in self.ring})
-        out.update({b: (draw(self.rng, self.buyer_probs(state)), "") for b in self.buyers})
+        out.update({b: (draw(self.rng, buyer_probs(state)), "") for b in self.buyers})
         return out
 
 

@@ -4,6 +4,7 @@ LLM auction games (2 and 5 sellers) with condition-level test results. Open view
   python viewer/export.py            (a few minutes)
 """
 import json
+import re
 import sys
 from pathlib import Path
 
@@ -64,11 +65,12 @@ def rps_game(sid, title, text, pop, rounds, state_kind, seed):
     states = encode_states(actions, state_kind)
     ctx = build_context(actions, states, B=B, seed=seed)
     z = edge_z(ctx)[0]
-    results = []
+    results, sig = [], []
     for key, label, f in DETECTORS:
         r = f(ctx)
         results.append({"key": key, "label": label, "found": [sorted(map(int, c)) for c in r.coalitions]})
-    sig = detect_edge_bh(ctx).info["sig_edges"]
+        if key == "edge_bh":
+            sig = r.info["sig_edges"]
     return {"id": sid, "title": title, "text": text, "n": pop.n, "rounds": rounds, "state": state_kind,
             "moves": ["".join("RPS"[m] for m in actions[:, i]) for i in range(pop.n)],
             "planted": [sorted(c.members) for c in pop.coalitions],
@@ -113,7 +115,6 @@ def auction():
 
 def auction5():
     """5-seller market: outcomes and pooled global test from studies/llm_auction_5seller (analysis.txt)."""
-    import re
     from build_report import CONDS, LABEL
     run = ROOT / "studies" / "llm_auction_5seller" / "runs" / "n5_rates_v1"
     games = {}

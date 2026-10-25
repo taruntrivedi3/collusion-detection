@@ -1,11 +1,10 @@
 import numpy as np
-import pytest
 
 from collusion.game import (Coalition, LeaderReactive, Population, beats, loses_to,
                             payoff_paper3, payoff_round_robin, simulate)
 from collusion.estimate import encode_states, gamma, net_influence
 from collusion.null import build_context, permute_within_states
-from collusion.detect import _bh, detect_subgraph, subset_masks, subset_scores, edge_z
+from collusion.detect import _bh, detect_bonjour_calibrated, detect_subgraph, edge_z, subset_scores
 
 LOG2_3 = np.log2(3)
 
@@ -111,8 +110,7 @@ def test_subgraph_recovers_strong_triangle():
     assert detect_subgraph(ctx).coalitions == [frozenset({0, 1, 2})]
 
 
-def test_bonjour_calibrated_pair_and_null():
-    from collusion.detect import detect_bonjour_calibrated
+def test_bonjour_calibrated_recovers_pair():
     rng = np.random.default_rng(9)
     a = simulate(Population(3, [Coalition("pair", [0, 1], 0.5)]), 500, rng)
     ctx = build_context(a, np.zeros(500, dtype=np.int64), B=100, seed=2)

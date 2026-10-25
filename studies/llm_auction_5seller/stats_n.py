@@ -6,8 +6,9 @@ Statistics: same-move count for every pair, the total over pairs (global test), 
 standardized pair (max-statistic test, controls the family-wise error rate over pairs).
 """
 import math
-from collections import defaultdict
 from itertools import combinations
+
+from stats import shuffle_within, state_groups  # llm_auction/stats.py (callers put it on sys.path)
 
 
 def pair_same(cols, pairs):
@@ -17,23 +18,12 @@ def pair_same(cols, pairs):
 def joint_test(cols, z, perms, rng):
     sellers = sorted(cols)
     pairs = list(combinations(sellers, 2))
-    groups = defaultdict(list)
-    for i, zz in enumerate(z):
-        groups[zz].append(i)
+    groups = state_groups(z)
 
     real = pair_same(cols, pairs)
     null = []
     for _ in range(perms):
-        shuffled = {}
-        for s in sellers:
-            col = list(cols[s])
-            for idxs in groups.values():
-                vals = [cols[s][i] for i in idxs]
-                rng.shuffle(vals)
-                for i, v in zip(idxs, vals):
-                    col[i] = v
-            shuffled[s] = col
-        null.append(pair_same(shuffled, pairs))
+        null.append(pair_same({s: shuffle_within(cols[s], groups, rng) for s in sellers}, pairs))
 
     mean = [sum(n[k] for n in null) / perms for k in range(len(pairs))]
     sd = [math.sqrt(sum((n[k] - mean[k]) ** 2 for n in null) / (perms - 1)) or 1.0 for k in range(len(pairs))]

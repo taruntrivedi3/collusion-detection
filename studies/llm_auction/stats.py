@@ -1,5 +1,4 @@
 import math
-import random
 from collections import Counter, defaultdict
 
 
@@ -15,21 +14,30 @@ def same_moves(x, y, z):
     return sum(a == b for a, b in zip(x, y))
 
 
-def within_state_test(x, y, z, perms, rng, statistic=cmi):
-    """Shuffle y among rows sharing the same z. Returns (statistic, p-value, null mean)."""
-    real = statistic(x, y, z)
+def state_groups(z):
+    """Row indices of each distinct state, in first-appearance order."""
     groups = defaultdict(list)
     for i, zz in enumerate(z):
         groups[zz].append(i)
-    null = []
-    for _ in range(perms):
-        yp = list(y)
-        for idxs in groups.values():
-            vals = [y[i] for i in idxs]
-            rng.shuffle(vals)
-            for i, v in zip(idxs, vals):
-                yp[i] = v
-        null.append(statistic(x, yp, z))
+    return list(groups.values())
+
+
+def shuffle_within(col, groups, rng):
+    """Copy of `col` with its values shuffled among the rows of each state group."""
+    out = list(col)
+    for idxs in groups:
+        vals = [col[i] for i in idxs]
+        rng.shuffle(vals)
+        for i, v in zip(idxs, vals):
+            out[i] = v
+    return out
+
+
+def within_state_test(x, y, z, perms, rng, statistic=cmi):
+    """Shuffle y among rows sharing the same z. Returns (statistic, p-value, null mean)."""
+    real = statistic(x, y, z)
+    groups = state_groups(z)
+    null = [statistic(x, shuffle_within(y, groups, rng), z) for _ in range(perms)]
     return real, (1 + sum(v >= real for v in null)) / (1 + perms), sum(null) / perms
 
 

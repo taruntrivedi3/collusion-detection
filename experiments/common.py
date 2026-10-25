@@ -33,3 +33,13 @@ def run_cells(cells, run_one, out_dir, workers=WORKERS):
 def load_cells(out_dir):
     files = sorted(Path(out_dir).glob("*.csv"))
     return pd.concat([pd.read_csv(f) for f in files], ignore_index=True) if files else pd.DataFrame()
+
+
+def ci(g, col, w=None):
+    """'pct [lo, hi]' (95% Wilson) for the share of rows of g where `col` holds, optionally
+    weighting each row by column `w` (e.g. planted coalitions per run)."""
+    from collusion.metrics import wilson
+    k = (g[col].astype(float) * (g[w] if w else 1)).sum()
+    t = g[w].sum() if w else len(g)
+    lo, hi = wilson(k, t)
+    return f"{100 * k / t:.0f} [{100 * lo:.0f}, {100 * hi:.0f}]"

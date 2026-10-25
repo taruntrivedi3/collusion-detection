@@ -8,6 +8,8 @@ S_real_max > 95th percentile of max_B (the pipeline rule). Variants:
   V3  fresh seeds, "real" input = a within-state permutation of the simulated data, B = 200
 Usage: python investigate_scan_fpr.py run | summary
 """
+from common import WORKERS, run_cells  # first: sets single-threaded BLAS before numpy is imported
+
 import sys
 from pathlib import Path
 
@@ -15,7 +17,6 @@ import numpy as np
 import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-from common import WORKERS, load_cells, run_cells  # noqa: E402
 from collusion.game import Population, simulate  # noqa: E402
 from collusion.null import build_context, permute_within_states  # noqa: E402
 from collusion.detect import detect_edge_bh, subset_scores  # noqa: E402
@@ -93,6 +94,6 @@ def summary():
 
 if __name__ == "__main__":
     if sys.argv[1] == "run":
-        run_cells([(f"{v}", [(v, r) for r in range(k)]) for v, k in CELLS], one, OUT, WORKERS)
+        run_cells([(v, [(v, r) for r in range(k)]) for v, k in CELLS], one, OUT, WORKERS)
     else:
         summary()

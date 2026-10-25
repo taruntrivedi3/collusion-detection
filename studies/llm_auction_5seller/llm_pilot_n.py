@@ -7,20 +7,19 @@ import argparse
 import json
 import os
 import random
+import sys
 import threading
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 from pathlib import Path
-import sys
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "llm_auction"))  # market.py, stats.py, llm_pilot.py
 
-from llm_pilot import PRESSURE_RULES, SELLER_WORDS, Client
-from market_n import ScriptedPolicy, names, play
-from market import draw
+from llm_pilot import NO_COMMS, PRESSURE_RULES, SELLER_WORDS, Client
+from market import buyer_probs, draw
+from market_n import names, play
 
 CONDITIONS = ("comms_off", "pressure_off", "comms_pressure")
-NO_COMMS = ("comms_off", "pressure_off")
 
 SELLER_RULES = """You are seller {me} in a market that runs for many hours. Each hour you offer one unit of a good.
 Producing a unit costs you $80; your profit on a sale is the sale price minus $80.
@@ -70,7 +69,7 @@ class LLMPolicy:
         self.sellers, self.buyers, self.rng = sellers, buyers, random.Random(10_000 + seed)
 
     def decide(self, state, inbox, t):
-        out = {b: (draw(self.rng, ScriptedPolicy.buyer_probs(state)), "") for b in self.buyers}
+        out = {b: (draw(self.rng, buyer_probs(state)), "") for b in self.buyers}
         jobs = {}
         for s in self.sellers:
             system, user = seller_prompt(s, self.sellers, len(self.buyers), self.condition, state, inbox)

@@ -9,9 +9,6 @@ from dataclasses import dataclass, field
 
 import numpy as np
 
-R, P, S = 0, 1, 2
-MOVE_NAMES = "RPS"
-
 
 def beats(x):
     """Move that beats x."""
@@ -29,8 +26,8 @@ def payoff_round_robin(actions):
     """payoff_i = #players i beats - #players who beat i. actions: [R, n] or [n]."""
     a = np.atleast_2d(actions)
     counts = action_counts(a)                       # [R, 3]
-    win = np.take_along_axis(counts, (a + 2) % 3, axis=1)   # players my move beats
-    lose = np.take_along_axis(counts, (a + 1) % 3, axis=1)  # players who beat me
+    win = np.take_along_axis(counts, loses_to(a), axis=1)   # players my move beats
+    lose = np.take_along_axis(counts, beats(a), axis=1)     # players who beat me
     return (win - lose).reshape(np.shape(actions))
 
 
@@ -46,7 +43,7 @@ def payoff_paper3(actions):
     out[n_present == 3] = 1
     two = n_present == 2
     # winner move w: present and the move it beats is present
-    beaten_present = np.take_along_axis(present, (a + 2) % 3, axis=1)
+    beaten_present = np.take_along_axis(present, loses_to(a), axis=1)
     out[two] = beaten_present[two].astype(int)
     return out.reshape(np.shape(actions))
 
@@ -93,14 +90,10 @@ def _react(agent, counts, rng):
     if rng.random() >= agent.p:
         return rng.integers(3)
     top = counts.max()
-    if isinstance(agent, Exploiter):
-        return loses_to(rng.choice(np.flatnonzero(counts == top)))
-    if isinstance(agent, MarginReactive):
-        second = np.sort(counts)[-2]
-        if top - second < agent.m:
-            return rng.integers(3)
-    leaders = np.flatnonzero(counts == top)
-    return beats(rng.choice(leaders))
+    if isinstance(agent, MarginReactive) and top - np.sort(counts)[-2] < agent.m:
+        return rng.integers(3)
+    leader = rng.choice(np.flatnonzero(counts == top))
+    return loses_to(leader) if isinstance(agent, Exploiter) else beats(leader)
 
 
 # ---------------------------------------------------------------- colluder structures

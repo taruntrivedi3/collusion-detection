@@ -8,20 +8,18 @@ Part C (profitable collusion, among 'margin' honest agents): a 4-player 'steer' 
         CP {0.1, 0.2, 0.3}, and a control of 4 honest Exploiters reacting independently at the
         same rate. Metrics: payoff per round, recovery (steer), any detection (exploit).
 Colluders and honest types sit at random seats (seed [seed, 1]).
-All six detectors use the cell's state definition. Each trajectory is shared across states.
+All five detectors use the cell's state definition. Each trajectory is shared across states.
 
 Usage: python step5_run.py A|B|C [workers] [n]   -> results/step5/part{A,B,C}_n{n}/*.csv (resumable)
+       python step5_run.py summary                -> tables with 95% Wilson CIs (n = 10)
 """
-import os
+from common import WORKERS, ci, load_cells, run_cells  # first: sets single-threaded BLAS before numpy is imported
 
-for v in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
-    os.environ[v] = "1"
+import sys
+from pathlib import Path
 
-import sys  # noqa: E402
-from pathlib import Path  # noqa: E402
-
-import numpy as np  # noqa: E402
-import pandas as pd  # noqa: E402
+import numpy as np
+import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from collusion.game import MarginReactive, payoff_round_robin, random_seats, simulate  # noqa: E402
@@ -29,7 +27,7 @@ from collusion.estimate import encode_states  # noqa: E402
 from collusion.null import build_context  # noqa: E402
 from collusion.detect import run_all  # noqa: E402
 from collusion.metrics import score  # noqa: E402
-from common import WORKERS, load_cells, run_cells  # noqa: E402
+from step4_planted import SHORT  # noqa: E402
 from step5_common import MIXES, STATE_DEFS, group, population  # noqa: E402
 
 OUT = Path(__file__).resolve().parents[1] / "results" / "step5"
@@ -82,15 +80,6 @@ def load(part, n=10):
     return load_cells(OUT / f"part{part}_n{n}")
 
 
-if __name__ == "__main__" and sys.argv[1] == "summary":
-    pass
-elif __name__ == "__main__":
-    part = sys.argv[1]
-    workers = int(sys.argv[2]) if len(sys.argv) > 2 else WORKERS
-    n = int(sys.argv[3]) if len(sys.argv) > 3 else 10
-    run_cells(cells(part, n), one, OUT / f"part{part}_n{n}", workers)
-
-
 def partB_false_and_clean(Bp):
     """Mean false coalitions per run, and % runs with the planted coalition recovered AND no
     false coalition ('clean recovery'), for the edge-based set detectors."""
@@ -103,23 +92,13 @@ def partB_false_and_clean(Bp):
 
 
 def summary(n=10):
-    from collusion.metrics import wilson
-    short = {"bonjour": "Bonj", "bonjour_cal": "Bonj-cal", "edge_bh": "edge-BH", "node_score": "node",
-             "subgraph": "scan"}
-
-    def ci(g, col, w=None):
-        k = (g[col].astype(float) * (g[w] if w else 1)).sum()
-        t = g[w].sum() if w else len(g)
-        lo, hi = wilson(k, t)
-        return f"{100 * k / t:.0f} [{100 * lo:.0f}, {100 * hi:.0f}]"
-
-    order = list(short)
+    order = list(SHORT)
     A, Bp = load("A", n), load("B", n)
     fa = A.groupby(["mix", "rounds", "state", "detector"]).apply(lambda g: ci(g, "detected"), include_groups=False)
-    fa = fa.unstack("detector")[order].rename(columns=short)
+    fa = fa.unstack("detector")[order].rename(columns=SHORT)
     pw = Bp.groupby(["structure", "rounds", "state", "detector"]).apply(lambda g: ci(g, "recovered", "n_planted"),
                                                                          include_groups=False)
-    pw = pw.unstack("detector")[order].rename(columns=short)
+    pw = pw.unstack("detector")[order].rename(columns=SHORT)
     fa.to_csv(OUT / f"partA_false_alarm_ci_n{n}.csv"); pw.to_csv(OUT / f"partB_recovery_ci_n{n}.csv")
     fc, clean = partB_false_and_clean(Bp)
     fc.to_csv(OUT / f"partB_false_coalitions_n{n}.csv"); clean.to_csv(OUT / f"partB_exact_and_clean_n{n}.csv")
@@ -128,7 +107,7 @@ def summary(n=10):
     pay = one_row.groupby(["structure", "cp", "rounds"])[["group_pay", "reactive_pay"]].mean().round(3)
     cs = C.assign(hit=np.where(C.structure == "steer", C.recovered, C.detected))
     cpw = cs.groupby(["structure", "cp", "rounds", "state", "detector"]).apply(
-        lambda g: ci(g, "hit"), include_groups=False).unstack("detector")[order].rename(columns=short)
+        lambda g: ci(g, "hit"), include_groups=False).unstack("detector")[order].rename(columns=SHORT)
     pay.to_csv(OUT / f"partC_payoff_n{n}.csv"); cpw.to_csv(OUT / f"partC_detection_ci_n{n}.csv")
     with pd.option_context("display.width", 250, "display.max_rows", 400):
         print("Part A: % runs with any detection, no colluders [95% Wilson CI]"); print(fa.to_string())
@@ -138,5 +117,11 @@ def summary(n=10):
         print(cpw.to_string())
 
 
-if __name__ == "__main__" and sys.argv[1] == "summary":
-    summary()
+if __name__ == "__main__":
+    if sys.argv[1] == "summary":
+        summary()
+    else:
+        part = sys.argv[1]
+        workers = int(sys.argv[2]) if len(sys.argv) > 2 else WORKERS
+        n = int(sys.argv[3]) if len(sys.argv) > 3 else 10
+        run_cells(cells(part, n), one, OUT / f"part{part}_n{n}", workers)

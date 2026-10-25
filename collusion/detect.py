@@ -1,9 +1,6 @@
-"""Collusion detectors. All share one interface:
-
-    detect(actions[R, n], states[R], method=..., B=..., seed=...) -> list[frozenset]
-
-Internally every detector works from a NullContext (observed gamma + two permutation sets),
-so experiments can build the context once and run all detectors on the same trajectories.
+"""Collusion detectors. Each takes a NullContext (observed gamma + two permutation sets) and
+returns a Result, so experiments build the context once and run every detector on the same
+trajectories; `detect()` is a one-call convenience wrapper.
 """
 from __future__ import annotations
 
@@ -28,13 +25,9 @@ class Result:
 
 # ---------------------------------------------------------------- edge z-scores
 
-def edge_moments(g_A):
-    return g_A.mean(0), np.maximum(g_A.std(0), EPS)
-
-
 def edge_z(ctx: NullContext):
     """z for observed and for every Set-B dataset, standardized by Set-A per-edge moments."""
-    mu, sd = edge_moments(ctx.g_A)
+    mu, sd = ctx.g_A.mean(0), np.maximum(ctx.g_A.std(0), EPS)
     zr = (ctx.g_real - mu) / sd
     zA = (ctx.g_A - mu) / sd
     zB = (ctx.g_B - mu) / sd
@@ -58,7 +51,7 @@ def detect_bonjour(ctx: NullContext, alpha=ALPHA_BONJOUR) -> Result:
 
 def pair_min_gamma(g):
     """m[.., i, j] = min(Gamma(i;j), Gamma(j;i)); a pair passes the both-directions rule at
-    threshold t iff m >= t. Diagonal = -inf."""
+    threshold t iff m >= t (the calibrated variant uses m > t). Diagonal = -inf."""
     G = np.nan_to_num(net_influence(g), nan=-np.inf)
     return np.minimum(G, np.swapaxes(G, -1, -2))
 
@@ -222,28 +215,28 @@ def _mask_to_set(mask, labels):
     return frozenset(int(labels[b]) for b in range(len(labels)) if (int(mask) >> b) & 1)
 
 
-def detect_subgraph(ctx: NullContext, level=0.95, max_rounds=None, cache=None) -> Result:
+def detect_subgraph(ctx: NullContext, level=0.95, cache=None) -> Result:
     """Exact scan over all subsets |C| >= 2; peel detected coalitions and recalibrate
     (step-down max-T).
-    `cache` (dict) shares per-stage scan scores between calls on the same root context."""
+    `cache` (dict) shares per-stage results (best mask, S_max, threshold) between calls on the
+    same root context."""
     cache = {} if cache is None else cache
     labels = np.arange(ctx.n)
     found, trace = [], []
     cur = ctx
-    while cur.n >= 2 and (max_rounds is None or len(found) < max_rounds):
+    while cur.n >= 2:
         key = tuple(labels.tolist())
         if key not in cache:
             masks, S, maxB = subset_scores(cur)
             k = int(np.argmax(S))
             cache[key] = (int(masks[k]), float(S[k]), float(np.quantile(maxB, level)))
         mask, s_max, thr = cache[key]
-        local = [b for b in range(cur.n) if (mask >> b) & 1]
-        trace.append({"S_max": s_max, "threshold": thr, "argmax": frozenset(labels[local].tolist())})
+        C = frozenset(labels[[b for b in range(cur.n) if (mask >> b) & 1]].tolist())
+        trace.append({"S_max": s_max, "threshold": thr, "argmax": C})
         if s_max <= thr:
             break
-        C = frozenset(labels[local].tolist())
         found.append(C)
-        keep = [i for i in range(cur.n) if i not in set(local)]
+        keep = [i for i in range(cur.n) if not (mask >> i) & 1]
         if len(keep) < 2:
             break
         cur, kidx = cur.restrict(keep)

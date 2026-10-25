@@ -8,8 +8,6 @@ import numpy as np
 
 from .game import action_counts
 
-STATE_KINDS = ("none", "top", "order", "full", "profile")
-
 
 # ---------------------------------------------------------------- states
 
@@ -52,8 +50,7 @@ def onehot(actions):
 def _xlogx_table(N):
     """t[k] = k * log2(k) for integer k in 0..N (t[0] = 0)."""
     k = np.arange(N + 1, dtype=np.float64)
-    with np.errstate(divide="ignore", invalid="ignore"):
-        return np.where(k > 0, k * np.log2(np.maximum(k, 1)), 0.0)
+    return k * np.log2(np.maximum(k, 1))
 
 
 def gamma_batch(actions, states):
@@ -89,6 +86,7 @@ def gamma_batch(actions, states):
 
 
 def gamma(actions, states=None):
+    """gamma for one dataset; states default to a single state (unconditional MI)."""
     if states is None:
         states = np.zeros(len(actions), dtype=np.int64)
     return gamma_batch(actions, states)

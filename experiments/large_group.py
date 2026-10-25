@@ -6,23 +6,19 @@ Seeds: SS[n, size, round(100 * CP), rounds, rep, 18]; colluders at random seats.
 Usage: python large_group.py run [workers]   -> results/large_group/cells/*.csv (resumable)
        python large_group.py summary         -> exact recovery and detection with 95% Wilson CIs
 """
-import os
+from common import WORKERS, ci, load_cells, run_cells  # first: sets single-threaded BLAS before numpy is imported
 
-for v in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
-    os.environ[v] = "1"
+import sys
+from pathlib import Path
 
-import sys  # noqa: E402
-from pathlib import Path  # noqa: E402
-
-import numpy as np  # noqa: E402
-import pandas as pd  # noqa: E402
+import numpy as np
+import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from collusion.game import Coalition, Population, random_seats, simulate  # noqa: E402
 from collusion.null import build_context  # noqa: E402
 from collusion.detect import DETECTORS, run_all  # noqa: E402
-from collusion.metrics import score, wilson  # noqa: E402
-from common import WORKERS, load_cells, run_cells  # noqa: E402
+from collusion.metrics import score  # noqa: E402
 from step4_planted import SHORT  # noqa: E402
 
 OUT = Path(__file__).resolve().parents[1] / "results" / "large_group"
@@ -43,11 +39,6 @@ def run_one(task):
 
 def summary():
     df = load_cells(OUT / "cells")
-
-    def ci(g, col):
-        k, t = g[col].astype(float).sum(), len(g)
-        lo, hi = wilson(k, t)
-        return f"{100 * k / t:.0f} [{100 * lo:.0f}, {100 * hi:.0f}]"
 
     order = [d for d in DETECTORS if d in set(df.detector)]
     with pd.option_context("display.width", 250):

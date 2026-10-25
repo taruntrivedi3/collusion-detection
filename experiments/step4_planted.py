@@ -12,24 +12,20 @@ Colluders sit at random seats (seed [seed, 1]).
 Reps: 100 for n <= 10, 50 for n = 20. Permutations B = 200 per set (dev setting).
 Edge-BH uses gamma-fit permutation p-values (see detect.edge_pvalues).
 """
-import os
+from common import WORKERS  # first: sets single-threaded BLAS before numpy is imported
 
-for v in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS"):
-    os.environ[v] = "1"
+import sys
+from multiprocessing import Pool
+from pathlib import Path
 
-import sys  # noqa: E402
-from multiprocessing import Pool  # noqa: E402
-from pathlib import Path  # noqa: E402
-
-import numpy as np  # noqa: E402
-import pandas as pd  # noqa: E402
+import numpy as np
+import pandas as pd
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 from collusion.game import Coalition, Population, random_seats, simulate  # noqa: E402
 from collusion.null import build_context  # noqa: E402
 from collusion.detect import DETECTOR_LABELS, DETECTORS, run_all  # noqa: E402
 from collusion.metrics import score  # noqa: E402
-from common import WORKERS  # noqa: E402
 
 OUT = Path(__file__).resolve().parents[1] / "results" / "step4"
 OUT.mkdir(parents=True, exist_ok=True)
@@ -116,14 +112,11 @@ def summarize():
     nul = nul.reindex(columns=DET_ORDER, level=1)
     nul.round(2).to_csv(OUT / "null_fpr.csv")
     # flagged cells: scan beats both node-score and edge-BH by > 10 points (recovered)
-    flags = []
-    for scan in ("subgraph",):
-        d = rec[(rec[scan] - rec[["node_score", "edge_bh"]].max(axis=1)) > 10]
-        flags.append(d.assign(scan=scan, margin=d[scan] - d[["node_score", "edge_bh"]].max(axis=1)))
-    flags = pd.concat(flags).round(1)
+    margin = rec["subgraph"] - rec[["node_score", "edge_bh"]].max(axis=1)
+    flags = rec[margin > 10].assign(scan="subgraph", margin=margin).round(1)
     flags.to_csv(OUT / "flagged_cells.csv")
     # reverse: a baseline beats the scan by > 10
-    rev = rec[(rec[["node_score", "edge_bh"]].max(axis=1) - rec["subgraph"]) > 10].round(1)
+    rev = rec[-margin > 10].round(1)
     rev.to_csv(OUT / "scan_loses_cells.csv")
     with pd.option_context("display.width", 250, "display.max_rows", 500):
         print("Detector key:", "; ".join(f"{SHORT[k]} = {v}" for k, v in DETECTOR_LABELS.items() if k in SHORT))

@@ -1,6 +1,7 @@
 """Write-up figures. Each figure saves a PNG and the CSV behind it to results/figures/.
 
   python make_figures.py A B C D E      (any subset)
+  python make_figures.py T              structure x n table -> results/figures/table_structure_by_n_ci.csv
   python make_figures.py R              print-size Figures 1-3 for report/report.md -> report/figures/
   python make_figures.py F              report Table 2 (fixed setting) -> results/figures/table_fixed_setting_cp02_r300.csv
 """
@@ -13,9 +14,9 @@ from matplotlib.colors import LinearSegmentedColormap, SymLogNorm, TwoSlopeNorm
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from collusion.plotting import GRID, INK2, SERIES, style  # noqa: E402
+from collusion.plotting import INK2, SERIES, style  # noqa: E402
 from collusion.metrics import wilson  # noqa: E402
-from collusion.detect import DETECTOR_LABELS, DETECTORS, edge_z  # noqa: E402
+from collusion.detect import DETECTORS, edge_z  # noqa: E402
 
 import matplotlib.pyplot as plt  # noqa: E402
 
@@ -208,29 +209,31 @@ def fig_e(grid=(1, 4), figsize=(14, 4), out=FIG / "figE_state_false_alarms.png",
 
 
 # ---------------------------------------------------------------- T: structure x n table
-def table_t():
-    """Structure x n summary with pooled 95% Wilson CIs, from the full Step 4 grid (B = 200)."""
-    df = pd.concat([pd.read_csv(ROOT / f"results/step4/runs_n{n}.csv") for n in (5, 10, 20)], ignore_index=True)
-    df = df[df.structure != "none"]
+def _recovery_table(df, out_name):
+    """Exact recovery 'pct [lo, hi]' per structure x n x detector from Step 4 runs -> CSV + stdout."""
     df = df.assign(n_planted=df.structure.map(lambda s: 2 if s == "two_pairs" else 1))
     g = _rate(df, "recovered", ["structure", "n", "detector"])
     g["cell"] = g.apply(lambda r: f"{r.pct:.0f} [{r.lo:.0f}, {r.hi:.0f}]", axis=1)
     t = g.pivot_table(index=["structure", "n"], columns="detector", values="cell", aggfunc="first")[PLOT]
     t = t.rename(columns=SHORT)
-    t.to_csv(FIG / "table_structure_by_n_ci.csv")
+    t.to_csv(FIG / out_name)
     print(t.to_string())
+
+
+def _step4_runs(ns):
+    return pd.concat([pd.read_csv(ROOT / f"results/step4/runs_n{n}.csv") for n in ns], ignore_index=True)
+
+
+def table_t():
+    """Structure x n summary with pooled 95% Wilson CIs, from the full Step 4 grid (B = 200)."""
+    df = _step4_runs((5, 10, 20))
+    _recovery_table(df[df.structure != "none"], "table_structure_by_n_ci.csv")
 
 
 def table_fixed():
     """Report Table 2: exact recovery at the one setting every group was run at (CP 0.2, 300 rounds, B = 200)."""
-    df = pd.concat([pd.read_csv(ROOT / f"results/step4/runs_n{n}.csv") for n in (5, 20)], ignore_index=True)
-    df = df[(df.cp == 0.2) & (df.rounds == 300) & (df.structure != "none") & df.detector.isin(PLOT)]
-    df = df.assign(n_planted=df.structure.map(lambda s: 2 if s == "two_pairs" else 1))
-    g = _rate(df, "recovered", ["structure", "n", "detector"])
-    g["cell"] = g.apply(lambda r: f"{r.pct:.0f} [{r.lo:.0f}, {r.hi:.0f}]", axis=1)
-    t = g.pivot_table(index=["structure", "n"], columns="detector", values="cell", aggfunc="first")[PLOT].rename(columns=SHORT)
-    t.to_csv(FIG / "table_fixed_setting_cp02_r300.csv")
-    print(t.to_string())
+    df = _step4_runs((5, 20))
+    _recovery_table(df[(df.cp == 0.2) & (df.rounds == 300) & (df.structure != "none")], "table_fixed_setting_cp02_r300.csv")
 
 
 def report_figures():

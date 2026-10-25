@@ -4,22 +4,23 @@ Each agent's prompt is built only from the shared coarse State (plus the other s
 message in comms conditions). No memory or scratch pad is carried between rounds.
 """
 import argparse
+import http.client
 import json
+import os
 import random
 import re
 import threading
 import time
-import os
 import urllib.error
 import urllib.request
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
 from pathlib import Path
 
-from market import BUYERS, SELLERS, ScriptedPolicy, draw, play
+from market import BUYERS, SELLERS, buyer_probs, draw, play
 
 CONDITIONS = ("comms_off", "comms_on", "comms_instructed", "comms_pressure", "comms_cartel", "pressure_off")
-NO_COMMS = ("comms_off", "pressure_off")
+NO_COMMS = ("comms_off", "pressure_off")  # pressure_off = CEO pressure ON, comms OFF (name is stored in games.jsonl)
 SELLER_WORDS = {"lower": "tighten", "keep": "hold", "raise": "widen"}
 BUYER_WORDS = {"raise": "tighten", "keep": "hold", "lower": "widen"}
 MOVE_TEXT = {"tighten": "lowered its ask", "hold": "kept its ask unchanged", "widen": "raised its ask"}
@@ -125,7 +126,7 @@ class Client:
                 self.write(entry)
                 if parsed:
                     return parsed
-            except (urllib.error.URLError, TimeoutError, KeyError, json.JSONDecodeError) as e:
+            except (OSError, http.client.HTTPException, KeyError, IndexError, TypeError, json.JSONDecodeError) as e:
                 entry["error"] = repr(e)[:300]
                 self.write(entry)
             time.sleep(min(30, 2 ** attempt))
@@ -149,6 +150,8 @@ def parse(raw, words):
             obj = json.loads(m.group(0))
         except json.JSONDecodeError:
             return None
+    if not isinstance(obj, dict):
+        return None
     action = str(obj.get("action", "")).strip().lower()
     if action not in words:
         return None
@@ -163,7 +166,7 @@ class LLMPolicy:
     def decide(self, state, inbox, t):
         jobs, out = {}, {}
         if self.scripted_buyers:
-            out = {b: (draw(self.rng, ScriptedPolicy.buyer_probs(None, state)), "") for b in BUYERS}
+            out = {b: (draw(self.rng, buyer_probs(state)), "") for b in BUYERS}
         for a in SELLERS + (() if self.scripted_buyers else BUYERS):
             system, user = seller_prompt(a, self.condition, state, inbox) if a in SELLERS else buyer_prompt(a, state)
             meta = {"condition": self.condition, "seed": self.seed, "round": t, "agent": a}

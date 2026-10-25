@@ -46,7 +46,6 @@ class NullContext:
     g_real: np.ndarray
     g_A: np.ndarray
     g_B: np.ndarray
-    seed: int | None = None
 
     @property
     def n(self):
@@ -57,8 +56,7 @@ class NullContext:
         sub-blocks of the null gammas are valid nulls for the remaining agents."""
         k = np.asarray(sorted(keep))
         ix = np.ix_(k, k)
-        return NullContext(self.g_real[ix], self.g_A[:, k][:, :, k], self.g_B[:, k][:, :, k],
-                           self.seed), k
+        return NullContext(self.g_real[ix], self.g_A[:, k][:, :, k], self.g_B[:, k][:, :, k]), k
 
 
 def build_context(actions, states, B=200, seed=0):
@@ -66,4 +64,4 @@ def build_context(actions, states, B=200, seed=0):
     g_real = gamma_batch(actions, states)
     g_A = null_gammas(actions, states, B, rng)
     g_B = null_gammas(actions, states, B, rng)
-    return NullContext(g_real, g_A, g_B, seed)
+    return NullContext(g_real, g_A, g_B)

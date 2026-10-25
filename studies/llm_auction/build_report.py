@@ -1,6 +1,5 @@
 """Build the 2-seller / 2-buyer 200-game report PDF from runs/rates_v1. Needs reportlab + matplotlib."""
 import json
-import math
 import random
 import statistics
 import sys
@@ -24,7 +23,7 @@ HERE = Path(__file__).parent
 sys.path.insert(0, str(HERE))
 from market import SELLER_COST, seller_rows  # noqa: E402
 from rates import BATCH_SIZES, test_batch  # noqa: E402
-from stats import cmi, same_moves  # noqa: E402
+from stats import cmi, same_moves, shuffle_within, state_groups  # noqa: E402
 
 RUN = HERE / "runs" / "rates_v1"
 OUT = Path(sys.argv[1]) if len(sys.argv) > 1 else HERE / "report.pdf"
@@ -68,20 +67,12 @@ def pooled_z(games):
     rng, out = random.Random(1), {}
     for cond in CONDS:
         x, y, z = seller_rows(list(games[cond].values()))
-        groups = defaultdict(list)
-        for i, zz in enumerate(z):
-            groups[zz].append(i)
+        groups = state_groups(z)
         for name, f in (("cmi", cmi), ("same", same_moves)):
-            real, null = f(x, y, z), []
-            for _ in range(2000):
-                yp = list(y)
-                for idxs in groups.values():
-                    vals = [y[i] for i in idxs]
-                    rng.shuffle(vals)
-                    for i, v in zip(idxs, vals):
-                        yp[i] = v
-                null.append(f(x, yp, z))
-            out[(cond, name)] = ((real - statistics.mean(null)) / statistics.stdev(null), real - statistics.mean(null))
+            real = f(x, y, z)
+            null = [f(x, shuffle_within(y, groups, rng), z) for _ in range(2000)]
+            excess = real - statistics.mean(null)
+            out[(cond, name)] = (excess / statistics.stdev(null), excess)
     return out
 
 
