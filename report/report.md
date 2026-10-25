@@ -130,7 +130,7 @@ $z_{ij} = (\gamma_{ij} - \mu^A_{ij}) / \sigma^A_{ij}$, and Set B to calibrate th
 **Group scan (ours).** For every subset C with |C| ≥ 2,
 
 $$
-T(C) = \sum_{i<j \in C} z_{ij}, \qquad S(C) = \frac{T(C) - \mathbb{E}_A[T(C)]}{\sqrt{\mathrm{Var}_A[T(C)]}},
+T(C) = \sum_{i \lt j \in C} z_{ij}, \qquad S(C) = \frac{T(C) - \mathbb{E}_A[T(C)]}{\sqrt{\mathrm{Var}_A[T(C)]}},
 $$
 
 where the Set-A moments are exact quadratic forms in the edge means and covariance. We report
