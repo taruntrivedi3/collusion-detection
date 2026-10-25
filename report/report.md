@@ -139,13 +139,13 @@ and rounds are exchangeable within a state, it is an exact permutation test.
 3. **Standardize edges with Set A.** $z_{ij} = (\gamma_{ij} - \mu^A_{ij}) / \sigma^A_{ij}$, where
    $\mu^A_{ij}$ and $\sigma^A_{ij}$ are the mean and standard deviation of $\gamma_{ij}$ over Set A. The
    Set-B datasets are standardized with the same Set-A moments.
-4. **Score every group.** For every subset C with |C| ≥ 2 (~10<sup>6</sup> subsets at n = 20),
+4. **Score every group.** For every subset C with |C| ≥ 2 (~10<sup>6</sup> subsets at n = 20), compute
+   T(C) and S(C) below, where the Set-A moments are exact quadratic forms in the edge means and covariance.
 
-   ```math
-   T(C) = \sum_{i \lt j \in C} z_{ij}, \qquad S(C) = \frac{T(C) - \mathbb{E}_A[T(C)]}{\sqrt{\mathrm{Var}_A[T(C)]}},
-   ```
+$$
+T(C) = \sum_{i \lt j \in C} z_{ij}, \qquad S(C) = \frac{T(C) - \mathbb{E}_A[T(C)]}{\sqrt{\mathrm{Var}_A[T(C)]}}.
+$$
 
-   where the Set-A moments are exact quadratic forms in the edge means and covariance.
 5. **Calibrate with Set B.** Compute $\max_C S(C)$ on each Set-B dataset; the threshold is the 95th
    percentile of these B maxima.
 6. **Decide.** If the observed $\max_C S(C)$ exceeds the threshold, report $\arg\max_C S(C)$ as a
