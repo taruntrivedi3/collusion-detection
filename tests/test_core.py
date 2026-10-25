@@ -119,16 +119,6 @@ def test_bonjour_calibrated_pair_and_null():
     assert detect_bonjour_calibrated(ctx).coalitions == [frozenset({0, 1})]
 
 
-def test_scan_grow_recovers_hub_and_shares_cache():
-    from collusion.detect import run_all
-    rng = np.random.default_rng(10)
-    a = simulate(Population(6, [Coalition("hub", [0, 1, 2, 3], 0.3)]), 1000, rng)
-    ctx = build_context(a, np.zeros(1000, dtype=np.int64), B=100, seed=3)
-    res = run_all(ctx, ["subgraph", "subgraph_grow"])
-    assert res["subgraph_grow"].coalitions[0] == frozenset({0, 1, 2, 3})
-    assert res["subgraph"].info["trace"][0]["argmax"] == res["subgraph_grow"].info["trace"][0]["argmax"]
-
-
 def test_clique_alias():
     rng = np.random.default_rng(11)
     a = simulate(Population(4, [Coalition("clique", [0, 1, 2, 3], 1.0)]), 50, rng)

@@ -67,8 +67,8 @@ Run time: under 10 minutes total. The 27-state estimator is state kind `profile`
 | `recovery_runs.csv`, `recovery_summary.csv` | same | 1000000 × (cell index + 1) + rep; B = 200 |
 
 † Produced before two method changes: edge-BH used raw permutation p-values (now gamma-fit), and
-the scan + grow detector did not exist yet. Regenerating with frozen code changes the edge-BH
-column and adds a scan + grow column. Γ, z and all other detectors are unaffected.
+a "scan + grow" detector (since removed) did not exist yet. Regenerating changes the edge-BH
+column. Γ, z and all other detectors are unaffected.
 
 ## Step 4 — planted structures, history-free (`results/step4/`)
 
@@ -76,7 +76,6 @@ column and adds a scan + grow column. Γ, z and all other detectors are unaffect
 |---|---|---|
 | `runs_n{5,10,20}.csv` (one row per run × detector) | `step4_planted.py 5 10 20` | SS[n, STRUCTS index, round(100 × CP), rounds, rep]; same seed for permutations; B = 200; 100 reps (n ≤ 10), 50 (n = 20) |
 | `summary.txt`, `summary_structure_by_n.csv`, `cell_recovered_pct.csv`, `cell_false_coalitions.csv`, `null_fpr.csv`, `flagged_cells.csv`, `scan_loses_cells.csv` | `step4_planted.py --summary > ../results/step4/summary.txt` | reads `runs_n*.csv` |
-| `superseded_perm_pvalues/` † | not regenerable by CLI | first pass with raw permutation p-values (edge-BH could not fire at n ≥ 10) |
 | `n20_stdout.txt` | log | — |
 
 Run time: about 30 minutes (n = 20 dominates).

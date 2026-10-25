@@ -80,7 +80,7 @@ elif __name__ == "__main__":
 def partB_false_and_clean(Bp):
     """Mean false coalitions per run, and % runs with the planted coalition recovered AND no
     false coalition ('clean recovery'), for the edge-based set detectors."""
-    d = Bp[Bp.detector.isin(["edge_bh", "subgraph", "subgraph_grow", "node_score"])]
+    d = Bp[Bp.detector.isin(["edge_bh", "subgraph", "node_score"])]
     keys = ["structure", "rounds", "state", "detector"]
     fc = d.groupby(keys).false_coal.mean().unstack("detector").round(2)
     d2 = d.assign(clean=(d.recovered == 1) & (d.false_coal == 0))
@@ -91,7 +91,7 @@ def partB_false_and_clean(Bp):
 def summary(n=10):
     from collusion.metrics import wilson
     short = {"bonjour": "Bonj", "bonjour_cal": "Bonj-cal", "edge_bh": "edge-BH", "node_score": "node",
-             "subgraph": "scan", "subgraph_grow": "scan+grow"}
+             "subgraph": "scan"}
 
     def ci(g, col, w=None):
         k = (g[col].astype(float) * (g[w] if w else 1)).sum()

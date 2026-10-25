@@ -13,7 +13,7 @@ We asked one question: **can a search over groups of players find colluding grou
 pairwise method misses?**
 
 We built a simulator for Rock Paper Scissors with up to 20 players, with honest players and
-planted colluding groups. We then compared six detectors on the same simulated games.
+planted colluding groups. We then compared the detectors below on the same simulated games.
 
 ## Key terms
 
@@ -49,7 +49,6 @@ planted colluding groups. We then compared six detectors on the same simulated g
 | Pair test | Tests every pair with the shuffle test and controls false discoveries (Benjamini & Hochberg 1995). A group = players joined by significant pairs. |
 | Player score | Scores each player by its total link strength and flags the top players. Inspired by Rose et al. (2026); not their method. |
 | Group scan (ours) | Scores every group of 2 or more players by the links inside it; reports the best group if it beats the shuffle test. Repeats on the remaining players. |
-| Group scan + grow (ours) | Group scan, then adds any player with a significant link into the found group. |
 | Triple scans (ours, Step 6) | Test every set of 3 players for any joint dependence ("total correlation") or for dependence that pairs cannot explain ("third-order part"). |
 
 ## Findings
@@ -63,9 +62,10 @@ planted colluding groups. We then compared six detectors on the same simulated g
 3. **The player score gets worse as players are added; the group scan barely does.** For a
    triangle, the player score falls from 72% to 52% exact recovery between 5 and 20 players; the
    group scan falls from 77% to 72% (Figure B, Table 3).
-4. **The group scan has two weak spots.** It splits hubs into one leader–helper pair; the grow step
-   fixes this. It is also weaker than the pair test on one isolated weak pair in a short game,
-   because it must search about a million groups (Table 4).
+4. **The group scan has two weak spots.** It often splits a hub (one leader, helpers that never
+   coordinate with each other) into one leader–helper pair, so the pair test does better there.
+   It is also weaker than the pair test on two separate weak pairs in a short game, because it must
+   search about a million groups (Table 4).
 5. **The published rule's fixed pass mark is not calibrated.** With no collusion at all, it
    raised false alarms in up to 43% of games, depending on game length, players and history state.
    Every shuffle-calibrated detector stayed near 5% (Figure D, Tables 2 and 5).
@@ -77,9 +77,6 @@ planted colluding groups. We then compared six detectors on the same simulated g
    scans (Table 8).
 
 ## Figures
-
-The figure legends use the code names of the detectors: *Subset scan* = group scan,
-*Per-edge BH* = pair test, *Node score* = player score.
 
 ### Figure A — Inside a group, the published score cancels while the links stay strong
 
@@ -104,8 +101,8 @@ player score has dropped about 20 points, while the group scan has dropped about
 ![Figure C: exact recovery vs collusion probability for 4- and 5-cliques among 20 players](figures/figC_weak_cliques.png)
 
 20 players, 100 rounds, 1000 shuffles, 100 games per point; bars are 95% intervals. **Read it:**
-at collusion probability 0.2–0.3 the group scan (pink) and scan + grow (dark green) find the group
-far more often than the pair test (teal) and player score (yellow). Both Bonjour lines sit at 0.
+at collusion probability 0.2–0.3 the group scan (pink) finds the group far more often than the
+pair test (green) and player score (yellow). Bonjour sits at 0.
 
 ### Figure D — False alarms with no collusion
 
@@ -113,8 +110,7 @@ far more often than the pair test (teal) and player score (yellow). Both Bonjour
 
 All players honest and random; 1000 shuffles, 500 games per point. The dashed line is the 5%
 target. **Read it:** Bonjour's fixed rule (blue) gives 8–23% false alarms at 100 rounds and 0%
-later; every shuffle-calibrated detector stays near 5%. The group scan and scan + grow overlap
-because growth only runs after a detection.
+later; every shuffle-calibrated detector stays near 5%.
 
 ### Figure E — False alarms depend on the history state
 
@@ -207,29 +203,29 @@ flagged.
 
 ### Table 3 — Exact recovery by planted group and number of players (Step 4, 200 shuffles)
 
-**Compares:** all six detectors on every planted group, at 5, 10 and 20 players.
+**Compares:** the four main detectors on every planted group, at 5, 10 and 20 players.
 **Columns:** one per detector. Each value = % of planted groups recovered exactly, averaged over
 all collusion probabilities and round counts tried for that group (12–15 settings, 50–100 games
 each).
 **Read it:** higher is better. Watch how each column changes as players increase.
 
-| Planted group | Players | Bonjour | Bonjour (cal.) | Pair test | Player score | Group scan | Scan + grow |
-|---|---|---|---|---|---|---|---|
-| Pair | 5 | 71 | 94 | 90 | 86 | 96 | 91 |
-| Pair | 20 | 70 | 86 | 89 | 72 | 90 | 84 |
-| Two pairs | 5 | 9 | 7 | 68 | 4 | 75 | 70 |
-| Two pairs | 20 | 7 | 7 | 63 | 2 | 62 | 58 |
-| Hub | 5 | 0 | 0 | 85 | 86 | 76 | 92 |
-| Hub | 20 | 0 | 0 | 88 | 70 | 75 | 85 |
-| Triangle | 5 | 0 | 0 | 66 | 72 | 77 | 74 |
-| Triangle | 10 | 0 | 0 | 64 | 61 | 75 | 72 |
-| Triangle | 20 | 0 | 0 | 62 | 52 | 72 | 68 |
-| 4-clique | 5 | 0 | 0 | 56 | 62 | 65 | 63 |
-| 4-clique | 10 | 0 | 0 | 49 | 54 | 63 | 61 |
-| 4-clique | 20 | 0 | 0 | 48 | 46 | 61 | 57 |
-| 5-clique | 10 | 0 | 0 | 46 | 58 | 64 | 62 |
-| 5-clique | 20 | 0 | 0 | 46 | 52 | 62 | 59 |
-| xor | 5–20 | 0 | 0 | 0 | 0 | 0 | 0 |
+| Planted group | Players | Bonjour | Pair test | Player score | Group scan |
+|---|---|---|---|---|---|
+| Pair | 5 | 71 | 90 | 86 | 96 |
+| Pair | 20 | 70 | 89 | 72 | 90 |
+| Two pairs | 5 | 9 | 68 | 4 | 75 |
+| Two pairs | 20 | 7 | 63 | 2 | 62 |
+| Hub | 5 | 0 | 85 | 86 | 76 |
+| Hub | 20 | 0 | 88 | 70 | 75 |
+| Triangle | 5 | 0 | 66 | 72 | 77 |
+| Triangle | 10 | 0 | 64 | 61 | 75 |
+| Triangle | 20 | 0 | 62 | 52 | 72 |
+| 4-clique | 5 | 0 | 56 | 62 | 65 |
+| 4-clique | 10 | 0 | 49 | 54 | 63 |
+| 4-clique | 20 | 0 | 48 | 46 | 61 |
+| 5-clique | 10 | 0 | 46 | 58 | 64 |
+| 5-clique | 20 | 0 | 46 | 52 | 62 |
+| xor | 5–20 | 0 | 0 | 0 | 0 |
 
 10-player rows for pair, two pairs and hub are in `figures/table_structure_by_n_ci.csv`.
 
@@ -241,15 +237,15 @@ each).
 **Read it:** the top five rows are weak, broad groups (scan wins). The last two are the scan's
 weak spots.
 
-| Setting | Group scan | Pair test | Player score | Scan + grow |
-|--------------|-------|-------|-------|-------|
-| 5-clique, 0.2, 100 rounds | 44 [35, 54] | 6 [3, 12] | 6 [3, 12] | 41 [32, 51] |
-| 4-clique, 0.3, 100 rounds | 91 [84, 95] | 59 [49, 68] | 37 [28, 47] | 89 [81, 94] |
-| 5-clique, 0.3, 100 rounds | 91 [84, 95] | 61 [51, 70] | 52 [42, 62] | 87 [79, 92] |
-| 4-clique, 0.2, 300 rounds | 97 [92, 99] | 77 [68, 84] | 61 [51, 70] | 93 [86, 97] |
-| Triangle, 0.2, 300 rounds | 91 [84, 95] | 68 [58, 76] | 35 [26, 45] | 87 [79, 92] |
-| Hub, 0.2, 300 rounds | 36 [27, 46] | 56 [46, 65] | 3 [1, 8] | 64 [54, 73] |
-| Two pairs, 0.3, 100 rounds | 36 [30, 43] | 50 [43, 56] | 2 [1, 4] | 35 [29, 42] |
+| Setting | Group scan | Pair test | Player score |
+|--------------|-------|-------|-------|
+| 5-clique, 0.2, 100 rounds | 44 [35, 54] | 6 [3, 12] | 6 [3, 12] |
+| 4-clique, 0.3, 100 rounds | 91 [84, 95] | 59 [49, 68] | 37 [28, 47] |
+| 5-clique, 0.3, 100 rounds | 91 [84, 95] | 61 [51, 70] | 52 [42, 62] |
+| 4-clique, 0.2, 300 rounds | 97 [92, 99] | 77 [68, 84] | 61 [51, 70] |
+| Triangle, 0.2, 300 rounds | 91 [84, 95] | 68 [58, 76] | 35 [26, 45] |
+| Hub, 0.2, 300 rounds | 36 [27, 46] | 56 [46, 65] | 3 [1, 8] |
+| Two pairs, 0.3, 100 rounds | 36 [30, 43] | 50 [43, 56] | 2 [1, 4] |
 
 ### Table 5 — False alarms with no collusion (Step 4 rerun, 1000 shuffles, 500 games each)
 

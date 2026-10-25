@@ -6,7 +6,7 @@ from pathlib import Path
 import numpy as np
 from engine import ROOT, simulate, surrogate, gamma, fit, score, rank_p
 
-sys.path.insert(0,str(ROOT/'source_snapshot'))
+sys.path.insert(0,str(Path(__file__).resolve().parents[3]))  # repo root: shared collusion/ package
 from collusion.estimate import gamma as reference_gamma, encode_states
 from collusion.detect import subset_scores
 from collusion.null import NullContext

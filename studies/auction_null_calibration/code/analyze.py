@@ -264,7 +264,7 @@ Full per-fold counts and intervals are in [source_score_transfer.csv](source_sco
 
 The accelerated MI and all 52 subset/view scores agree with the supplied Python implementation. Seven focused checks cover scoring, surrogate invariants, donor/clone construction, singleton and constant-action degeneracy, rank/tie handling, and a strong generic copied-triple example. The final [audit](audit.json) verifies frozen hashes, expected outputs, donor disjointness, independent generation/replay, and reported counts. The exact source dataset, donor provenance, raw parsed logs, seeds, per-game scores and reference quantiles remain here.
 
-Use `bash ../code/reproduce.sh` (or that file's absolute path) to resume missing results and rebuild the reports. Dependencies are recorded in [environment.json](environment.json). No upstream auction runner or LLM API client is executed.
+Use `python scripts/reproduce.py auction --mode full --output <new dir>` from the repository root to rerun the results and rebuild the reports in a new directory. Dependencies are recorded in [environment.json](environment.json). No upstream auction runner or LLM API client is executed.
 '''
     interp=ROOT/'results/INTERPRETATION.md'
     if interp.exists():text=text.replace('# LLM double-auction calibration study\n','# LLM double-auction calibration study\n\n'+interp.read_text()+'\n',1)

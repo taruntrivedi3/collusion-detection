@@ -28,10 +28,10 @@
 
 ## Step 4 method notes (results/step4)
 - Per-edge permutation p-values have floor 1/(B+1); BH cannot reject when q / #edges < 1/(B+1)
-  (n >= 10 at B = 200). Edge-BH and the grow step use gamma-fit p-values instead (moment-matched
+  (n >= 10 at B = 200). Edge-BH uses gamma-fit p-values instead (moment-matched
   gamma on the Set-A permutation null; implied chi2 df ≈ 4.1 vs G-test theory df = 4). Null calibration
   at n = 10: P(p < x) / x = 1.0-1.2 for x = 0.05, 0.01; 1.0-1.6 at x = 0.001 (few events).
-  First-pass results with raw permutation p-values: results/step4/superseded_perm_pvalues/.
+  First-pass results with raw permutation p-values are in git history (results/step4/superseded_perm_pvalues/).
 - Subset null moments computed in closed form (T linear in edge z's): identical to sample
   moments to 1e-5.
 - Full grid at B = 200 (dev). Final numbers at B = 1000 for all flagged / scan-loses cells, the

@@ -9,7 +9,7 @@ Grid (per n):
   reduced  pair, hub, xor                  CP {0.2, 0.5}                 rounds {300, 1000}
   null     none                                                          rounds {100, 300, 1000}
 Reps: 100 for n <= 10, 50 for n = 20. Permutations B = 200 per set (dev setting).
-Edge-BH and the grow step use gamma-fit permutation p-values (see detect.edge_pvalues).
+Edge-BH uses gamma-fit permutation p-values (see detect.edge_pvalues).
 """
 import os
 
@@ -91,7 +91,7 @@ def run_n(n, workers=8):
 
 DET_ORDER = list(DETECTORS)
 SHORT = {"bonjour": "Bonj", "bonjour_cal": "Bonj-cal", "edge_bh": "edge-BH",
-         "node_score": "node", "subgraph": "scan", "subgraph_grow": "scan+grow"}
+         "node_score": "node", "subgraph": "scan"}
 
 
 def summarize():
@@ -115,7 +115,7 @@ def summarize():
     nul.round(2).to_csv(OUT / "null_fpr.csv")
     # flagged cells: scan beats both node-score and edge-BH by > 10 points (recovered)
     flags = []
-    for scan in ("subgraph", "subgraph_grow"):
+    for scan in ("subgraph",):
         d = rec[(rec[scan] - rec[["node_score", "edge_bh"]].max(axis=1)) > 10]
         flags.append(d.assign(scan=scan, margin=d[scan] - d[["node_score", "edge_bh"]].max(axis=1)))
     flags = pd.concat(flags).round(1)

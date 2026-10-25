@@ -222,27 +222,9 @@ def _mask_to_set(mask, labels):
     return frozenset(int(labels[b]) for b in range(len(labels)) if (int(mask) >> b) & 1)
 
 
-def _grow(ctx: NullContext, C, q=0.05):
-    """Add every node outside C with a significant edge into C (per-edge permutation p-values,
-    BH over all candidate edges v-c, v not in C, c in C). Repeat until nothing is added.
-    C and the return value are local indices of ctx."""
-    p = edge_pvalues(ctx)
-    C = set(C)
-    while True:
-        out = [v for v in range(ctx.n) if v not in C]
-        if not out:
-            return C
-        cand = [(v, c) for v in out for c in sorted(C)]
-        sig = _bh(np.array([p[v, c] for v, c in cand]), q)
-        add = {cand[k][0] for k in np.flatnonzero(sig)}
-        if not add:
-            return C
-        C |= add
-
-
-def detect_subgraph(ctx: NullContext, level=0.95, max_rounds=None, grow=False, cache=None) -> Result:
+def detect_subgraph(ctx: NullContext, level=0.95, max_rounds=None, cache=None) -> Result:
     """Exact scan over all subsets |C| >= 2; peel detected coalitions and recalibrate
-    (step-down max-T). grow=True: after each detection, extend it with _grow (scan+grow).
+    (step-down max-T).
     `cache` (dict) shares per-stage scan scores between calls on the same root context."""
     cache = {} if cache is None else cache
     labels = np.arange(ctx.n)
@@ -259,9 +241,6 @@ def detect_subgraph(ctx: NullContext, level=0.95, max_rounds=None, grow=False, c
         trace.append({"S_max": s_max, "threshold": thr, "argmax": frozenset(labels[local].tolist())})
         if s_max <= thr:
             break
-        if grow:
-            local = sorted(_grow(cur, local))
-            trace[-1]["grown"] = frozenset(labels[local].tolist())
         C = frozenset(labels[local].tolist())
         found.append(C)
         keep = [i for i in range(cur.n) if i not in set(local)]
@@ -310,7 +289,6 @@ DETECTORS = {
     "edge_bh": detect_edge_bh,
     "node_score": detect_node_score,
     "subgraph": detect_subgraph,
-    "subgraph_grow": lambda ctx, **kw: detect_subgraph(ctx, grow=True, **kw),
 }
 
 # names for result tables / write-up
@@ -320,7 +298,6 @@ DETECTOR_LABELS = {
     "edge_bh": "Per-edge BH (Benjamini & Hochberg 1995)",
     "node_score": "Node score (per-agent, inspired by Rose et al.)",
     "subgraph": "Subset scan (ours)",
-    "subgraph_grow": "Subset scan + grow (ours)",
     "tc_scan": "Total-correlation triple scan (ours)",
     "synergy_scan": "Third-order (synergy) triple scan (ours)",
 }
@@ -330,7 +307,7 @@ def run_all(ctx: NullContext, methods=None):
     cache = {}
     out = {}
     for m in methods or DETECTORS:
-        kw = {"cache": cache} if m.startswith("subgraph") else {}
+        kw = {"cache": cache} if m == "subgraph" else {}
         out[m] = DETECTORS[m](ctx, **kw)
     return out
 
