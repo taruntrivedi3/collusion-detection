@@ -7,7 +7,7 @@ Every figure and table, the data behind it, and the exact command and seeds that
 Setup once, from the project root:
 
     uv venv .venv && uv pip install --python .venv/bin/python numpy scipy pandas matplotlib pytest numba
-    .venv/bin/python -m pytest -q tests          # 21 tests
+    .venv/bin/python -m pytest -q tests          # 14 tests
 
 Run every experiment command from `experiments/`:
 

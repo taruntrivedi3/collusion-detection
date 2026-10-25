@@ -9,6 +9,7 @@ from multiprocessing import Pool
 from pathlib import Path
 
 import matplotlib
+import numpy as np
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from reportlab.lib import colors
@@ -84,13 +85,18 @@ def pooled_z(games):
     return out
 
 
-def outcomes(games):
+def outcomes(games, boot=10_000):
+    """(trade rate, mean price, seller profit per hour, 95% bootstrap CI of profit per hour over games)."""
+    rng = np.random.default_rng(0)
     out = {}
     for cond in CONDS:
         rows = [r for log in games[cond].values() for r in log]
         trades = [r for r in rows if r["price"] is not None]
+        per_game = np.array([sum(r["price"] - SELLER_COST for r in log if r["price"] is not None) / len(log)
+                             for log in games[cond].values()])
+        means = rng.choice(per_game, (boot, len(per_game))).mean(1)
         out[cond] = (len(trades) / len(rows), sum(r["price"] for r in trades) / len(trades),
-                     sum(r["price"] - SELLER_COST for r in trades) / len(rows))
+                     sum(r["price"] - SELLER_COST for r in trades) / len(rows), tuple(np.percentile(means, [2.5, 97.5])))
     return out
 
 
@@ -181,8 +187,9 @@ def build():
     s.append(P("Result", h2))
     s.append(P(
         f"With a message channel and CEO profit-margin pressure (the Agrawal et al. setup), gpt-4.1-mini sellers earn "
-        f"<b>{cp[2]:.2f}</b> per hour versus <b>{po[2]:.2f}</b> with the same pressure but no channel, and "
-        f"<b>{outc['comms_off'][2]:.2f}</b> with neither. Pooled over 200 games, the within-state shuffle test flags this "
+        f"<b>{cp[2]:.2f}</b> per hour [95% CI {cp[3][0]:.2f}, {cp[3][1]:.2f}] versus <b>{po[2]:.2f}</b> "
+        f"[{po[3][0]:.2f}, {po[3][1]:.2f}] with the same pressure but no channel, and "
+        f"<b>{outc['comms_off'][2]:.2f}</b> [{outc['comms_off'][3][0]:.2f}, {outc['comms_off'][3][1]:.2f}] with neither. Pooled over 200 games, the within-state shuffle test flags this "
         f"condition decisively (CMI z = {z[('comms_pressure', 'cmi')][0]:.1f}; same-move z = "
         f"{z[('comms_pressure', 'same')][0]:.1f}) and stays silent on both controls "
         f"(|z| ≤ {max(abs(z[(c, n)][0]) for c in ('comms_off', 'pressure_off') for n in ('cmi', 'same')):.1f}). "
@@ -226,10 +233,11 @@ def build():
     s.append(P("Results", h2))
     rows = [["Condition", "Trade rate", "Mean price", "Seller profit / hour", "CMI z", "Same-move z (extra rows)"]]
     for c in CONDS:
-        rows.append([LABEL[c], f"{outc[c][0]:.2f}", f"${outc[c][1]:.1f}", f"{outc[c][2]:.2f}", f"{z[(c, 'cmi')][0]:+.1f}",
+        rows.append([LABEL[c], f"{outc[c][0]:.2f}", f"${outc[c][1]:.1f}", f"{outc[c][2]:.2f} [{outc[c][3][0]:.2f}, {outc[c][3][1]:.2f}]", f"{z[(c, 'cmi')][0]:+.1f}",
                      f"{z[(c, 'same')][0]:+.1f} ({z[(c, 'same')][1]:+.0f} of 6,000)"])
     s.append(table(rows, [1.75 * inch, 0.7 * inch, 0.75 * inch, 1.15 * inch, 0.6 * inch, 1.55 * inch]))
-    s.append(P("Pooled over all 200 games per condition; z = (real − mean of 2,000 shuffles) / SD of shuffles.", small))
+    s.append(P("Pooled over all 200 games per condition; profit interval = 95% bootstrap over games (10,000 "
+               "resamples); z = (real − mean of 2,000 shuffles) / SD of shuffles.", small))
     s.append(Spacer(1, 4))
     s.append(Image(str(FIG), width=7.0 * inch, height=2.9 * inch))
     rows = [["Share of batches flagged", *[f"CMI<br/>{n} games" for n in BATCH_SIZES],

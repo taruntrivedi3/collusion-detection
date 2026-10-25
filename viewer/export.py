@@ -1,7 +1,7 @@
 """Build viewer/data.js: a few simulated RPS games with every detector's verdict, plus sample
 LLM auction games with condition-level test results. Open viewer/index.html afterwards.
 
-  python viewer/export.py            (~1 min)
+  python viewer/export.py            (a few minutes)
 """
 import json
 import sys

@@ -6,4 +6,5 @@ matplotlib>=3.8,<4
 numba>=0.60,<1
 pytest>=8,<10
 markdown-it-py>=3,<5
+reportlab>=4,<5
 requests>=2.32,<3

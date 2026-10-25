@@ -1,81 +1,81 @@
 structure,matrix,i,j,value
-triangle,Net influence Γ(i;j) (bits),0,1,0.014140011771985928
-triangle,Net influence Γ(i;j) (bits),0,2,0.002723695894190359
-triangle,Net influence Γ(i;j) (bits),0,3,-0.005234528865530592
-triangle,Net influence Γ(i;j) (bits),0,4,-0.0032175315789936577
-triangle,Net influence Γ(i;j) (bits),1,0,0.011416315877795569
-triangle,Net influence Γ(i;j) (bits),1,2,-0.002723695894190359
-triangle,Net influence Γ(i;j) (bits),1,3,-0.004506483945988293
-triangle,Net influence Γ(i;j) (bits),1,4,0.0032175315789936577
-triangle,Net influence Γ(i;j) (bits),2,0,-0.011416315877795569
-triangle,Net influence Γ(i;j) (bits),2,1,-0.014140011771985928
-triangle,Net influence Γ(i;j) (bits),2,3,0.0044388058728927725
-triangle,Net influence Γ(i;j) (bits),2,4,-0.004121573589804029
-triangle,Net influence Γ(i;j) (bits),3,0,-0.4212961927097968
-triangle,Net influence Γ(i;j) (bits),3,1,-0.4205681477902563
-triangle,Net influence Γ(i;j) (bits),3,2,-0.4046453479664688
-triangle,Net influence Γ(i;j) (bits),3,4,-0.0038356382249148738
-triangle,Net influence Γ(i;j) (bits),4,0,-0.4198823630712359
-triangle,Net influence Γ(i;j) (bits),4,1,-0.41666483149224226
-triangle,Net influence Γ(i;j) (bits),4,2,-0.4093700892042489
-triangle,Net influence Γ(i;j) (bits),4,3,-0.0044388058728927725
-triangle,Edge z-score,0,1,206.637413029764
-triangle,Edge z-score,0,2,191.08449652904343
-triangle,Edge z-score,0,3,-0.7572949074860127
-triangle,Edge z-score,0,4,-0.09435458636395079
-triangle,Edge z-score,1,0,206.63741302976564
-triangle,Edge z-score,1,2,197.38065267618023
-triangle,Edge z-score,1,3,-0.37726868503230404
-triangle,Edge z-score,1,4,1.5650775901700817
-triangle,Edge z-score,2,0,191.08449652903994
-triangle,Edge z-score,2,1,197.38065267618592
-triangle,Edge z-score,2,3,1.7715184838635065
-triangle,Edge z-score,2,4,-0.506154220619571
-triangle,Edge z-score,3,0,-0.7572949074860309
-triangle,Edge z-score,3,1,-0.3772686850331552
-triangle,Edge z-score,3,2,1.7715184838643898
-triangle,Edge z-score,3,4,-0.3891372195096073
-triangle,Edge z-score,4,0,-0.09435458636393845
-triangle,Edge z-score,4,1,1.5650775901701373
-triangle,Edge z-score,4,2,-0.5061542206186868
-triangle,Edge z-score,4,3,-0.38913721951042474
-hub,Net influence Γ(i;j) (bits),0,1,0.26116124293455684
-hub,Net influence Γ(i;j) (bits),0,2,0.23252963766075482
-hub,Net influence Γ(i;j) (bits),0,3,-0.0005398583149617479
-hub,Net influence Γ(i;j) (bits),0,4,-0.0014627003569403314
-hub,Net influence Γ(i;j) (bits),1,0,0.02863160527380021
-hub,Net influence Γ(i;j) (bits),1,2,-0.23252963766075482
-hub,Net influence Γ(i;j) (bits),1,3,0.0004412349927479229
-hub,Net influence Γ(i;j) (bits),1,4,0.0010179391474375737
-hub,Net influence Γ(i;j) (bits),2,0,-0.02863160527380021
-hub,Net influence Γ(i;j) (bits),2,1,-0.26116124293455684
-hub,Net influence Γ(i;j) (bits),2,3,-0.0016345243460200436
-hub,Net influence Γ(i;j) (bits),2,4,-0.0016467902627373408
-hub,Net influence Γ(i;j) (bits),3,0,-0.32083088679440697
-hub,Net influence Γ(i;j) (bits),3,1,-0.3202910284794434
-hub,Net influence Γ(i;j) (bits),3,2,-0.29329394755166505
-hub,Net influence Γ(i;j) (bits),3,4,-0.0010179391474375737
-hub,Net influence Γ(i;j) (bits),4,0,-0.3211770246816959
-hub,Net influence Γ(i;j) (bits),4,1,-0.3197143243247537
-hub,Net influence Γ(i;j) (bits),4,2,-0.2927295093136927
-hub,Net influence Γ(i;j) (bits),4,3,-0.0004412349927479229
-hub,Edge z-score,0,1,155.86746438850886
-hub,Edge z-score,0,2,148.82933333634637
-hub,Edge z-score,0,3,-0.22697008584380224
-hub,Edge z-score,0,4,-0.41429409688927543
-hub,Edge z-score,1,0,155.8674643885112
-hub,Edge z-score,1,2,28.923706506030108
-hub,Edge z-score,1,3,-0.06629975341651025
-hub,Edge z-score,1,4,0.23181948101349598
-hub,Edge z-score,2,0,148.8293333363469
-hub,Edge z-score,2,1,28.92370650602923
-hub,Edge z-score,2,3,-0.8201802624894348
-hub,Edge z-score,2,4,-0.5011368173080085
-hub,Edge z-score,3,0,-0.2269700858438131
-hub,Edge z-score,3,1,-0.06629975341569477
-hub,Edge z-score,3,2,-0.8201802624894386
-hub,Edge z-score,3,4,-0.2066350843984642
-hub,Edge z-score,4,0,-0.41429409688926405
-hub,Edge z-score,4,1,0.23181948101433822
-hub,Edge z-score,4,2,-0.5011368173080113
-hub,Edge z-score,4,3,-0.20663508439848952
+triangle,Published score: net influence (bits),0,1,0.014140011771985928
+triangle,Published score: net influence (bits),0,2,0.002723695894190359
+triangle,Published score: net influence (bits),0,3,-0.005234528865530592
+triangle,Published score: net influence (bits),0,4,-0.0032175315789936577
+triangle,Published score: net influence (bits),1,0,0.011416315877795569
+triangle,Published score: net influence (bits),1,2,-0.002723695894190359
+triangle,Published score: net influence (bits),1,3,-0.004506483945988293
+triangle,Published score: net influence (bits),1,4,0.0032175315789936577
+triangle,Published score: net influence (bits),2,0,-0.011416315877795569
+triangle,Published score: net influence (bits),2,1,-0.014140011771985928
+triangle,Published score: net influence (bits),2,3,0.0044388058728927725
+triangle,Published score: net influence (bits),2,4,-0.004121573589804029
+triangle,Published score: net influence (bits),3,0,-0.4212961927097968
+triangle,Published score: net influence (bits),3,1,-0.4205681477902563
+triangle,Published score: net influence (bits),3,2,-0.4046453479664688
+triangle,Published score: net influence (bits),3,4,-0.0038356382249148738
+triangle,Published score: net influence (bits),4,0,-0.4198823630712359
+triangle,Published score: net influence (bits),4,1,-0.41666483149224226
+triangle,Published score: net influence (bits),4,2,-0.4093700892042489
+triangle,Published score: net influence (bits),4,3,-0.0044388058728927725
+triangle,Link strength (z-score vs shuffles),0,1,206.637413029764
+triangle,Link strength (z-score vs shuffles),0,2,191.08449652904343
+triangle,Link strength (z-score vs shuffles),0,3,-0.7572949074860127
+triangle,Link strength (z-score vs shuffles),0,4,-0.09435458636395079
+triangle,Link strength (z-score vs shuffles),1,0,206.63741302976564
+triangle,Link strength (z-score vs shuffles),1,2,197.38065267618023
+triangle,Link strength (z-score vs shuffles),1,3,-0.37726868503230404
+triangle,Link strength (z-score vs shuffles),1,4,1.5650775901700817
+triangle,Link strength (z-score vs shuffles),2,0,191.08449652903994
+triangle,Link strength (z-score vs shuffles),2,1,197.38065267618592
+triangle,Link strength (z-score vs shuffles),2,3,1.7715184838635065
+triangle,Link strength (z-score vs shuffles),2,4,-0.506154220619571
+triangle,Link strength (z-score vs shuffles),3,0,-0.7572949074860309
+triangle,Link strength (z-score vs shuffles),3,1,-0.3772686850331552
+triangle,Link strength (z-score vs shuffles),3,2,1.7715184838643898
+triangle,Link strength (z-score vs shuffles),3,4,-0.3891372195096073
+triangle,Link strength (z-score vs shuffles),4,0,-0.09435458636393845
+triangle,Link strength (z-score vs shuffles),4,1,1.5650775901701373
+triangle,Link strength (z-score vs shuffles),4,2,-0.5061542206186868
+triangle,Link strength (z-score vs shuffles),4,3,-0.38913721951042474
+hub,Published score: net influence (bits),0,1,0.26116124293455684
+hub,Published score: net influence (bits),0,2,0.23252963766075482
+hub,Published score: net influence (bits),0,3,-0.0005398583149617479
+hub,Published score: net influence (bits),0,4,-0.0014627003569403314
+hub,Published score: net influence (bits),1,0,0.02863160527380021
+hub,Published score: net influence (bits),1,2,-0.23252963766075482
+hub,Published score: net influence (bits),1,3,0.0004412349927479229
+hub,Published score: net influence (bits),1,4,0.0010179391474375737
+hub,Published score: net influence (bits),2,0,-0.02863160527380021
+hub,Published score: net influence (bits),2,1,-0.26116124293455684
+hub,Published score: net influence (bits),2,3,-0.0016345243460200436
+hub,Published score: net influence (bits),2,4,-0.0016467902627373408
+hub,Published score: net influence (bits),3,0,-0.32083088679440697
+hub,Published score: net influence (bits),3,1,-0.3202910284794434
+hub,Published score: net influence (bits),3,2,-0.29329394755166505
+hub,Published score: net influence (bits),3,4,-0.0010179391474375737
+hub,Published score: net influence (bits),4,0,-0.3211770246816959
+hub,Published score: net influence (bits),4,1,-0.3197143243247537
+hub,Published score: net influence (bits),4,2,-0.2927295093136927
+hub,Published score: net influence (bits),4,3,-0.0004412349927479229
+hub,Link strength (z-score vs shuffles),0,1,155.86746438850886
+hub,Link strength (z-score vs shuffles),0,2,148.82933333634637
+hub,Link strength (z-score vs shuffles),0,3,-0.22697008584380224
+hub,Link strength (z-score vs shuffles),0,4,-0.41429409688927543
+hub,Link strength (z-score vs shuffles),1,0,155.8674643885112
+hub,Link strength (z-score vs shuffles),1,2,28.923706506030108
+hub,Link strength (z-score vs shuffles),1,3,-0.06629975341651025
+hub,Link strength (z-score vs shuffles),1,4,0.23181948101349598
+hub,Link strength (z-score vs shuffles),2,0,148.8293333363469
+hub,Link strength (z-score vs shuffles),2,1,28.92370650602923
+hub,Link strength (z-score vs shuffles),2,3,-0.8201802624894348
+hub,Link strength (z-score vs shuffles),2,4,-0.5011368173080085
+hub,Link strength (z-score vs shuffles),3,0,-0.2269700858438131
+hub,Link strength (z-score vs shuffles),3,1,-0.06629975341569477
+hub,Link strength (z-score vs shuffles),3,2,-0.8201802624894386
+hub,Link strength (z-score vs shuffles),3,4,-0.2066350843984642
+hub,Link strength (z-score vs shuffles),4,0,-0.41429409688926405
+hub,Link strength (z-score vs shuffles),4,1,0.23181948101433822
+hub,Link strength (z-score vs shuffles),4,2,-0.5011368173080113
+hub,Link strength (z-score vs shuffles),4,3,-0.20663508439848952

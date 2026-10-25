@@ -60,8 +60,8 @@ def fig_a():
         z = edge_z(ctx)[0]
         np.fill_diagonal(z, np.nan)
         for name, M, ax, norm, fmt in (
-            ("Net influence Γ(i;j) (bits)", G, axs[r, 0], TwoSlopeNorm(0, -0.45, 0.45), "{:+.3f}"),
-            ("Edge z-score", z, axs[r, 1], SymLogNorm(2, vmin=-250, vmax=250), "{:.1f}"),
+            ("Published score: net influence (bits)", G, axs[r, 0], TwoSlopeNorm(0, -0.45, 0.45), "{:+.3f}"),
+            ("Link strength (z-score vs shuffles)", z, axs[r, 1], SymLogNorm(2, vmin=-250, vmax=250), "{:.1f}"),
         ):
             ax.imshow(M, cmap=DIVERGING, norm=norm)
             for i in range(5):
@@ -71,12 +71,12 @@ def fig_a():
                                 color="white" if abs(norm(M[i, j]) - 0.5) > 0.35 else "#0b0b0b")
                         rows.append(dict(structure=kind, matrix=name, i=i, j=j, value=M[i, j]))
             ax.set_xticks(range(5)); ax.set_yticks(range(5))
-            ax.set_xlabel("agent j"); ax.set_ylabel("agent i")
+            ax.set_xlabel("player j"); ax.set_ylabel("player i")
             ax.grid(False)
-            who = "triangle {0,1,2}" if kind == "triangle" else "hub: primary 0, helpers 1, 2"
-            ax.set_title(f"{name}\n{who}; agents 3, 4 independent", fontsize=9)
-    fig.suptitle("Inside a coalition, Γ cancels to about 0 while edge z-scores stay large\n"
-                 "(5 agents, CP = 0.5, 1000 rounds; the paper flags a pair only if Γ ≥ 0.05 both ways)",
+            who = "triangle {0,1,2}" if kind == "triangle" else "hub: leader 0, helpers 1, 2"
+            ax.set_title(f"{name}\n{who}; players 3, 4 honest", fontsize=9)
+    fig.suptitle("Inside a group, the published score cancels to about 0 while the links stay strong\n"
+                 "(5 players, collusion probability 0.5, 1000 rounds; the rule flags a pair only if the score ≥ 0.05 both ways)",
                  fontsize=10)
     fig.tight_layout()
     fig.savefig(FIG / "figA_cancellation.png", dpi=150)
@@ -96,13 +96,13 @@ def fig_b():
         for det in ("node_score", "subgraph"):
             d = g[(g.structure == s) & (g.detector == det)]
             _errline(ax, d.n, d, det)
-        ax.set_xticks([5, 10, 20]); ax.set_xlabel("number of agents n")
-        ax.set_title({"triangle": "3-agent coalition", "clique4": "4-agent coalition"}[s])
-    axs[0].set_ylabel("% coalitions recovered exactly")
+        ax.set_xticks([5, 10, 20]); ax.set_xlabel("number of players")
+        ax.set_title({"triangle": "Triangle (3 colluders)", "clique4": "4-clique (4 colluders)"}[s])
+    axs[0].set_ylabel("% of planted groups recovered exactly")
     axs[0].set_ylim(0, 100)
     axs[0].legend(loc="lower left")
-    fig.suptitle("Player score loses power as agents are added; the group scan holds\n"
-                 "(pooled over CP × rounds grid; B = 200; 100 reps per cell at n ≤ 10, 50 at n = 20; 95% CI)",
+    fig.suptitle("The player score loses power as players are added; the group scan holds\n"
+                 "(averaged over collusion probabilities and rounds; 200 shuffles; 100 games per setting at 5–10 players, 50 at 20; 95% CI)",
                  fontsize=10)
     fig.tight_layout()
     fig.savefig(FIG / "figB_dilution.png", dpi=150)
@@ -120,12 +120,12 @@ def fig_c():
         for det in PLOT:
             d = g[(g.structure == s) & (g.detector == det)]
             _errline(ax, d.cp, d, det)
-        ax.set_xlabel("collusion probability CP"); ax.set_title(f"{s[-1]}-agent coalition among 20 agents")
-    axs[0].set_ylabel("% coalitions recovered exactly")
+        ax.set_xlabel("collusion probability"); ax.set_title(f"{s[-1]}-player group among 20 players")
+    axs[0].set_ylabel("% of planted groups recovered exactly")
     axs[0].set_ylim(0, 100)
     axs[1].legend(fontsize=8)
-    fig.suptitle("Weak, broad coalitions in short games (100 rounds): the group scan recovers more\n"
-                 "(B = 1000, 100 reps per point, 95% Wilson CI)", fontsize=10)
+    fig.suptitle("Weak, broad groups in short games (100 rounds): the group scan recovers more\n"
+                 "(1000 shuffles, 100 games per point, 95% CI)", fontsize=10)
     fig.tight_layout()
     fig.savefig(FIG / "figC_weak_cliques.png", dpi=150)
 
@@ -144,11 +144,11 @@ def fig_d():
             _errline(ax, d.rounds, d, det)
         ax.axhline(5, color=INK2, lw=1, ls="--")
         ax.set_xscale("log"); ax.set_xticks([100, 300, 1000]); ax.set_xticklabels(["100", "300", "1000"])
-        ax.set_xlabel("rounds"); ax.set_title(f"n = {n} independent agents")
-    axs[0].set_ylabel("% runs with any detection")
+        ax.set_xlabel("rounds"); ax.set_title(f"{n} random players")
+    axs[0].set_ylabel("% of games with any report")
     axs[0].legend(fontsize=8)
-    fig.suptitle("False alarms with no collusion: the fixed threshold drifts with n and rounds; "
-                 "calibrated detectors stay near 5% (dashed)\n(B = 1000, 500 reps per point, 95% Wilson CI)",
+    fig.suptitle("False alarms with no collusion: the fixed cutoff drifts with players and rounds; "
+                 "calibrated detectors stay near 5% (dashed)\n(1000 shuffles, 500 games per point, 95% CI)",
                  fontsize=10)
     fig.tight_layout()
     fig.savefig(FIG / "figD_null_false_alarms.png", dpi=150)
@@ -172,13 +172,13 @@ def fig_e():
                         ms=5, capsize=2, color=COLOR[det], label=SHORT[det])
         ax.axhline(5, color=INK2, lw=1, ls="--")
         ax.set_xticks(range(4)); ax.set_xticklabels(states)
-        ax.set_xlabel("state the detector conditions on")
-        ax.set_title({"uniform": "all honest agents uniform", "leader": "half leader-reactive",
-                      "margin": "half margin-reactive", "mixed": "leader + margin + uniform"}[mix], fontsize=9)
-    axs[0].set_ylabel("% runs with any detection")
+        ax.set_xlabel("history state the detector conditions on")
+        ax.set_title({"uniform": "all honest players random", "leader": "half leader-reactive",
+                      "margin": "half margin-reactive", "mixed": "leader + margin + random"}[mix], fontsize=9)
+    axs[0].set_ylabel("% of games with any report")
     axs[0].legend(fontsize=7.5)
-    fig.suptitle("False alarms among honest history-reacting agents depend on the state definition\n"
-                 "(n = 10, 1000 rounds, no colluders, B = 1000, 200 reps, 95% Wilson CI; dashed = 5%)",
+    fig.suptitle("False alarms among honest players who react to history depend on the state\n"
+                 "(10 players, 1000 rounds, no colluders, 1000 shuffles, 200 games per point, 95% CI; dashed = 5%)",
                  fontsize=10)
     fig.tight_layout()
     fig.savefig(FIG / "figE_state_false_alarms.png", dpi=150)

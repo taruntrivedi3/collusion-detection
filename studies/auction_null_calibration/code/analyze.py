@@ -184,7 +184,7 @@ Generated {datetime.now(timezone.utc).isoformat()}. All files live in `{ROOT}`. 
 
 The pinned published double-auction repository contains 75 actual LLM markets, each with five sellers, five buyers and 30 rounds. We verified all 1,119 upstream files against their Git blobs, parsed 22,500 prompt-response pairs, reconciled 22,393 numeric quotes, checked 4,110 current-order trade prices plus one carried-order case, and reconciled all 300 economic totals with zero issues. The source includes GPT-4.1 and Claude compositions. Only ten markets are matched GPT-only no-message controls. The no-message label is not certified noncollusion.
 
-The statistic is the existing subset scan on two bundled action views: price band and quote direction. One maximum covers 52 candidates (26 subsets per view). Round one is excluded, leaving 29 observations. Every test uses 999 B draws and, for source-style scans, an independent 999-draw A bank. No group growth, peeling, IPF or new feature tuning was used. [Frozen protocol](../PROTOCOL.md), [configuration](../config.json), [source provenance](../source_integrity.json).
+The statistic is the existing subset scan on two bundled action views: price band and quote direction. One maximum covers 52 candidates (26 subsets per view). Round one is excluded, leaving 29 observations. Every test uses 999 B draws and, for source-style scans, an independent 999-draw A bank. No group growth, peeling, IPF or new feature tuning was used. [Frozen protocol](../PROTOCOL.md), [configuration](../config.json).
 
 ## What the independently resampled paths show
 
@@ -262,7 +262,7 @@ Full per-fold counts and intervals are in [source_score_transfer.csv](source_sco
 
 ## Reproduction and audit
 
-The accelerated MI and all 52 subset/view scores agree with the supplied Python implementation. Seven focused checks cover scoring, surrogate invariants, donor/clone construction, singleton and constant-action degeneracy, rank/tie handling, and a strong generic copied-triple example. The final [audit](audit.json) verifies frozen hashes, expected outputs, donor disjointness, independent generation/replay, and reported counts. The exact source dataset, donor provenance, raw parsed logs, seeds, per-game scores and reference quantiles remain here.
+The accelerated MI and all 52 subset/view scores agree with the supplied Python implementation. Seven focused checks cover scoring, surrogate invariants, donor/clone construction, singleton and constant-action degeneracy, rank/tie handling, and a strong generic copied-triple example. The exact source dataset, donor provenance, raw parsed logs, seeds, per-game scores and reference quantiles remain here.
 
 Use `python scripts/reproduce.py --mode full --output <new dir>` from the repository root to rerun the results and rebuild the reports in a new directory. Dependencies are recorded in [environment.json](environment.json). No upstream auction runner or LLM API client is executed.
 '''
