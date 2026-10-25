@@ -101,9 +101,7 @@ inspired by this but is not their method.
 Our “pair test” applies Benjamini–Hochberg (1995) false-discovery control to all pairs and joins
 significant pairs into groups.
 
-**Scan statistics.** Searching subsets for the most anomalous one and calibrating its maximum by
-permutation is standard in disease surveillance (Kulldorff, 1997) and controls the family-wise error over
-all subsets (max-T; Westfall & Young, 1993). Our within-state shuffle is a stratified permutation test. What is new here is the target:
+**Permutation tests.** Our within-state shuffle is a stratified permutation test. What is new here is the target:
 subsets of agents scored by their pairwise dependence, a null that shuffles only within history states,
 and the confound of honest agents who react to the same history.
 
@@ -166,7 +164,7 @@ $$
 6. **Decide.** If the observed $\max_C S(C)$ exceeds the threshold, report $\arg\max_C S(C)$ as a
    colluding group; otherwise stop.
 7. **Remove and repeat.** Drop the reported group's players and return to step 4 on the remaining
-   players, with the threshold recomputed among them (a sequential extension of the single max-T test).
+   players, with the threshold recomputed among them.
    Stop when no group passes or fewer than two players remain.
 
 **Baselines.** *Bonjour*: the published rule with its fixed threshold of 0.05. *Bonjour (calibrated)*:
@@ -375,9 +373,7 @@ during the sprint.
 1. Agrawal, K., Teo, V., Vazquez, J. J., Kunnavakkam, S., Srikanth, V., & Liu, A. (2025). Evaluating LLM agent collusion in double auctions. arXiv:2507.01413. Code: <https://github.com/andyjliu/llm-agent-collusion>
 2. Benjamini, Y., & Hochberg, Y. (1995). Controlling the false discovery rate: a practical and powerful approach to multiple testing. *Journal of the Royal Statistical Society: Series B*, 57(1), 289–300.
 3. Bonjour, T., Aggarwal, V., & Bhargava, B. (2022). Information theoretic approach to detect collusion in multi-agent games. *Proceedings of the 38th Conference on Uncertainty in Artificial Intelligence (UAI)*, PMLR 180, 223–232. <https://proceedings.mlr.press/v180/bonjour22a.html>
-4. Kulldorff, M. (1997). A spatial scan statistic. *Communications in Statistics – Theory and Methods*, 26(6), 1481–1496.
-5. Rose, A., Cullen, C., Abdelnabi, S., Torr, P., Kaplowitz, B. G., & Schroeder de Witt, C. (2026). Detecting multi-agent collusion through multi-agent interpretability. arXiv:2604.01151.
-6. Westfall, P. H., & Young, S. S. (1993). *Resampling-Based Multiple Testing: Examples and Methods for p-Value Adjustment.* Wiley.
+4. Rose, A., Cullen, C., Abdelnabi, S., Torr, P., Kaplowitz, B. G., & Schroeder de Witt, C. (2026). Detecting multi-agent collusion through multi-agent interpretability. arXiv:2604.01151.
 
 ---
 
