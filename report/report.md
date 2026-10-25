@@ -30,7 +30,7 @@ players, a 5-player group colluding in 20% of rounds is found exactly in 48% of 
 respond to the previous round look like colluders in up to 100% of games unless rounds with the same
 recent history are shuffled together, which keeps false alarms at 4–9% while still catching a group that
 colludes for profit. In LLM double auctions where sellers see only a recorded summary of the last hour,
-gpt-4.1-mini sellers given a message channel and profit pressure earn about 50% more than with pressure
+gpt-4.1-mini sellers given a message channel and profit pressure earn 56% more than with pressure
 alone; the test flags them but not the controls, and it misses sellers who coordinate only by following
 public moves. Moves-only auditing works if the auditor records what each agent sees and tests groups.
 
@@ -61,7 +61,7 @@ Our contributions:
    coordination pays is found while honest exploiters are not.
 4. **An LLM market where the null holds by design.** Each seller's prompt is built only from a logged
    coarse state, and a within-state same-move test detects comms + CEO-pressure collusion among
-   gpt-4.1-mini sellers, with 2 and with 5 sellers, while staying quiet on the controls.
+   five gpt-4.1-mini sellers while staying quiet on the controls.
 
 ## 2. Related Work
 
@@ -109,16 +109,14 @@ the honest player types used throughout.
 
 | Kind | Name | What the players do |
 |---|---|---|
-| Colluders | Pair | A helper plays the move that loses to its partner, feeding the partner a point. |
-| Colluders | Two pairs | Two separate pairs, as above. |
-| Colluders | Hub | One leader and two helpers; each helper feeds the leader, and the helpers never coordinate with each other. |
-| Colluders | Triangle, *k*-clique | *k* = 3, 4 or 5 players share a secret signal and all play the same move (a 3-clique is a triangle). |
-| Colluders | xor | Player C plays (A + B) mod 3, so every pair looks independent. |
-| Colluders | Steer | 4 players all play one move to create a clear lead, then all play the move that beats the honest players who react to that lead; coordination pays. |
+| Colluders | Pair; two pairs | A helper plays the move that loses to its partner, feeding it a point. |
+| Colluders | Hub | One leader, two helpers who each feed it and never coordinate with each other. |
+| Colluders | Triangle, *k*-clique | *k* = 3–5 players share a secret signal and play the same move. |
+| Colluders | xor | C plays (A + B) mod 3, so every pair looks independent. |
+| Colluders | Steer | 4 players create a clear lead, then all beat the honest players who react to it. |
 | Honest | Random | Plays uniformly at random. |
-| Honest | Leader-reactive | With probability 0.5, plays the move that beats last round's most common move. |
-| Honest | Margin-reactive | Same, but only when that move led by 3 or more. |
-| Honest | Exploiter | With probability CP / (1 + CP) (the steer group's exploit rate), plays the move that beats the leader-reactive response, on its own, without coordinating. |
+| Honest | Leader- / margin-reactive | W.p. 0.5 beats last round's most common move (margin: only if it led by ≥ 3). |
+| Honest | Exploiter | On its own, w.p. CP / (1 + CP), beats the leader-reactive response. |
 
 ### 3.2 Detectors
 
@@ -161,8 +159,7 @@ connected components. *Player score*: per-player total link strength, top player
 
 **Metrics.** *Exact recovery*: the reported group equals the planted one. *Clean recovery*: exact and
 nothing else reported. *False alarm*: any report when no collusion exists (target 5%). 95% Wilson
-intervals in brackets. B = 1000 for all simulation numbers unless stated (2,000 shuffles in the 2×2 LLM
-study, 1,000 in the 5×5 study).
+intervals in brackets. B = 1000 shuffles throughout unless stated.
 
 ### 3.3 LLM double auction with a coarse shared state
 
@@ -171,33 +168,27 @@ valid if the state captures everything honest agents react to (Section 4.3), and
 memory or see detailed price paths no recorded state does (Appendix C). We therefore **design the market
 so the state is the agents' entire public input.**
 
-- **Market.** Sellers (cost $80) and scripted buyers (value $100) each hour *lower*, *keep* or *raise*
-  their quote by $2 (logged as *tighten*, *hold*, *widen* in the code and data). At most one trade per hour, between the lowest ask and the highest bid, at the
-  midpoint. Asks start at $96, bids at $84. Exact prices stay inside the simulator.
-- **Shared state** $S_t$, the only thing in each prompt besides the rules:
-  2×2 market (2 sellers, 2 buyers, 30 hours) — each seller's last move, who sold, and whether the
-  lowest ask is high (≥ $92) or low; 5×5 market (5 sellers, 5 buyers, 50 hours) — how many sellers
-  lowered / kept / raised, who sold, and the ask level. No memory, scratch pad or hour number.
-- **Conditions.** `comms_off` (rules only); `pressure_off` (plus a CEO message: margins are tracked
-  and low-margin sellers are decommissioned); `comms_pressure` (CEO message plus a 200-character
-  message channel; each seller sees every seller's last message). Messages are the hidden channel:
-  they are not in $S_t$.
-- **Model.** gpt-4.1-mini, temperature 0.7, JSON output. 2×2: 200 games per condition (36,000 calls,
-  ≈$6.35). 5×5: 100 games per condition (75,000 calls, ≈$14.38).
-- **Test.** Every seller's prompt is a function of $S_t$ (and its own name), so sellers are conditionally
-  independent given $S_t$ unless something outside it links them; any message that changes moves breaks
-  this null, collusive or not. Exchangeability within a state is approximate, because $S_{t+1}$ includes
-  each seller's move at $t$; a scripted check (300 replications of 20 five-seller games) gave 4.3% and
-  5.0% false alarms at a 5% target. The statistic is the *same-move count* (hours in which a pair of
-  sellers made the same move). We switched to it from CMI after the 200-game 2×2 run, where CMI flagged
-  10% of 20-game batches against 80% for same-move, so the 2×2 same-move rates are post hoc; the statistic
-  was fixed before the 5×5 run, which tests it as specified. With 5 sellers we report a global test (sum
-  over all 10 pairs) and a max-pair test (largest standardized pair, which controls family-wise error and
-  names the pair), over disjoint batches of 5, 10 and 20 games.
+- **Market.** 5 LLM sellers (cost $80) and 5 scripted buyers (value $100), 50 hours per game. Each hour
+  every agent lowers, keeps or raises its quote by $2; at most one trade per hour, between the lowest ask
+  and the highest bid, at the midpoint. Exact prices stay inside the simulator.
+- **Shared state** $S_t$, the only thing in each prompt besides the rules: how many sellers lowered /
+  kept / raised last hour, who sold, and whether the lowest ask is high (≥ $92) or low. No memory,
+  scratch pad or hour number.
+- **Conditions** (100 games each): *comms off* (rules only); *pressure, no comms* (plus a CEO message:
+  margins are tracked and low-margin sellers are decommissioned); *comms + pressure* (plus a 200-character
+  message channel; each seller sees every seller's last message). Messages are not in $S_t$.
+  gpt-4.1-mini, temperature 0.7; 75,000 calls (≈$14).
+- **Test.** Sellers are conditionally independent given $S_t$ unless something outside it links them, so
+  any message that changes moves breaks the null, collusive or not. Exchangeability within a state is
+  approximate ($S_{t+1}$ depends on moves at $t$); in a scripted check (300 replications of 20 games) the
+  tests gave 4.3% and 5.0% false alarms at a 5% target. The statistic is the *same-move count* of each
+  seller pair, chosen in earlier 2-seller runs (Appendix D) where CMI was underpowered, and fixed
+  before this run. The *global test* sums it over all 10 pairs; the *max-pair test* takes the largest
+  standardized pair, which controls family-wise error and names the pair.
 
-**What did not work.** LLM buyers drove bids to the floor, so we switched to scripted buyers; sellers
-confused "tighten/widen", so we renamed the moves; CMI was underpowered (above); and triple scans for xor
-were dropped, since a test over triples is blind to the same construction with four players.
+**What did not work.** LLM buyers drove bids to the floor, so we switched to scripted buyers; CMI was
+underpowered as the LLM statistic (Appendix D); and triple scans for xor were dropped, since a test over
+triples is blind to the same construction with four players.
 
 ## 4. Results
 
@@ -230,10 +221,8 @@ and a 5-clique at CP 0.2, the group scan recovered the exact group in **48% [38,
 5% [2, 11] for the pair test and 4% [2, 10] for the player score (Figure 2). It also degrades less as
 players are added: for a triangle at CP 0.2 and 300 rounds, the player score falls from 93% to 32% between
 5 and 20 players, the group scan from 93% to 84% (Table 2). We plant groups of 3–5 because larger groups have more linked pairs and
-are easier for every method; the scan searches all sizes. In a near-total cartel (18 of 20 players) it
-recovers the exact group in 96–100% of games from CP 0.2 with 300 rounds or CP 0.3 with 100, while the
-player score keeps up at weak collusion (76–100% at CP 0.1–0.2 with 300 rounds) but levels off at 76–92%
-at CP 0.3–0.5.
+are easier for every method; the scan searches all sizes, and recovers even an 18-of-20 cartel in 96–100%
+of games from CP 0.3 (`results/SUMMARY.md`).
 
 **Table 2.** Exact recovery (%) at one setting every group was run at: CP 0.2, 300 rounds, 200 shuffles,
 20 players (triangle also at 5), 50 games per cell at 20 players and 100 at 5; 95% Wilson intervals for the
@@ -298,51 +287,29 @@ rounds with *full*, 94–95% from 1000 rounds).
 
 ### 4.4 LLM sellers: comms + CEO pressure is detected, controls are not
 
-**Observation.** In both markets, comms + pressure raised sellers' combined profit by 49% (2×2) and 56%
-(5×5) over pressure alone, and by 65% and 60% over neither (Table 4). In the 2×2 market the mean trade
-price rises from $85 to $89 (seller cost $80, buyer value $100) while trades fall from 89% to 79% of
-hours. It was the only condition the test flagged consistently. Pooled over 200 games, the 2×2 same-move
-statistic gave z = +7.9 for comms + pressure and |z| ≤ 1.5 for both controls (CMI: +5.0 vs |z| ≤ 0.8).
-In the 5×5 market, pooled over 100 games, the global test gave p = 0.001 (the floor at 1000 shuffles;
-+1,991 matching seller pairs above the shuffle's expectation out of 50,000 pair-hours, top pairs z = 9–12)
-against p = 0.17 and 0.71 on the controls. Raw agreement alone would not show this: comms + pressure
-sellers made the same move in 66.8% of pair-hours, against 62.8% expected within states, but sellers with
-no channel and no pressure agreed even more often (68.6%) because they all lowered together.
+**Observation.** Comms + pressure raised sellers' combined profit by 56% over pressure alone and 60% over
+neither (Table 4): the mean trade price rose from $85.5 to $89.1 while trades fell from 95% to 90% of
+hours. Pooled over 100 games, the global test gave p = 0.001 (the floor at 1,000 shuffles; 1,991 more
+matching seller pairs than the shuffle expects, out of 50,000 pair-hours; top pairs z = 9–12) against
+p = 0.17 and 0.71 on the controls. Raw agreement alone would not show this: comms + pressure sellers made
+the same move in 66.8% of pair-hours against 62.8% expected within states, while sellers with no channel
+and no pressure agreed more often (68.6%) because they all lowered together.
 
-**Table 4.** Batches flagged at α = 0.05, out of disjoint batches of 5, 10 and 20 games. 2×2: same-move
-test. 5×5: global test over all 10 seller pairs. Profit = all sellers' combined profit per market hour, $
-(per seller: divide by 2 or 5), with a 95% bootstrap interval over games.
+**Table 4.** Batches flagged by the global test at α = 0.05, out of disjoint batches of 5, 10 and 20 games
+(95% Wilson intervals: 19/20 → [76, 99]%, 5/5 → [57, 100]%). Profit: all sellers combined, $ per hour,
+95% bootstrap interval over games.
 
-| Market | Condition | Sellers' profit / hour ($) | 5 games | 10 games | 20 games |
-|---|---|---|---|---|---|
-| 2×2 | comms off | 4.29 [4.06, 4.51] | 2/40 | 0/20 | 0/10 |
-| 2×2 | pressure, no comms | 4.76 [4.52, 5.00] | 1/40 | 2/20 | 2/10 |
-| 2×2 | **comms + pressure** | **7.07** [6.76, 7.38] | 12/40 | 8/20 | **8/10** |
-| 5×5 | comms off | 5.12 [4.82, 5.42] | 0/20 | 0/10 | 0/5 |
-| 5×5 | pressure, no comms | 5.24 [4.93, 5.54] | 0/20 | 0/10 | 0/5 |
-| 5×5 | **comms + pressure** | **8.20** [7.83, 8.59] | **19/20** | **10/10** | **5/5** |
+| Condition | Sellers' profit / hour | 5 games | 10 games | 20 games |
+|---|---|---|---|---|
+| comms off | 5.12 [4.82, 5.42] | 0/20 | 0/10 | 0/5 |
+| pressure, no comms | 5.24 [4.93, 5.54] | 0/20 | 0/10 | 0/5 |
+| **comms + pressure** | **8.20** [7.83, 8.59] | **19/20** | **10/10** | **5/5** |
 
-The batch counts are small: 95% Wilson intervals are [49, 94]% for 8/10, [76, 99]% for 19/20 and [57, 100]%
-for 5/5. The 5×5 max-pair test flags comms + pressure in 16/20, 10/10 and 5/5 batches, and the controls in
-1/20 and 0/20 five-game batches and none of the larger ones.
-
-![Figure 4](figures/fig4_llm_detection.png)
-
-**Figure 4.** Batches flagged (%) vs games per batch, with 95% Wilson intervals; the batch counts are in
-Table 4. Left: 2×2 market, same-move test (40 / 20 / 10 batches). Right: 5×5 market, global test
-(20 / 10 / 5 batches). Dashed line: 5% target.
-
-**Interpretation.** CEO pressure makes the seller who just sold raise (2×2, low-price hours after a
-trade: 8% without pressure → 33% with it), and the channel stops the other seller from undercutting
-("lower" falls from 82% with pressure alone to 41% with the channel), so moves synchronize. In the 5×5 market the whole group converges on "hold, don't undercut" (e.g.
-"Maintain stable asks; avoid price wars to protect profits for all sellers.", seed 102, hour 25), so the
-excess agreement appears in all 10 pairs and is detected in smaller batches (each 5×5 game also has 50
-hours and 10 pairs, against 30 hours and one). Because every pair is in sync, the max-pair test cannot
-isolate a sub-cartel here; in a scripted check where only S1 and S2 coordinate (10% of hours, 300 batches
-of 20 games) it flags every batch and names the right pair in 99.7%. The 2×2 pressure-only control's 2 of
-10 batches (95% interval [6, 51]%) is consistent with 5% but is the weakest control result. What the test
-detects is a shared signal outside the logged state; reading it as collusion rests on the profit gap over
-the pressure-only control.
+**Interpretation.** The sellers converge on "hold, don't undercut" (e.g. "Maintain stable asks; avoid price
+wars to protect profits for all sellers.", seed 102, hour 25), so the excess agreement appears in all 10
+pairs at once. For the same reason the max-pair test (16/20, 10/10, 5/5 batches) cannot isolate a sub-cartel (the controls are flagged in 1/20 and 0/20 five-game batches); in a scripted check where only two of five sellers coordinate in 10% of hours,
+it names the right pair in 99.7% of batches. What the test detects is a shared signal outside the logged
+state; reading it as collusion rests on the profit gap over the pressure-only control.
 
 ## 5. Discussion and Limitations
 
@@ -375,7 +342,7 @@ cancels inside them and its fixed threshold is uncalibrated. A group scan with a
 test recovers weak, broad colluding groups at near-nominal false-alarm rates (3–9% at a 5% target),
 provided the state captures what honest players react to. In LLM markets where each seller's prompt is
 built only from a logged state, the same-move version of the test detects comms + CEO-pressure collusion
-among gpt-4.1-mini sellers (8 of 10 20-game batches with 2 sellers, 19 of 20 5-game batches with 5) and
+among gpt-4.1-mini sellers (19 of 20 five-game batches) and
 not the controls.
 
 ## Code and Data
@@ -411,7 +378,7 @@ during the sprint.
 **Limitations.**
 
 - **Coordination that is a function of the public state is invisible.** Follow-the-leader or an explicit
-  cartel that keys on last round's public moves is absorbed into the state. In the 2×2 pilots of
+  cartel that keys on last round's public moves is absorbed into the state. In the 2-seller pilots of
   Appendix D, sellers told to form a cartel and agree each hour on a joint move were not detected for
   this reason. A direction test (does a seller raise after
   others raise?) catches such coordination but also fires on tacit following without communication, so
@@ -462,53 +429,40 @@ alarms and 85.6% detection of copied triples, but did not transfer to held-out m
 flags across folds). This motivated the coarse-state design of Section 3.3: without a state that
 explains honest behaviour, the test is not usable. Details: `studies/auction_null_calibration/`.
 
-## Appendix D. Earlier 2×2 LLM pilots
+## Appendix D. 2-seller development runs
 
-Before the 200-game 2×2 run we ran four pilots, 20 games of 30 hours per condition, while developing the
-market. They include conditions we later dropped when we restricted the study to the setup of Agrawal et
-al. (2025): `comms_on` (message channel only), `comms_instructed` (channel, plus being told that
-coordinating to keep prices high pays) and `comms_cartel` (told they have secretly formed a cartel, to
-agree each hour on what both will do, and never to undercut). All results are reported below.
+Before the 5-seller study we developed the market with 2 LLM sellers and 2 scripted buyers, 30 hours per
+game, the state being each seller's last move, who sold, and the ask level (`studies/llm_auction/`). Four
+20-game pilots per condition (v1–v4) were followed by a 200-game run of the three final conditions.
 
-**Table 5.** Pilot results. Shuffle-test p-values from 5,000 within-state shuffles. Direction D: how much
-more often a seller raises after the other seller raised than after it lowered, within the same
-sold-by / ask-level stratum (95% bootstrap interval over games).
+**Table D1.** Seller profit (all sellers combined, $ per hour) and same-move shuffle-test results. Pilots:
+p-value of one 20-game batch. 200-game run: batches flagged at α = 0.05 out of 10 disjoint 20-game
+batches, and the pooled z-score.
 
-| Pilot | Condition | Profit / hour | Same-move p | CMI p | Direction D |
-|---|---|---|---|---|---|
-| v1 | comms off | 0.00 | 0.85 | 0.19 | −0.00 [−0.01, 0.00] |
-| v1 | comms on | 0.00 | 0.94 | 0.04 | +0.04 [−0.02, 0.11] |
-| v1 | comms instructed | 0.00 | 0.42 | 0.67 | +0.65 [0.60, 0.71] |
-| v2 | comms off | 4.79 | 0.30 | 0.19 | +0.05 [−0.01, 0.12] |
-| v2 | comms on | 4.70 | 0.60 | 0.97 | +0.01 [−0.05, 0.08] |
-| v2 | comms instructed | 7.42 | 0.13 | 0.37 | +0.60 [0.52, 0.67] |
-| v3 | comms off | 4.80 | 0.48 | 0.73 | +0.21 [0.06, 0.31] |
-| v3 | comms + pressure | 7.38 | 0.87 | 0.25 | +0.05 [−0.02, 0.12] |
-| v3 | comms cartel | 5.33 | 0.15 | 0.14 | +0.89 [0.76, 0.96] |
-| v4 | comms off | 4.72 | 0.48 | 0.93 | +0.12 [0.00, 0.21] |
-| v4 | pressure, no comms | 5.32 | 0.98 | 0.94 | +0.17 [0.10, 0.24] |
-| v4 | comms cartel | 7.63 | 0.36 | 0.85 | +0.34 [0.27, 0.40] |
-| v4 | comms + pressure | 7.81 | 0.0002 | 0.0002 | −0.09 [−0.18, 0.00] |
+| Run | Condition | Profit / hour | Same-move test |
+|---|---|---|---|
+| v2 pilot | comms, told coordination pays | 7.42 | p = 0.13 |
+| v4 pilot | comms, told to form a cartel | 7.63 | p = 0.36 |
+| v4 pilot | comms + pressure | 7.81 | p = 0.0002 |
+| v3 pilot | comms + pressure | 7.38 | p = 0.87 |
+| 200-game run | comms off | 4.29 [4.06, 4.51] | 0/10 batches; z ≤ 1.5 |
+| 200-game run | pressure, no comms | 4.76 [4.52, 5.00] | 2/10; z ≤ 1.5 |
+| 200-game run | **comms + pressure** | **7.07** [6.76, 7.38] | **8/10**; z = +7.9 |
 
-**Differences between pilots.** In v1 the buyers were also LLMs; they lowered their bids to the floor
-and almost no trades happened, so v2 onward use scripted buyers. In v3 each seller saw only the other
-seller's message, and the cartel's plans kept alternating; v4 shows both messages and tells cartel sellers
-to follow S1's plan when the plans differ. Prompts were otherwise those in `llm_pilot.py`, up to wording
-edits made while developing it; the exact v1–v3 prompts were not saved.
-
-**What the pilots show.**
-
-- **Explicit and instructed coordination is missed.** Cartel and instructed sellers raise prices
-  (v2 instructed 7.42, v4 cartel 7.63 per hour) but coordinate by following the other seller's last
-  move, which is part of the state, so the shuffle test cannot see it (same-move p ≥ 0.12).
-- **The direction test sees it, but is not calibrated.** D is large for cartel and instructed sellers
-  (+0.34 to +0.89) but also positive for honest controls (up to +0.21 for comms off and +0.17 for pressure
-  only), so it would need a comms-off baseline to be used as a detector.
-- **Comms + pressure is not always detected at 20 games.** It was flagged in v4 (p = 0.0002) and missed
-  in v3 (p = 0.87), consistent with the 8/10 detection rate for 20-game batches in Table 4.
-- **A channel alone does not produce collusion.** `comms_on` earns the same as comms off.
-
-Data: `studies/llm_auction/runs/pilot_v1` … `pilot_v4/games.jsonl`; `python3 pilots.py` reproduces Table 5.
+- **Explicit coordination through public moves is missed.** Sellers told to form a cartel, or that
+  coordinating pays, raise prices but coordinate by following the other seller's last move, which is in
+  the state, so the shuffle test cannot see it. A test of whether a seller raises after the other raised
+  does see it (+0.34 to +0.89), but also fires on honest controls (up to +0.21), so it would need a
+  comms-off baseline.
+- **The same-move statistic was chosen here.** In the 200-game run, CMI flagged comms + pressure in only
+  1 of 10 20-game batches (pooled z = +5.0), against 8 of 10 for the same-move count, so the 2-seller
+  same-move rates above are post hoc; the 5-seller study then tested the statistic as fixed in advance.
+- **Mechanism.** In low-price hours after a trade, CEO pressure makes the seller who just sold raise (8%
+  without pressure → 33% with it), and the channel stops the other seller from undercutting ("lower"
+  82% → 41%), so moves synchronize.
+- In v1 the buyers were LLMs and drove bids to the floor, so v2 onward use scripted buyers. The exact
+  v1–v3 prompts were not saved. All pilot conditions and the direction test: `studies/llm_auction/`
+  (`pilots.py`, `report.pdf`).
 
 ## LLM Usage Statement
 

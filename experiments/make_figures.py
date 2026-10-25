@@ -185,10 +185,11 @@ def fig_e(grid=(1, 4), figsize=(14, 4), out=FIG / "figE_state_false_alarms.png",
                         fmt=MARKER[det], ms=5, capsize=2, color=color, label=SHORT[det])
         ax.axhline(5, color=INK2, lw=1, ls="--")
         ax.set_xticks(range(4)); ax.set_xticklabels(states)
-        if i >= len(axs) - grid[1]:
+        if i >= len(axs) - grid[1] and (title or grid[0] > 1):
             ax.set_xlabel("history state the detector conditions on")
         ax.set_title({"uniform": "all honest players random", "leader": "half leader-reactive",
-                      "margin": "half margin-reactive", "mixed": "leader + margin + random"}[mix], fontsize=9)
+                      "margin": "half margin-reactive", "mixed": "leader + margin + random"}[mix],
+                     fontsize=9 if title else 8)
     for i in range(0, len(axs), grid[1]):
         axs[i].set_ylabel("% of games with any report")
     if title:
@@ -200,7 +201,9 @@ def fig_e(grid=(1, 4), figsize=(14, 4), out=FIG / "figE_state_false_alarms.png",
     else:
         h, l = axs[0].get_legend_handles_labels()
         fig.legend(h, l, loc="lower center", ncol=4, fontsize=8, bbox_to_anchor=(0.5, 0))
-        fig.tight_layout(rect=(0, 0.07, 1, 1))
+        if grid[0] == 1:
+            fig.supxlabel("history state the detector conditions on", fontsize=9, y=0.135)
+        fig.tight_layout(rect=(0, 0.17 if grid[0] == 1 else 0.07, 1, 1))
     fig.savefig(out, dpi=200 if not title else 150)
 
 
@@ -234,8 +237,8 @@ def report_figures():
     """Figures 1-3 of report/report.md at print width (7 in), no suptitles (the captions carry them)."""
     REPORT_FIG.mkdir(parents=True, exist_ok=True)
     fig_a(kinds=(("triangle", 7),), figsize=(7, 3.3), out=REPORT_FIG / "fig1_cancellation.png", title=False)
-    fig_c(figsize=(7, 2.9), out=REPORT_FIG / "fig2_weak_cliques.png", title=False)
-    fig_e(grid=(2, 2), figsize=(7, 4.5), out=REPORT_FIG / "fig3_state_false_alarms.png", title=False)
+    fig_c(figsize=(7, 2.5), out=REPORT_FIG / "fig2_weak_cliques.png", title=False)
+    fig_e(grid=(1, 4), figsize=(7.2, 2.7), out=REPORT_FIG / "fig3_state_false_alarms.png", title=False)
 
 
 if __name__ == "__main__":

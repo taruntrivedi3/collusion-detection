@@ -124,7 +124,7 @@ No command here calls an LLM; all games are saved in `runs/*/games.jsonl`.
 | 2 sellers: batch rejection rates | `rates.py runs/rates_v1 same_moves` (or `cmi`) | disjoint batches of 5 / 10 / 20 games |
 | 5 sellers: `runs/n5_rates_v1/analysis.txt` (profits, pooled test, batch rates) | `analyze_n.py runs/n5_rates_v1 5,10,20` | games seeds 100–199 per condition; 1,000 shuffles; test seed = job index |
 | 5 sellers: `runs/n5_rates_v1/dry_run.txt` (scripted false alarms and power) | `dry_run_n.py 300` | 300 replications of 20 games × 50 hours; replication seed 1000 × i + 17 |
-| Report Figure 4: `report/figures/fig4_llm_detection.png` | `python report/make_llm_figure.py` (from the repo root) | reads the two outputs above |
+| LLM detection figure, 2 and 5 sellers: `report/figures/fig4_llm_detection.png` (not in the report) | `python report/make_llm_figure.py` (from the repo root) | reads the two outputs above |
 
 ## Documents
 
