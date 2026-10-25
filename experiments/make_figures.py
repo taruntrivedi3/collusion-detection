@@ -2,6 +2,7 @@
 
   python make_figures.py A B C D E      (any subset)
   python make_figures.py R              print-size Figures 1-3 for report/report.md -> report/figures/
+  python make_figures.py F              report Table 2 (fixed setting) -> results/figures/table_fixed_setting_cp02_r300.csv
 """
 import sys
 from pathlib import Path
@@ -74,6 +75,9 @@ def fig_a(kinds=(("triangle", 7), ("hub", 8)), figsize=(9.5, 8), out=FIG / "figA
                                 color="white" if abs(norm(M[i, j]) - 0.5) > 0.35 else "#0b0b0b")
                         rows.append(dict(structure=kind, matrix=name, i=i, j=j, value=M[i, j]))
             ax.set_xticks(range(5)); ax.set_yticks(range(5))
+            if not title and kind == "triangle":            # report figure: outline the colluding block
+                from matplotlib.patches import Rectangle
+                ax.add_patch(Rectangle((-0.5, -0.5), 3, 3, fill=False, lw=2, ec="#0b0b0b"))
             ax.set_xlabel("player j"); ax.set_ylabel("player i")
             ax.grid(False)
             who = "triangle {0,1,2}" if kind == "triangle" else "hub: leader 0, helpers 1, 2"
@@ -175,8 +179,10 @@ def fig_e(grid=(1, 4), figsize=(14, 4), out=FIG / "figE_state_false_alarms.png",
         d0 = g[(g.mix == mix) & (g.rounds == 1000)]
         for k, det in enumerate(PLOT):
             d = d0[d0.detector == det].set_index("state").loc[states]
+            # report figure: grey out Bonjour, which sits at 0 only because its cutoff never fires here
+            color = "#b5b4af" if (not title and det == "bonjour") else COLOR[det]
             ax.errorbar(np.arange(4) + off[k], d.pct, yerr=[(d.pct - d.lo).clip(lower=0), (d.hi - d.pct).clip(lower=0)],
-                        fmt=MARKER[det], ms=5, capsize=2, color=COLOR[det], label=SHORT[det])
+                        fmt=MARKER[det], ms=5, capsize=2, color=color, label=SHORT[det])
         ax.axhline(5, color=INK2, lw=1, ls="--")
         ax.set_xticks(range(4)); ax.set_xticklabels(states)
         if i >= len(axs) - grid[1]:
@@ -212,6 +218,18 @@ def table_t():
     print(t.to_string())
 
 
+def table_fixed():
+    """Report Table 2: exact recovery at the one setting every group was run at (CP 0.2, 300 rounds, B = 200)."""
+    df = pd.concat([pd.read_csv(ROOT / f"results/step4/runs_n{n}.csv") for n in (5, 20)], ignore_index=True)
+    df = df[(df.cp == 0.2) & (df.rounds == 300) & (df.structure != "none") & df.detector.isin(PLOT)]
+    df = df.assign(n_planted=df.structure.map(lambda s: 2 if s == "two_pairs" else 1))
+    g = _rate(df, "recovered", ["structure", "n", "detector"])
+    g["cell"] = g.apply(lambda r: f"{r.pct:.0f} [{r.lo:.0f}, {r.hi:.0f}]", axis=1)
+    t = g.pivot_table(index=["structure", "n"], columns="detector", values="cell", aggfunc="first")[PLOT].rename(columns=SHORT)
+    t.to_csv(FIG / "table_fixed_setting_cp02_r300.csv")
+    print(t.to_string())
+
+
 def report_figures():
     """Figures 1-3 of report/report.md at print width (7 in), no suptitles (the captions carry them)."""
     REPORT_FIG.mkdir(parents=True, exist_ok=True)
@@ -222,5 +240,6 @@ def report_figures():
 
 if __name__ == "__main__":
     for k in sys.argv[1:]:
-        {"A": fig_a, "B": fig_b, "C": fig_c, "D": fig_d, "E": fig_e, "T": table_t, "R": report_figures}[k]()
+        {"A": fig_a, "B": fig_b, "C": fig_c, "D": fig_d, "E": fig_e, "T": table_t, "F": table_fixed,
+         "R": report_figures}[k]()
         print("fig", k, "done")

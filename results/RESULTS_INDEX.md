@@ -38,6 +38,8 @@ xor 6, none 7.
 | D — null false alarms (`figD_null_false_alarms.png`) | `figD_null_false_alarms.csv` | `make_figures.py D` | reads `step4_final/cells/none_*` |
 | E — false alarms by history state (`figE_state_false_alarms.png`) | `figE_state_false_alarms.csv` | `make_figures.py E` | reads `step5/partA_n10/` |
 | Table: structure × n with CIs | `table_structure_by_n_ci.csv` | `make_figures.py T` | reads `step4/runs_n*.csv` |
+| Report Table 2: fixed setting (CP 0.2, 300 rounds) | `table_fixed_setting_cp02_r300.csv` | `make_figures.py F` | reads `step4/runs_n{5,20}.csv` |
+| Report Figures 1–3 (print size) | `report/figures/fig{1,2,3}_*.png` | `make_figures.py R` | as Figures A, C, E |
 
 Summary tables in `results/SUMMARY.md` are copied from the files below (Table 1: step4 / figures T;
 Tables 2–3: step4_final; Tables 4 and 8: step1; Tables 5–7: step5).

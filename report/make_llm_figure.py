@@ -15,11 +15,14 @@ sys.path[:0] = [str(ROOT), str(ROOT / "studies" / "llm_auction")]
 sys.argv = sys.argv[:1]                                    # build_report reads argv[1] as its output path
 
 import matplotlib.pyplot as plt  # noqa: E402
-from build_report import COLOR, CONDS, GRID, INK, INK2, LABEL, MARKER, batch_rates, load  # noqa: E402
+from build_report import CONDS, GRID, INK, INK2, LABEL, MARKER, batch_rates, load  # noqa: E402
 
 from collusion.metrics import wilson  # noqa: E402
 
 SIZES = (5, 10, 20)
+# Conditions get colours no detector uses in Figures 2-3 (palette slots 6 and 7, plus grey for the
+# no-comms, no-pressure control), so blue never means two different things in the report.
+COLOR = {"comms_off": "#8a8984", "pressure_off": "#6250d6", "comms_pressure": "#008300"}
 OUT = Path(__file__).with_name("figures") / "fig4_llm_detection.png"
 
 

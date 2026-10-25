@@ -7,7 +7,7 @@ Numbers come from results/SUMMARY.md, studies/llm_auction and studies/llm_auctio
 (runs/n5_rates_v1/analysis.txt, dry_run.txt).
 -->
 
-# Finding Colluding Groups from Players' Moves: Group Scans and State-Conditioned Shuffle Tests for Multi-Agent and LLM Collusion
+# Detecting Colluding Groups from Moves Alone: Group Scans with History-Conditioned Shuffle Tests
 
 **Tarun Trivedi** (Independent), **Eashan Gandotra** (Independent)
 
@@ -17,7 +17,7 @@ Numbers come from results/SUMMARY.md, studies/llm_auction and studies/llm_auctio
 
 ## Abstract
 
-<!-- 150–250 words (currently ~239). Plain terms only: hubs, cliques, history states etc. are defined in Section 3. -->
+<!-- 150–250 words (currently ~247). Plain terms only: hubs, cliques, history states etc. are defined in Section 3. -->
 
 Auditors of multi-agent systems often see what agents do, not what they say to each other. The
 information-theoretic detector of Bonjour et al. (2022) looks for one pair of players whose moves depend
@@ -31,8 +31,8 @@ respond to the previous round look like colluders in up to 100% of games unless 
 recent history are shuffled together, which keeps false alarms at 4–9% while still catching a group that
 colludes for profit. In LLM double auctions where sellers see only a recorded summary of the last hour,
 gpt-4.1-mini sellers given a message channel and profit pressure earn about 50% more than with pressure
-alone; the test flags them but not the controls. Moves-only auditing works if the auditor records what
-each agent sees and tests groups, not just pairs.
+alone; the test flags them but not the controls, and it misses sellers who coordinate only by following
+public moves. Moves-only auditing works if the auditor records what each agent sees and tests groups.
 
 ## 1. Introduction
 
@@ -54,8 +54,8 @@ Our contributions:
    score, so the published rule rarely flags even one in-group pair (8–15% of games), although the links
    are ~200 standard deviations above chance; its fixed threshold is also uncalibrated.
 2. **A shuffle-calibrated group scan** that recovers weak, broad groups pairwise methods miss (48% vs 5%
-   for a weak 5-player group among 20) at near-nominal false-alarm rates, and loses only where
-   colluders are not all linked to each other.
+   for a weak 5-player group among 20) at near-nominal false-alarm rates; a per-pair test does better
+   on hubs and isolated pairs.
 3. **History conditioning is necessary.** Honest players who react to history are flagged in up to 100%
    of games unless the shuffle stays within history states; with the right state, a coalition whose
    coordination pays is found while honest exploiters are not.
@@ -87,13 +87,14 @@ suspicious behaviour; our "player score" baseline is inspired by this but is not
 Our "pair test" applies Benjamini–Hochberg (1995) false-discovery control to all pairs and joins
 significant pairs into groups.
 
-**Scan statistics and max-T tests.** The group scan is a scan statistic over subsets, calibrated by the
-permutation distribution of its maximum; this controls the family-wise error over all subsets at once
-(Westfall & Young, 1993).
+**Scan statistics.** Searching subsets for the most anomalous one and calibrating its maximum by
+permutation is standard in disease and event surveillance (Kulldorff, 1997; Neill, 2012) and controls the
+family-wise error over all subsets (max-T; Westfall & Young, 1993). What is new here is the target:
+subsets of agents scored by their pairwise dependence, a null that shuffles only within history states,
+and the confound of honest agents who react to the same history.
 
-**Gap.** No prior method we know of (i) detects groups larger than two from moves, (ii) has a
-calibrated false-alarm rate, and (iii) handles honest agents whose moves are correlated through
-shared history.
+**Gap.** We know of no collusion detector that (i) reports groups larger than two from moves, (ii) has a
+calibrated false-alarm rate, and (iii) handles honest agents correlated through shared history.
 
 ## 3. Methods
 
@@ -217,37 +218,38 @@ each colluder's strongest influence comes from another colluder.
 Scoring the group as a whole adds up evidence too weak in any single pair. With 20 players, 100 rounds
 and a 5-clique at CP 0.2, the group scan recovered the exact group in **48% [38, 58]** of games, against
 5% [2, 11] for the pair test and 4% [2, 10] for the player score (Figure 2). It also degrades less as
-players are added: for a triangle, the player score falls from 71% to 52% between n = 5 and 20, the group
-scan from 77% to 71% (Table 2). We plant groups of 3–5 because larger groups have more linked pairs and
+players are added: for a triangle at CP 0.2 and 300 rounds, the player score falls from 93% to 32% between
+5 and 20 players, the group scan from 93% to 84% (Table 2). We plant groups of 3–5 because larger groups have more linked pairs and
 are easier for every method; the scan searches all sizes. In a near-total cartel (18 of 20 players) it
 recovers the exact group in 96–100% of games from CP 0.2 with 300 rounds or CP 0.3 with 100, while the
 player score keeps up at weak collusion (76–100% at CP 0.1–0.2 with 300 rounds) but levels off at 76–92%
 at CP 0.3–0.5.
 
-**Table 2.** Exact recovery (%) by planted group and number of players. Each row averages over the CP and
-round settings tried for that group (4 for pair, hub and xor; 12–15 for the others; 200 shuffles), so rows
-are not comparable with each other or with single settings such as the 48% above.
+**Table 2.** Exact recovery (%) at one setting every group was run at: CP 0.2, 300 rounds, 200 shuffles,
+20 players (triangle also at 5), 50 games per cell at 20 players and 100 at 5; 95% Wilson intervals for the
+two strongest methods.
 
-| Planted group | n | Bonjour | Pair test | Player score | Group scan |
-|---|---|---|---|---|---|
-| Pair | 20 | 70 | 89 | 72 | **91** |
-| Hub | 20 | 0 | **86** | 68 | 78 |
-| Triangle | 5 | 0 | 67 | 71 | **77** |
-| Triangle | 20 | 0 | 64 | 52 | **71** |
-| 4-clique | 20 | 0 | 48 | 45 | **62** |
-| 5-clique | 20 | 0 | 46 | 51 | **63** |
-| xor | 5–20 | 0 | 0 | 0 | 0 |
+| Planted group | Bonjour | Pair test | Player score | Group scan |
+|---|---|---|---|---|
+| Pair | 34 | **70** [56, 81] | 8 | 64 [50, 76] |
+| Two pairs | 23 | **69** [59, 77] | 6 | 60 [50, 69] |
+| Hub | 0 | **66** [52, 78] | 2 | 44 [31, 58] |
+| Triangle (5 players) | 0 | 83 [74, 89] | 93 | **93** [86, 97] |
+| Triangle | 0 | 70 [56, 81] | 32 | **84** [71, 92] |
+| 4-clique | 0 | 78 [65, 87] | 66 | **90** [79, 96] |
+| 5-clique | 0 | 78 [65, 87] | 90 | **96** [87, 99] |
+| xor | 0 | 0 | 0 | 0 |
 
 ![Figure 2](figures/fig2_weak_cliques.png)
 
 **Figure 2.** Exact recovery vs CP for 4- and 5-cliques among 20 players (100 rounds, 1000 shuffles,
 100 games per point, 95% Wilson intervals). Bonjour stays at 0.
 
-**Where it loses.** The scan often reports a hub as one leader–helper pair, because the two helpers are
-linked only indirectly (z ≈ 29, against ≈ 150 for leader–helper links; 5 players, CP 0.5). The pair test, which joins both edges, does better (58% [48, 67] vs 34% [25, 44] at
-CP 0.2, 300 rounds, 20 players; 86% vs 78% averaged in Table 2). For two isolated weak pairs in short
-games the pair test also wins narrowly (58% [51, 64] vs 52% [46, 59]; 10 players, CP 0.3, 100 rounds):
-the scan pays for searching ~10<sup>3</sup> groups.
+**Where it loses.** On hubs the pair test does better (66% vs 44%, Table 2): the scan often reports one
+leader–helper pair, because the two helpers are linked only indirectly (z ≈ 29, against ≈ 150 for
+leader–helper links; 5 players, CP 0.5). On single and two separate weak pairs the pair test also edges
+ahead (70 vs 64 and 69 vs 60; intervals overlap): for a lone link, the scan pays for searching ~10<sup>6</sup>
+groups, while a per-pair correction is cheaper.
 
 ### 4.3 The test must condition on what honest players react to
 
@@ -260,7 +262,8 @@ are 4–9%.
 
 **Figure 3.** False-alarm rate by history state (coarse → fine) for four mixes of honest players; 10
 players, 1000 rounds, no colluders, 200 games per point, 95% Wilson intervals. Dashed line: 5% target.
-Bonjour's fixed rule sits at 0 because its cutoff never fires at 1000 rounds, not because it is calibrated.
+Bonjour's fixed rule (grey) sits at 0 because its cutoff never fires at 1000 rounds, not because it is
+calibrated.
 
 **Profitable collusion.** A 4-player steer group earns 0.21 points per round each at CP 0.3, **2.6×**
 what four independent exploiters earn reacting at the same rate; the margin-reactive players pay for it
@@ -340,6 +343,10 @@ agent is shown; the test is then valid when decisions depend only on what is log
 signal outside the log, collusive or not, so calling a flag collusion needs an outcome check such as the
 profit gap.
 
+**An auditor's recipe.** (1) Log what each agent observes each round. (2) Run the group scan with a shuffle
+that stays within those logged states. (3) Before calling a flagged group collusion, compare its payoff
+with a comparable honest baseline.
+
 **Limitations** (details in Appendix A). Coordination that is a function of the public state is
 invisible: in 2-seller pilots (Appendix D) the test missed sellers told to form an explicit cartel, who
 earned 7.63 per hour against 4.72 with comms off, because they coordinated by following last hour's
@@ -381,9 +388,11 @@ during the sprint.
 1. Agrawal, K., Teo, V., Vazquez, J. J., Kunnavakkam, S., Srikanth, V., & Liu, A. (2025). Evaluating LLM agent collusion in double auctions. arXiv:2507.01413. Code: <https://github.com/andyjliu/llm-agent-collusion>
 2. Benjamini, Y., & Hochberg, Y. (1995). Controlling the false discovery rate: a practical and powerful approach to multiple testing. *Journal of the Royal Statistical Society: Series B*, 57(1), 289–300.
 3. Bonjour, T., Aggarwal, V., & Bhargava, B. (2022). Information theoretic approach to detect collusion in multi-agent games. *Proceedings of the 38th Conference on Uncertainty in Artificial Intelligence (UAI)*, PMLR 180, 223–232. <https://proceedings.mlr.press/v180/bonjour22a.html>
-4. Rose, A., Cullen, C., Abdelnabi, S., Torr, P., Kaplowitz, B. G., & Schroeder de Witt, C. (2026). Detecting multi-agent collusion through multi-agent interpretability. arXiv:2604.01151.
-5. Westfall, P. H., & Young, S. S. (1993). *Resampling-Based Multiple Testing: Examples and Methods for p-Value Adjustment.* Wiley.
-6. Williams, P. L., & Beer, R. D. (2010). Nonnegative decomposition of multivariate information. arXiv:1004.2515.
+4. Kulldorff, M. (1997). A spatial scan statistic. *Communications in Statistics – Theory and Methods*, 26(6), 1481–1496.
+5. Neill, D. B. (2012). Fast subset scan for spatial pattern detection. *Journal of the Royal Statistical Society: Series B*, 74(2), 337–360.
+6. Rose, A., Cullen, C., Abdelnabi, S., Torr, P., Kaplowitz, B. G., & Schroeder de Witt, C. (2026). Detecting multi-agent collusion through multi-agent interpretability. arXiv:2604.01151.
+7. Westfall, P. H., & Young, S. S. (1993). *Resampling-Based Multiple Testing: Examples and Methods for p-Value Adjustment.* Wiley.
+8. Williams, P. L., & Beer, R. D. (2010). Nonnegative decomposition of multivariate information. arXiv:1004.2515.
 
 ---
 
