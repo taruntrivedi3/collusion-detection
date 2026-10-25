@@ -77,10 +77,14 @@ Our main contributions are:
 ## 2. Related Work
 
 **Information-theoretic collusion detection.** Bonjour, Aggarwal & Bhargava (2022) define a pairwise
-influence γ(i;j) as the mutual information between two players' actions, and net influence
-Γ(i;j) = γ(i;j) − max<sub>k≠i,j</sub> γ(k;j); a pair is flagged when Γ passes 0.05 bits in both directions
-and exactly one pair passes. This is the closest prior work. We reproduce it (Appendix B) and show its
-cancellation inside groups and its miscalibration; our detectors keep its building block (pairwise
+influence γ(i;j) as the mutual information between two players' actions, and net influence as
+
+$$
+\Gamma(i;j) = \gamma(i;j) - \max_{k \neq i,j} \gamma(k;j).
+$$
+
+A pair is flagged when Γ passes 0.05 bits in both directions and exactly one pair passes. This is the
+closest prior work. We reproduce it (Appendix B) and show its cancellation inside groups and its miscalibration; our detectors keep its building block (pairwise
 conditional mutual information) but change the decision rule and calibration.
 
 **LLM collusion in markets.** Agrawal et al. (2025) study LLM sellers in a continuous double auction
