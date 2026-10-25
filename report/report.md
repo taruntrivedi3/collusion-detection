@@ -128,7 +128,7 @@ the honest player types used throughout.
 |---|---|---|
 | Colluders | Pair; two pairs | A helper plays the move that loses to its partner's, feeding it a point. |
 | Colluders | Hub | One leader and two helpers, who each feed the leader and never coordinate with each other. |
-| Colluders | Triangle, *k*-clique | *k* = 3–5 players (18 in one check) share a secret signal and play the same move. |
+| Colluders | Triangle, *k*-clique | *k* = 3, 4, 5 or 18 players share a secret signal and play the same move. |
 | Colluders | xor | C plays (A + B) mod 3, so every pair looks independent. |
 | Colluders | Steer | 4 players all play one move to create a clear lead, then all beat the honest players who react to it. |
 | Honest | Random | Plays uniformly at random. |
