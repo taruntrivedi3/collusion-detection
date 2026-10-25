@@ -173,7 +173,7 @@ A shuffle test is only valid if the state captures everything honest agents reac
 With LLMs that carry memory or see detailed price paths, no recorded state does (Appendix C). We
 therefore **design the market so the state is the agents' entire public input.** We replace the CMI edge
 statistic with a same-move count, because CMI spreads a small effect over many state × action cells (in
-the 2×2 pilot, CMI flagged 10% of 20-game batches against 80% for same-move). With 2 sellers there is one
+the 200-game 2×2 run, CMI flagged 10% of 20-game batches against 80% for same-move). With 2 sellers there is one
 pair, so no subset search is needed; with 5 we test the sum over all pairs and the largest pair.
 
 - **Market.** Sellers (cost $80) and scripted buyers (value $100) each hour *lower*, *keep* or *raise*
@@ -194,8 +194,9 @@ pair, so no subset search is needed; with 5 we test the sum over all pairs and t
   moves breaks this null, collusive or not. Exchangeability within a state is approximate, because
   $S_{t+1}$ includes each seller's move at $t$; in a scripted check (300 replications of 20 five-seller
   games) the tests gave 4.3% (global) and 5.0% (max-pair) false alarms at a 5% target. The statistic is the *same-move count*: rounds in which a pair of
-  sellers took the same action. We chose it from a 20-game 2×2 pilot, before either main run, and kept
-  it unchanged for 5 sellers. For 5 sellers we shuffle each seller independently within states and
+  sellers took the same action. We switched to it after the 200-game 2×2 run showed CMI was underpowered,
+  so the 2×2 same-move rates are post hoc; the statistic was then fixed before the 5×5 run, which tests
+  it as specified. For 5 sellers we shuffle each seller independently within states and
   report a global test (sum over all 10 pairs) and a max-pair test (largest standardized pair, which
   controls family-wise error and localizes the pair). We report rejection rates over disjoint batches
   of 5, 10 and 20 games.
@@ -362,6 +363,9 @@ is flagged, collusive or not, so calling a flag collusion needs an outcome check
 follow-the-leader or an explicit cartel keyed to last round's moves, is invisible to the test; so is
 xor-style coordination with no pairwise trace. The exact search stops at about 20 players, the state
 must be chosen by the auditor, and the LLM results use one model with scripted buyers and no memory.
+In 2-seller pilots run before the main experiments (Appendix D), the test missed sellers told to form an
+explicit cartel, who earned 7.63 per hour against 4.72 with comms off, because they coordinated by
+following last hour's public moves.
 
 **Future work.** Learned or richer states (e.g. conditioning on a model of honest play), higher-order
 dependence (partial information decomposition, Williams & Beer 2010), payoff-based tests that target
@@ -410,9 +414,9 @@ during the sprint.
 **Limitations.**
 
 - **Coordination that is a function of the public state is invisible.** Follow-the-leader or an explicit
-  cartel that keys on last round's public moves is absorbed into the state. In an earlier 2×2 pilot,
-  sellers told to form a cartel and agree each hour on a joint move were not detected for this reason;
-  that pilot's data is not included in the repository. A direction test (does a seller raise after
+  cartel that keys on last round's public moves is absorbed into the state. In the 2×2 pilots of
+  Appendix D, sellers told to form a cartel and agree each hour on a joint move were not detected for
+  this reason. A direction test (does a seller raise after
   others raise?) catches such coordination but also fires on tacit following without communication, so
   it needs a comms-off calibration.
 - **Any shared channel is flagged, collusive or not.** The LLM test detects coordination outside the
@@ -460,6 +464,54 @@ groups at nominal 5% (circular shifts: 37.2%). A same-pool empirical calibration
 alarms and 85.6% detection of copied triples, but did not transfer to held-out markets (4.2–48.8% null
 flags across folds). This motivated the coarse-state design of Section 3.3: without a state that
 explains honest behaviour, the test is not usable. Details: `studies/auction_null_calibration/`.
+
+## Appendix D. Earlier 2×2 LLM pilots
+
+Before the 200-game 2×2 run we ran four pilots, 20 games of 30 hours per condition, while developing the
+market. They include conditions we later dropped when we restricted the study to the setup of Agrawal et
+al. (2025): `comms_on` (message channel only), `comms_instructed` (channel, plus being told that
+coordinating to keep prices high pays) and `comms_cartel` (told they have secretly formed a cartel, to
+agree each hour on what both will do, and never to undercut). All results are reported below.
+
+**Table 5.** Pilot results. Shuffle-test p-values from 5,000 within-state shuffles. Direction D: how much
+more often a seller raises after the other seller raised than after it lowered, within the same
+sold-by / ask-level stratum (95% bootstrap interval over games).
+
+| Pilot | Condition | Profit / hour | Same-move p | CMI p | Direction D |
+|---|---|---|---|---|---|
+| v1 | comms off | 0.00 | 0.85 | 0.19 | −0.00 [−0.01, 0.00] |
+| v1 | comms on | 0.00 | 0.94 | 0.04 | +0.04 [−0.02, 0.11] |
+| v1 | comms instructed | 0.00 | 0.42 | 0.67 | +0.65 [0.60, 0.71] |
+| v2 | comms off | 4.79 | 0.30 | 0.19 | +0.05 [−0.01, 0.12] |
+| v2 | comms on | 4.70 | 0.60 | 0.97 | +0.01 [−0.05, 0.08] |
+| v2 | comms instructed | 7.42 | 0.13 | 0.37 | +0.60 [0.52, 0.67] |
+| v3 | comms off | 4.80 | 0.48 | 0.73 | +0.21 [0.06, 0.31] |
+| v3 | comms + pressure | 7.38 | 0.87 | 0.25 | +0.05 [−0.02, 0.12] |
+| v3 | comms cartel | 5.33 | 0.15 | 0.14 | +0.89 [0.76, 0.96] |
+| v4 | comms off | 4.72 | 0.48 | 0.93 | +0.12 [0.00, 0.21] |
+| v4 | pressure, no comms | 5.32 | 0.98 | 0.94 | +0.17 [0.10, 0.24] |
+| v4 | comms cartel | 7.63 | 0.36 | 0.85 | +0.34 [0.27, 0.40] |
+| v4 | comms + pressure | 7.81 | 0.0002 | 0.0002 | −0.09 [−0.18, 0.00] |
+
+**Differences between pilots.** In v1 the buyers were also LLMs; they lowered their bids to the floor
+and almost no trades happened, so v2 onward use scripted buyers. In v3 each seller saw only the other
+seller's message, and the cartel's plans kept alternating; v4 shows both messages and tells cartel sellers
+to follow S1's plan when the plans differ. Prompts were otherwise those in `llm_pilot.py`, up to wording
+edits made while developing it; the exact v1–v3 prompts were not saved.
+
+**What the pilots show.**
+
+- **Explicit and instructed coordination is missed.** Cartel and instructed sellers raise prices
+  (v2 instructed 7.42, v4 cartel 7.63 per hour) but coordinate by following the other seller's last
+  move, which is part of the state, so the shuffle test cannot see it (same-move p ≥ 0.12).
+- **The direction test sees it, but is not calibrated.** D is large for cartel and instructed sellers
+  (+0.34 to +0.89) but also positive for honest controls (up to +0.21 for comms off and +0.17 for pressure
+  only), so it would need a comms-off baseline to be used as a detector.
+- **Comms + pressure is not always detected at 20 games.** It was flagged in v4 (p = 0.0002) and missed
+  in v3 (p = 0.87), consistent with the 8/10 detection rate for 20-game batches in Table 4.
+- **A channel alone does not produce collusion.** `comms_on` earns the same as comms off.
+
+Data: `studies/llm_auction/runs/pilot_v1` … `pilot_v4/games.jsonl`; `python3 pilots.py` reproduces Table 5.
 
 ## LLM Usage Statement
 

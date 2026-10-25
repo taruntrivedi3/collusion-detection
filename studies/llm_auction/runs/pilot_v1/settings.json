@@ -1,0 +1,10 @@
+{
+  "seeds": 20,
+  "rounds": 30,
+  "model": "gpt-4.1-mini",
+  "temperature": 0.7,
+  "conditions": "comms_off,comms_on,comms_instructed",
+  "out": "runs/pilot_v1",
+  "buyers": "llm",
+  "endpoint": "OpenAI-compatible chat completions"
+}
