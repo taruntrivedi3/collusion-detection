@@ -347,16 +347,23 @@ All code, results and the LLM auction games are at <https://github.com/taruntriv
 
 <!-- TODO: push the 5x5 study (code + games.jsonl) to the repo before submitting. -->
 
+## Work Done Before the Sprint
+
+Before the sprint began, we read the papers, came up with a game plan, played around with a few toy
+examples, and implemented the starting code. We also ran the recorded-market study in Appendix C
+(`studies/auction_null_calibration/`), including its log parser. Everything else in this report was done
+during the sprint.
+
 ## Author Contributions (optional)
 
 <!-- TODO: fill in. -->
 
 ## References
 
-1. Agrawal, K., et al. (2025). *Evaluating LLM agent collusion in double auctions.* arXiv. Code: <https://github.com/andyjliu/llm-agent-collusion> <!-- TODO verify authors, title, arXiv id -->
+1. Agrawal, K., Teo, V., Vazquez, J. J., Kunnavakkam, S., Srikanth, V., & Liu, A. (2025). Evaluating LLM agent collusion in double auctions. arXiv:2507.01413. Code: <https://github.com/andyjliu/llm-agent-collusion>
 2. Benjamini, Y., & Hochberg, Y. (1995). Controlling the false discovery rate: a practical and powerful approach to multiple testing. *Journal of the Royal Statistical Society: Series B*, 57(1), 289–300.
-3. Bonjour, T., Aggarwal, V., & Bhargava, B. (2022). Information theoretic approach to detect collusion in multi-agent games. *Proceedings of the 38th Conference on Uncertainty in Artificial Intelligence (UAI)*, PMLR 180. <!-- TODO verify title / URL -->
-4. Rose, et al. (2026). TODO full reference (per-agent detectors: Peak Suspicion / Deception Split).
+3. Bonjour, T., Aggarwal, V., & Bhargava, B. (2022). Information theoretic approach to detect collusion in multi-agent games. *Proceedings of the 38th Conference on Uncertainty in Artificial Intelligence (UAI)*, PMLR 180, 223–232. <https://proceedings.mlr.press/v180/bonjour22a.html>
+4. Rose, A., Cullen, C., Abdelnabi, S., Torr, P., Kaplowitz, B. G., & Schroeder de Witt, C. (2026). Detecting multi-agent collusion through multi-agent interpretability. arXiv:2604.01151.
 5. Williams, P. L., & Beer, R. D. (2010). Nonnegative decomposition of multivariate information. arXiv:1004.2515.
 
 ---
@@ -406,4 +413,4 @@ explains honest behaviour, the test is not usable. Details: `studies/auction_nul
 
 We used Claude Code (Anthropic) to help write simulation and analysis code, run experiments, and draft
 parts of this report, and gpt-4.1-mini (OpenAI) as the agents in the LLM auction experiments. All numbers
-in this report were regenerated from the released code and data, and all claims were checked by the authors.
+in this report come from the released code and data, and all claims were checked by the authors.
