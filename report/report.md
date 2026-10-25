@@ -65,7 +65,7 @@ Our contributions:
    up to 100% of games unless the shuffle keeps rounds with the same recent history together. With that
    conditioning, a group whose coordination pays is found (**94–98%**), while honest players reacting to
    the same signal are not (**4–7%**).
-4. **An LLM market where the test's assumptions hold by design.** Each seller's prompt is built only from a
+4. **An LLM market where the state is everything agents see.** Each seller's prompt is built only from a
    logged summary of the last hour. Five gpt-4.1-mini sellers who can message each other and are pressured
    by a “CEO” to keep margins high coordinate their moves, and the test flags them in **19 of 20** batches
    of five games, while sellers without the message channel are flagged in **0 of 20**.
@@ -143,8 +143,9 @@ round: none, top (which move led), order (ranking of move counts) or full (exact
 
 **Within-state shuffle null.** Each player's action column is permuted independently among rounds
 that share the same state. This preserves each player's state-dependent habits and destroys any
-coordination beyond them. If players are conditionally independent given the state and rounds are
-exchangeable within a state, this is an exact permutation test.
+coordination beyond them. The test is valid if the state captures everything honest players react to;
+since the state comes from earlier moves, this holds only approximately, and our false-alarm checks
+measure how closely.
 
 **GroupScan.** Given every player's action in every round and the history state of each round:
 
