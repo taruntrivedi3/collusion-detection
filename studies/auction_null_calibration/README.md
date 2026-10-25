@@ -6,7 +6,7 @@ buyers, 30 rounds) from [andyjliu/llm-agent-collusion](https://github.com/andyjl
 and lower later. A coarse time state leaves those trends in, and exact rounds leave nothing to shuffle. Independently resampled
 seller paths were flagged in 88.5% of groups under within-state shuffling and 37.2% under circular
 shifts. Calibrating on the same pool fixed the rate, but the fix did not carry over to held-out
-markets (4.2–48.8% flags). This is why the main LLM experiment (`studies/llm_auction`) records a
+markets (4.2–48.8% flags). This is why the LLM experiments (`studies/llm_auction_5seller`, `studies/llm_auction_2seller`) record a
 coarse state that is the agents' entire public input. Details: [findings](results/INTERPRETATION.md),
 [full report](results/REPORT.md).
 

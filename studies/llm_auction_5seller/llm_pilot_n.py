@@ -13,7 +13,7 @@ from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "llm_auction"))  # market.py, stats.py, llm_pilot.py
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "llm_auction_2seller"))  # market.py, stats.py, llm_pilot.py
 
 from llm_pilot import NO_COMMS, PRESSURE_RULES, SELLER_WORDS, Client
 from market import buyer_probs, draw

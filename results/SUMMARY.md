@@ -2,7 +2,7 @@
 
 Apart Research AI Collusion Research Sprint (2026-10-23 to 2026-10-25), research question 1.4.
 This file covers findings 1–3 of the [README](../README.md): simulated Rock Paper Scissors. The
-LLM experiment (finding 4) is in [studies/llm_auction](../studies/llm_auction/README.md).
+LLM experiments (finding 4) are in [studies/llm_auction_5seller](../studies/llm_auction_5seller/README.md) and [studies/llm_auction_2seller](../studies/llm_auction_2seller/README.md).
 
 ## Question
 

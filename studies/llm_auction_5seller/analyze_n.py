@@ -8,7 +8,7 @@ from collections import Counter, defaultdict
 from multiprocessing import Pool
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "llm_auction"))  # market.py, stats.py, llm_pilot.py
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "llm_auction_2seller"))  # market.py, stats.py, llm_pilot.py
 
 from market import SELLER_COST
 from market_n import seller_columns

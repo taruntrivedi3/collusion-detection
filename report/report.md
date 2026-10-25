@@ -3,7 +3,7 @@ DRAFT report following the Apart Research AI Collusion Sprint (Oct 2026) templat
 Length: main text (through Conclusion) must fit 8 pages; references and appendices follow.
 Live view in VS Code: Ctrl+K V (built-in preview) or Markdown Preview Enhanced (renders $math$, exports PDF).
 Comments like this one are hidden in the preview. Lines marked TODO need a human decision or check.
-Numbers come from results/SUMMARY.md, studies/llm_auction and studies/llm_auction_5seller
+Numbers come from results/SUMMARY.md, studies/llm_auction_2seller and studies/llm_auction_5seller
 (runs/n5_rates_v1/analysis.txt, dry_run.txt).
 -->
 
@@ -349,7 +349,7 @@ not the controls.
 
 All code, results and the LLM auction games are at <https://github.com/taruntrivedi3/collusion-detection>.
 `results/RESULTS_INDEX.md` lists the exact command and seeds for every number, including the two LLM
-studies (`studies/llm_auction/`, `studies/llm_auction_5seller/`). An interactive viewer
+studies (`studies/llm_auction_2seller/`, `studies/llm_auction_5seller/`). An interactive viewer
 (<https://taruntrivedi3.github.io/collusion-detection/viewer/>) replays example games, including the
 2- and 5-seller LLM games with the sellers' messages.
 
@@ -432,7 +432,7 @@ explains honest behaviour, the test is not usable. Details: `studies/auction_nul
 ## Appendix D. 2-seller development runs
 
 Before the 5-seller study we developed the market with 2 LLM sellers and 2 scripted buyers, 30 hours per
-game, the state being each seller's last move, who sold, and the ask level (`studies/llm_auction/`). Four
+game, the state being each seller's last move, who sold, and the ask level (`studies/llm_auction_2seller/`). Four
 20-game pilots per condition (v1–v4) were followed by a 200-game run of the three final conditions.
 
 **Table D1.** Seller profit (all sellers combined, $ per hour) and same-move shuffle-test results. Pilots:
@@ -461,7 +461,7 @@ batches, and the pooled z-score.
   without pressure → 33% with it), and the channel stops the other seller from undercutting ("lower"
   82% → 41%), so moves synchronize.
 - In v1 the buyers were LLMs and drove bids to the floor, so v2 onward use scripted buyers. The exact
-  v1–v3 prompts were not saved. All pilot conditions and the direction test: `studies/llm_auction/`
+  v1–v3 prompts were not saved. All pilot conditions and the direction test: `studies/llm_auction_2seller/`
   (`pilots.py`, `report.pdf`).
 
 ## LLM Usage Statement

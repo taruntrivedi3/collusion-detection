@@ -9,7 +9,7 @@ import sys
 from dataclasses import dataclass, asdict
 from pathlib import Path
 
-sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "llm_auction"))  # market.py
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "llm_auction_2seller"))  # market.py
 
 from market import (TICK, ASK_START, BID_START, ASK_BOUNDS, BID_BOUNDS, HIGH_ASK, buyer_probs,  # noqa: E402
                     clamp, draw, seller_probs)

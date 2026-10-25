@@ -8,7 +8,7 @@ standardized pair (max-statistic test, controls the family-wise error rate over 
 import math
 from itertools import combinations
 
-from stats import shuffle_within, state_groups  # llm_auction/stats.py (callers put it on sys.path)
+from stats import shuffle_within, state_groups  # llm_auction_2seller/stats.py (callers put it on sys.path)
 
 
 def pair_same(cols, pairs):

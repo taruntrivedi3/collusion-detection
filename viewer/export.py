@@ -11,7 +11,7 @@ from pathlib import Path
 import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
-AUCTION = ROOT / "studies" / "llm_auction"
+AUCTION = ROOT / "studies" / "llm_auction_2seller"
 sys.path[:0] = [str(ROOT), str(AUCTION)]
 from collusion.detect import detect_bonjour, detect_edge_bh, detect_node_score, detect_subgraph, edge_z  # noqa: E402
 from collusion.estimate import encode_states  # noqa: E402
@@ -99,7 +99,7 @@ def sample_games(by_seed, k=12):
 
 
 def auction():
-    """2-seller market: condition outcomes and pooled z-scores from studies/llm_auction/build_report.py."""
+    """2-seller market: condition outcomes and pooled z-scores from studies/llm_auction_2seller/build_report.py."""
     from build_report import CONDS, LABEL, load, outcomes, pooled_z
     games = load()
     oc, pz = outcomes(games), pooled_z(games)

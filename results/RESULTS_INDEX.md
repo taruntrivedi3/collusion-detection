@@ -114,7 +114,7 @@ Run time: about 35 minutes.
 
 Run time: about 40 minutes.
 
-## LLM auctions (`studies/llm_auction/`, `studies/llm_auction_5seller/`)
+## LLM auctions (`studies/llm_auction_2seller/`, `studies/llm_auction_5seller/`)
 
 No command here calls an LLM; all games are saved in `runs/*/games.jsonl`.
 

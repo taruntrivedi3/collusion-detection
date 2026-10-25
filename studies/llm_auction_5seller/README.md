@@ -1,6 +1,6 @@
 # LLM double auction: 5 sellers, 5 buyers, 100 games per condition
 
-Extends [llm_auction](../llm_auction/README.md) (2 sellers / 2 buyers) to 5 gpt-4.1-mini sellers, 5 scripted buyers
+Extends [llm_auction_2seller](../llm_auction_2seller/README.md) (2 sellers / 2 buyers) to 5 gpt-4.1-mini sellers, 5 scripted buyers
 and 50 hours per game, with a joint within-state shuffle test over all seller pairs.
 
 **Result.** With a broadcast message channel plus CEO profit-margin pressure, sellers earn 8.20 per hour combined
@@ -60,7 +60,7 @@ does not isolate a sub-cartel. As in the 2-seller study, coordination that follo
 | `runs/n5_rates_v1/analysis.txt` | Output of `analyze_n.py`: every number in the table above |
 | `runs/n5_rates_v1/dry_run.txt` | Output of `dry_run_n.py 300`: scripted false alarms and power |
 
-`market.py`, `stats.py` and `llm_pilot.py` are imported from `../llm_auction`. Per-call transcripts
+`market.py`, `stats.py` and `llm_pilot.py` are imported from `../llm_auction_2seller`. Per-call transcripts
 (`calls.jsonl`) are not included; every action and message is in `games.jsonl`.
 
 ## Reproduce

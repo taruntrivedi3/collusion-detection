@@ -2,7 +2,7 @@
 
   python report/make_llm_figure.py      (from the repo root; recomputes the 2-seller batch tests)
 
-2 sellers: same-move test, recomputed with studies/llm_auction/build_report.py's batch_rates.
+2 sellers: same-move test, recomputed with studies/llm_auction_2seller/build_report.py's batch_rates.
 5 sellers: global test, read from studies/llm_auction_5seller/runs/n5_rates_v1/analysis.txt
 (written by analyze_n.py).
 """
@@ -11,7 +11,7 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path[:0] = [str(ROOT), str(ROOT / "studies" / "llm_auction")]
+sys.path[:0] = [str(ROOT), str(ROOT / "studies" / "llm_auction_2seller")]
 sys.argv = sys.argv[:1]                                    # build_report reads argv[1] as its output path
 
 import matplotlib.pyplot as plt  # noqa: E402
