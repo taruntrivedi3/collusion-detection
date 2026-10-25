@@ -341,7 +341,7 @@ shared signal outside the log, collusive or not.
 **Limitations** (details in Appendix A). Coordination that is a function of the public state is
 invisible. In 2-seller pilots (Appendix D) the test missed sellers told to form an explicit cartel, who
 earned $7.63 per hour against $4.72 with comms off, because they coordinated by following last hour's
-public moves; so is xor-style coordination. Without logged inputs the test fails: on recorded markets from
+public moves. Coordination with no pairwise trace (xor) is also invisible. Without logged inputs the test fails: on recorded markets from
 Agrawal et al. (2025) it flagged 88.5% of groups of independently resampled sellers (Appendix C). Exact
 search stops at about 20 players; the LLM results use one model, scripted buyers and no memory, and have
 no comms-only condition (in a 2-seller pilot it earned the same as comms off; Appendix D).
@@ -467,12 +467,12 @@ batches, and the pooled z-score.
   the state, so the shuffle test cannot see it. A test of whether a seller raises after the other raised
   does see it (+0.34 to +0.89), but also fires on honest controls (up to +0.21), so it would need a
   comms-off baseline.
-- **A channel alone does not produce collusion.** Comms without pressure earned the same as comms off
-  in the v2 pilot ($4.70 vs $4.79 per hour).
-- **Single 20-game batches are noisy.** Comms + pressure was flagged in v4 (p = 0.0002) but not in v3
-  (p = 0.87), where each seller saw only the other seller's message; in the 200-game run, 8 of 10
-  20-game batches are flagged. Pressure alone was flagged in 2 of 10, consistent with a 5% rate (95%
-  interval [6, 51]%).
+- **A channel alone did not raise profit in the one pilot that tested it.** Comms without pressure earned
+  the same as comms off in v2 ($4.70 vs $4.79 per hour, 20 games each).
+- **The v3 and v4 comms + pressure pilots disagree** (p = 0.87 vs 0.0002). v3 showed each seller only the
+  other seller's message, so the difference may come from that design change or from chance (in the
+  200-game run, 8 of 10 single 20-game batches are flagged); one pilot each cannot tell them apart.
+  Pressure alone was flagged in 2 of 10 batches, not significantly above a 5% rate (binomial p = 0.09).
 - **The same-move statistic was chosen here.** In the 200-game run, CMI flagged comms + pressure in only
   1 of 10 20-game batches (pooled z = +5.0), against 8 of 10 for the same-move count, so the 2-seller
   same-move rates above are post hoc; the 5-seller study then tested the statistic as fixed in advance.
