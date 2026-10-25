@@ -109,6 +109,8 @@ def to_html(md_text, katex_dir):
     body = md.renderer.render(tokens, md.options, {})
 
     body = re.sub(r"<p>(<img [^>]*>)</p>", r'<p class="figure">\1</p>', body)
+    # WeasyPrint ignores <ol start>; set the counter explicitly so a list resumed after an equation continues
+    body = re.sub(r'<ol start="(\d+)">', lambda m: f'<ol start="{m[1]}" style="counter-reset: list-item {int(m[1]) - 1}">', body)
     body = re.sub(r"<p>(<strong>(?:Figure|Table) \d+\.</strong>)", r'<p class="caption">\1', body)
     head, sep, rest = body.partition("<hr")  # title block: everything before the first rule
     head = re.sub(r"<p>", '<p class="front">', head)
