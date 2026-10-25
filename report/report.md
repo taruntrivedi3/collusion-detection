@@ -53,27 +53,30 @@ et al., 2022) is built for one colluding pair; real coordination may involve a g
 
 Our contributions:
 
-1. **A failure mode of pairwise net influence.** Inside a group, each member's partners cancel out in its
-   score, so the published rule rarely flags even one in-group pair (**8–15%** of games), even when the
-   links are about 200 standard deviations above chance. Its fixed threshold is also uncalibrated.
-2. **GroupScan**, a shuffle-calibrated scan over all groups of players, recovers weak, broad groups that
-   pairwise methods miss (**48% vs 5%** for a weak 5-player group among 20) at near-nominal false-alarm
-   rates; a per-pair test does better on hubs and isolated pairs.
-3. **History conditioning is necessary.** Honest players who react to history are flagged in up to 100%
-   of games unless the shuffle stays within history states; with the right state, a coalition whose
-   coordination pays is found (**94–98%**), while honest players reacting to the same signal are not
-   (**4–7%**).
-4. **An LLM market where the null holds by design.** Each seller's prompt is built only from a logged
-   summary of the last hour. Five gpt-4.1-mini sellers who can message each other and are pressured by a
-   “CEO” to keep margins high coordinate their moves, and the test flags them (**19/20** batches), while
-   sellers without the message channel are not flagged (**0/20**).
+1. **A failure mode of pairwise net influence.** The published score for a pair subtracts each player's
+   strongest dependence on anyone else, so inside a group the members cancel each other out. The rule
+   rarely flags even one in-group pair (**8–15%** of games), even when the dependence between members is
+   about 200 standard deviations above chance. Its fixed threshold is also uncalibrated.
+2. **GroupScan**, a shuffle-calibrated scan over all groups of players, recovers weak, broad groups (many
+   players who coordinate in only a few rounds) that pairwise methods miss: **48% vs 5%** for a 5-player
+   group among 20, with false alarms close to the 5% target. Testing pairs one at a time does better on
+   isolated pairs, and on a leader with helpers who are not linked to each other.
+3. **History conditioning is necessary.** Honest players who react to the previous round are flagged in
+   up to 100% of games unless the shuffle keeps rounds with the same recent history together. With that
+   conditioning, a group whose coordination pays is found (**94–98%**), while honest players reacting to
+   the same signal are not (**4–7%**).
+4. **An LLM market where the test's assumptions hold by design.** Each seller's prompt is built only from a
+   logged summary of the last hour. Five gpt-4.1-mini sellers who can message each other and are pressured
+   by a “CEO” to keep margins high coordinate their moves, and the test flags them in **19 of 20** batches
+   of five games, while sellers without the message channel are flagged in **0 of 20**.
 
 ![Figure 1](figures/fig2_weak_cliques.png)
 
-**Figure 1. GroupScan finds weak, broad groups that pairwise methods miss.** Exact recovery of a planted
-4- or 5-player group among 20 players against the collusion probability CP (the share of rounds in which
-the group coordinates); 100 rounds, 1,000 shuffles, 100 games per point, 95% Wilson intervals. Bonjour's
-rule stays at 0.
+**Figure 1. GroupScan finds weak, broad groups that pairwise methods miss.** Share of games in which each
+method reports exactly the planted 4- or 5-player group, among 20 players, against the collusion
+probability CP (the share of rounds in which the group coordinates); 100 rounds, 1,000 shuffles, 100 games
+per point, 95% Wilson intervals. The pair test and player score are pairwise baselines and Bonjour is the
+published rule (§3.2); Bonjour stays at 0.
 
 ## 2. Related Work
 
@@ -233,12 +236,13 @@ and a 5-clique at CP 0.2, GroupScan recovered the exact group in **48% [38, 58]*
 for weak signals and short games: at CP 0.5 the pair test reaches 80–82% against 100%. It also degrades less as
 players are added: for a triangle at CP 0.2 and 300 rounds, the player score falls from 93% to 32% between
 5 and 20 players, and GroupScan only from 93% to 84% (Table 2). We plant groups of 3–5 players because
-larger groups have more linked pairs and are easier for every method. GroupScan searches all sizes: it
-recovers even an 18-of-20 cartel in 96–100% of games from CP 0.3 (`results/SUMMARY.md`).
+larger groups have more linked pairs and are easier for every method. GroupScan searches all sizes and
+recovers even an 18-of-20 cartel (96%, Table 2), although there the simpler player score does as well.
 
-**Table 2. GroupScan wins on groups; the pair test wins on hubs and isolated pairs.** Exact recovery (%)
-at the one setting every group was run at: CP 0.2, 300 rounds, 200 shuffles, 20 players (the triangle
-also at 5). 50 games per cell (100 at 5 players); 95% Wilson intervals for the two strongest methods.
+**Table 2. GroupScan wins on weak groups of 3–5; simpler baselines win on hubs, isolated pairs and a
+near-total cartel.** Exact recovery (%) at the one setting every group was run at: CP 0.2, 300 rounds,
+200 shuffles, 20 players (the triangle also at 5). 50 games per cell (100 at 5 players); 95% Wilson
+intervals for the two strongest methods. †Separate run: 1,000 shuffles, 100 games (`results/large_group/`).
 
 | Planted group | Bonjour | Pair test | Player score | GroupScan |
 |---|---|---|---|---|
@@ -249,6 +253,7 @@ also at 5). 50 games per cell (100 at 5 players); 95% Wilson intervals for the t
 | Triangle | 0 | 70 [56, 81] | 32 | **84** [71, 92] |
 | 4-clique | 0 | 78 [65, 87] | 66 | **90** [79, 96] |
 | 5-clique | 0 | 78 [65, 87] | 90 | **96** [87, 99] |
+| 18-clique† | 0 | 35 [26, 45] | **100** | 96 [90, 98] |
 | xor | 0 | 0 | 0 | 0 |
 
 **Where it loses.** On hubs the pair test does better (66% vs 44%, Table 2). GroupScan often reports just
