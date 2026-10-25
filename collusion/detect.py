@@ -222,27 +222,9 @@ def _mask_to_set(mask, labels):
     return frozenset(int(labels[b]) for b in range(len(labels)) if (int(mask) >> b) & 1)
 
 
-def _grow(ctx: NullContext, C, q=0.05):
-    """Add every node outside C with a significant edge into C (per-edge permutation p-values,
-    BH over all candidate edges v-c, v not in C, c in C). Repeat until nothing is added.
-    C and the return value are local indices of ctx."""
-    p = edge_pvalues(ctx)
-    C = set(C)
-    while True:
-        out = [v for v in range(ctx.n) if v not in C]
-        if not out:
-            return C
-        cand = [(v, c) for v in out for c in sorted(C)]
-        sig = _bh(np.array([p[v, c] for v, c in cand]), q)
-        add = {cand[k][0] for k in np.flatnonzero(sig)}
-        if not add:
-            return C
-        C |= add
-
-
-def detect_subgraph(ctx: NullContext, level=0.95, max_rounds=None, grow=False, cache=None) -> Result:
+def detect_subgraph(ctx: NullContext, level=0.95, max_rounds=None, cache=None) -> Result:
     """Exact scan over all subsets |C| >= 2; peel detected coalitions and recalibrate
-    (step-down max-T). grow=True: after each detection, extend it with _grow (scan+grow).
+    (step-down max-T).
     `cache` (dict) shares per-stage scan scores between calls on the same root context."""
     cache = {} if cache is None else cache
     labels = np.arange(ctx.n)
@@ -259,9 +241,6 @@ def detect_subgraph(ctx: NullContext, level=0.95, max_rounds=None, grow=False, c
         trace.append({"S_max": s_max, "threshold": thr, "argmax": frozenset(labels[local].tolist())})
         if s_max <= thr:
             break
-        if grow:
-            local = sorted(_grow(cur, local))
-            trace[-1]["grown"] = frozenset(labels[local].tolist())
         C = frozenset(labels[local].tolist())
         found.append(C)
         keep = [i for i in range(cur.n) if i not in set(local)]
@@ -272,36 +251,6 @@ def detect_subgraph(ctx: NullContext, level=0.95, max_rounds=None, grow=False, c
     return Result(found, {"trace": trace})
 
 
-# ---------------------------------------------------------------- 5. triple scans (Step 6)
-
-def _triple_scan(real, A, B, n, level):
-    """Max-z scan over triples: z_t = (x_t - mean_A) / sd_A per triple; threshold = `level`
-    quantile over Set B of max_t z_t (family-wise error over all triples)."""
-    from .triples import triple_index
-    mu, sd = A.mean(0), np.maximum(A.std(0), EPS)
-    z = (real - mu) / sd
-    thr = float(np.quantile(((B - mu) / sd).max(1), level))
-    tri = triple_index(n)
-    k = int(np.argmax(z))
-    best = frozenset(tri[k].tolist())
-    above = [frozenset(tri[t].tolist()) for t in np.flatnonzero(z > thr)]
-    return Result([best] if z[k] > thr else [], {"z": z, "threshold": thr, "z_max": float(z[k]),
-                                                  "argmax": best, "above": above})
-
-
-def detect_tc_scan(ctx: NullContext, level=0.95) -> Result:
-    """Total-correlation scan over triples (TC captures pairwise + higher-order dependence)."""
-    return _triple_scan(ctx.tc_real, ctx.tc_A, ctx.tc_B, ctx.n, level)
-
-
-def detect_synergy_scan(ctx: NullContext, level=0.95) -> Result:
-    """Scan over triples of E = third-order (beyond-pairwise) part of TC."""
-    return _triple_scan(ctx.e_real, ctx.e_A, ctx.e_B, ctx.n, level)
-
-
-TRIPLE_DETECTORS = {"tc_scan": detect_tc_scan, "synergy_scan": detect_synergy_scan}
-
-
 # ---------------------------------------------------------------- unified interface
 
 DETECTORS = {
@@ -310,7 +259,6 @@ DETECTORS = {
     "edge_bh": detect_edge_bh,
     "node_score": detect_node_score,
     "subgraph": detect_subgraph,
-    "subgraph_grow": lambda ctx, **kw: detect_subgraph(ctx, grow=True, **kw),
 }
 
 # names for result tables / write-up
@@ -320,9 +268,6 @@ DETECTOR_LABELS = {
     "edge_bh": "Per-edge BH (Benjamini & Hochberg 1995)",
     "node_score": "Node score (per-agent, inspired by Rose et al.)",
     "subgraph": "Subset scan (ours)",
-    "subgraph_grow": "Subset scan + grow (ours)",
-    "tc_scan": "Total-correlation triple scan (ours)",
-    "synergy_scan": "Third-order (synergy) triple scan (ours)",
 }
 
 
@@ -330,7 +275,7 @@ def run_all(ctx: NullContext, methods=None):
     cache = {}
     out = {}
     for m in methods or DETECTORS:
-        kw = {"cache": cache} if m.startswith("subgraph") else {}
+        kw = {"cache": cache} if m == "subgraph" else {}
         out[m] = DETECTORS[m](ctx, **kw)
     return out
 

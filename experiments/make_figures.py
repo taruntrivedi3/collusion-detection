@@ -22,8 +22,9 @@ FIG.mkdir(parents=True, exist_ok=True)
 DIVERGING = LinearSegmentedColormap.from_list("bgr", ["#104281", "#3987e5", "#f0efec", "#e34948", "#8f1d1c"])
 DET = list(DETECTORS)
 COLOR = dict(zip(DET, SERIES))                      # fixed slot per detector, never re-ordered
-SHORT = {"bonjour": "Bonjour (fixed α)", "bonjour_cal": "Bonjour, calibrated", "edge_bh": "Per-edge BH",
-         "node_score": "Node score", "subgraph": "Subset scan", "subgraph_grow": "Scan + grow"}
+SHORT = {"bonjour": "Bonjour (fixed cutoff)", "bonjour_cal": "Bonjour (calibrated)", "edge_bh": "Pair test",
+         "node_score": "Player score", "subgraph": "Group scan"}
+PLOT = ["bonjour", "edge_bh", "node_score", "subgraph"]   # detectors shown in the write-up
 
 
 def _load(sub):
@@ -100,7 +101,7 @@ def fig_b():
     axs[0].set_ylabel("% coalitions recovered exactly")
     axs[0].set_ylim(0, 100)
     axs[0].legend(loc="lower left")
-    fig.suptitle("Node score loses power as agents are added; the subset scan holds\n"
+    fig.suptitle("Player score loses power as agents are added; the group scan holds\n"
                  "(pooled over CP × rounds grid; B = 200; 100 reps per cell at n ≤ 10, 50 at n = 20; 95% CI)",
                  fontsize=10)
     fig.tight_layout()
@@ -116,14 +117,14 @@ def fig_c():
     style()
     fig, axs = plt.subplots(1, 2, figsize=(10, 4), sharey=True)
     for ax, s in zip(axs, ("clique4", "clique5")):
-        for det in DET:
+        for det in PLOT:
             d = g[(g.structure == s) & (g.detector == det)]
             _errline(ax, d.cp, d, det)
         ax.set_xlabel("collusion probability CP"); ax.set_title(f"{s[-1]}-agent coalition among 20 agents")
     axs[0].set_ylabel("% coalitions recovered exactly")
     axs[0].set_ylim(0, 100)
     axs[1].legend(fontsize=8)
-    fig.suptitle("Weak, broad coalitions in short games (100 rounds): the subset scan recovers more\n"
+    fig.suptitle("Weak, broad coalitions in short games (100 rounds): the group scan recovers more\n"
                  "(B = 1000, 100 reps per point, 95% Wilson CI)", fontsize=10)
     fig.tight_layout()
     fig.savefig(FIG / "figC_weak_cliques.png", dpi=150)
@@ -138,7 +139,7 @@ def fig_d():
     style()
     fig, axs = plt.subplots(1, 3, figsize=(12, 3.8), sharey=True)
     for ax, n in zip(axs, (5, 10, 20)):
-        for det in DET:
+        for det in PLOT[:1] + ["bonjour_cal"] + PLOT[1:]:
             d = g[(g.n == n) & (g.detector == det)]
             _errline(ax, d.rounds, d, det)
         ax.axhline(5, color=INK2, lw=1, ls="--")
@@ -162,10 +163,10 @@ def fig_e():
     mixes = ["uniform", "leader", "margin", "mixed"]
     states = ["none", "top", "order", "full"]
     fig, axs = plt.subplots(1, 4, figsize=(14, 4), sharey=True)
-    off = np.linspace(-0.25, 0.25, len(DET))
+    off = np.linspace(-0.25, 0.25, len(PLOT))
     for ax, mix in zip(axs, mixes):
         d0 = g[(g.mix == mix) & (g.rounds == 1000)]
-        for k, det in enumerate(DET):
+        for k, det in enumerate(PLOT):
             d = d0[d0.detector == det].set_index("state").loc[states]
             ax.errorbar(np.arange(4) + off[k], d.pct, yerr=[(d.pct - d.lo).clip(lower=0), (d.hi - d.pct).clip(lower=0)], fmt="o",
                         ms=5, capsize=2, color=COLOR[det], label=SHORT[det])
@@ -191,7 +192,7 @@ def table_t():
     df = df.assign(n_planted=df.structure.map(lambda s: 2 if s == "two_pairs" else 1))
     g = _rate(df, "recovered", ["structure", "n", "detector"])
     g["cell"] = g.apply(lambda r: f"{r.pct:.0f} [{r.lo:.0f}, {r.hi:.0f}]", axis=1)
-    t = g.pivot_table(index=["structure", "n"], columns="detector", values="cell", aggfunc="first")[DET]
+    t = g.pivot_table(index=["structure", "n"], columns="detector", values="cell", aggfunc="first")[PLOT]
     t = t.rename(columns=SHORT)
     t.to_csv(FIG / "table_structure_by_n_ci.csv")
     print(t.to_string())

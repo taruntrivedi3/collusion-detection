@@ -10,7 +10,6 @@ from dataclasses import dataclass
 import numpy as np
 
 from .estimate import gamma_batch
-from .triples import triple_stats
 
 
 def permute_within_states(actions, states, B, rng, chunk=None):
@@ -31,17 +30,9 @@ def permute_within_states(actions, states, B, rng, chunk=None):
         done += b
 
 
-def null_gammas(actions, states, B, rng, chunk=50, triples=False):
-    """gamma for B permuted datasets: [B, n, n]. triples=True also returns (TC, E) [B, T]
-    computed on the SAME permuted datasets."""
-    g, tc, e = [], [], []
-    for x in permute_within_states(actions, states, B, rng, chunk):
-        g.append(gamma_batch(x, states))
-        if triples:
-            t, u = triple_stats(x, states)
-            tc.append(t); e.append(u)
-    g = np.concatenate(g)
-    return (g, np.concatenate(tc), np.concatenate(e)) if triples else g
+def null_gammas(actions, states, B, rng, chunk=50):
+    """gamma for B permuted datasets: [B, n, n]."""
+    return np.concatenate([gamma_batch(x, states) for x in permute_within_states(actions, states, B, rng, chunk)])
 
 
 @dataclass
@@ -56,13 +47,6 @@ class NullContext:
     g_A: np.ndarray
     g_B: np.ndarray
     seed: int | None = None
-    # optional triple statistics (TC, E): real [T], Set A / Set B [B, T]
-    tc_real: np.ndarray | None = None
-    tc_A: np.ndarray | None = None
-    tc_B: np.ndarray | None = None
-    e_real: np.ndarray | None = None
-    e_A: np.ndarray | None = None
-    e_B: np.ndarray | None = None
 
     @property
     def n(self):
@@ -77,14 +61,9 @@ class NullContext:
                            self.seed), k
 
 
-def build_context(actions, states, B=200, seed=0, triples=False):
+def build_context(actions, states, B=200, seed=0):
     rng = np.random.default_rng(seed)
     g_real = gamma_batch(actions, states)
-    if not triples:
-        g_A = null_gammas(actions, states, B, rng)
-        g_B = null_gammas(actions, states, B, rng)
-        return NullContext(g_real, g_A, g_B, seed)
-    tc_r, e_r = triple_stats(actions, states)
-    g_A, tc_A, e_A = null_gammas(actions, states, B, rng, triples=True)
-    g_B, tc_B, e_B = null_gammas(actions, states, B, rng, triples=True)
-    return NullContext(g_real, g_A, g_B, seed, tc_r, tc_A, tc_B, e_r, e_A, e_B)
+    g_A = null_gammas(actions, states, B, rng)
+    g_B = null_gammas(actions, states, B, rng)
+    return NullContext(g_real, g_A, g_B, seed)

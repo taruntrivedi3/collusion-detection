@@ -12,7 +12,7 @@ from pathlib import Path  # noqa: E402
 
 import pandas as pd  # noqa: E402
 
-WORKERS = 12          # ~0.5 GB per worker at n = 20, B = 1000; container limit is 24 GB
+WORKERS = int(os.environ.get("WORKERS", 12))   # ~0.5 GB per worker at n = 20, B = 1000
 
 
 def run_cells(cells, run_one, out_dir, workers=WORKERS):
