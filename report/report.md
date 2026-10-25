@@ -239,7 +239,10 @@ of games, against 5% [2, 11] for the pair test and 4% [2, 10] for the player sco
 less as players are added: for a triangle, the player score falls from 71% to 52% between n = 5 and 20,
 the group scan from 77% to 71%. We plant groups of 3–5 because that is the hard regime: a larger group has more
 linked pairs (21 for 7 players, against 10 for 5), so every method finds it more easily. The scan itself
-searches groups of every size, so nothing in the method stops at 5.
+searches groups of every size, so nothing in the method stops at 5. In a near-total cartel (18 of 20
+players, 100 games per setting) the scan recovers the exact group in 96–100% of games from CP 0.2 with 300
+rounds or CP 0.3 with 100; the player score keeps up at weak collusion (76–100% at CP 0.1 with 300 rounds
+and at CP 0.2) but levels off at 76–92% at CP 0.3–0.5.
 
 **Table 2.** Exact recovery (%) by planted group and number of players. Each row averages over the CP and
 round settings tried for that group (4 for pair, hub and xor; 12–15 for the others; 200 shuffles), so rows

@@ -95,6 +95,13 @@ clique5 at n = 20, 100 rounds, all CP, plus null cells. Run time: about 60 minut
 Mix index: uniform 0, leader 1, margin 2, mixed 3. State index: none 0, top 1, order 2, full 3.
 Run time: about 35 minutes.
 
+## Very large group — 18 of 20 players collude (`results/large_group/`)
+
+| Output | Command | Seeds / settings |
+|---|---|---|
+| `cells/*.csv` (10 cells) | `large_group.py run 64` | SS[20, 18, round(100 × CP), rounds, rep, 18]; seats from `default_rng([seed, 1])`; CP {0.05, 0.1, 0.2, 0.3, 0.5} × rounds {100, 300}; B = 1000; 100 reps |
+| `summary.txt`, `summary_recovered.csv`, `summary_detected.csv`, `summary_best_jacc.csv` | `large_group.py summary > ../results/large_group/summary.txt` | reads `cells/` |
+
 ## Investigation — scan false alarms at n = 20, 300 rounds (`results/investigate_scan_fpr/`)
 
 | Output | Command | Seeds / settings |

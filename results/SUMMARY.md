@@ -99,6 +99,11 @@ helpers are not linked to each other. The pair test, which joins both edges, doe
 two separate weak pairs in a short game (58% vs 52%), because the group scan pays for searching
 about a thousand groups at 10 players (Table 2).
 
+**Very large groups.** With 18 of 20 players colluding, the group scan recovers the exact group in
+96–100% of games from collusion probability 0.2 (300 rounds) or 0.3 (100 rounds). The player score keeps
+up at weak collusion (76–100% at 0.1 with 300 rounds and at 0.2) but levels off at 76–92% at 0.3–0.5;
+the pair test stays at 32–42% from 0.1 (300 rounds) up. Details: `large_group/summary.txt`.
+
 ## Finding 3 — The test must condition on what honest players react to
 
 Honest players who react to last round's moves are correlated with each other. If the shuffle
