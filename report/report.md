@@ -27,7 +27,7 @@ Bonjour et al. (2022) looks for a single dependent pair, so in multi-player Rock
 none of the planted groups of three or more. We propose GroupScan, which scores every subset of players
 by how strongly their moves depend on each other, calibrated against shuffled copies of the game. Among
 20 players, a 5-player group colluding in 20% of rounds is recovered exactly in 48% of 100-round games,
-versus 5% for the best pairwise method. The shuffle must respect what honest players react to, otherwise
+versus 5% for the best pairwise method. The shuffle must respect what honest players react to; otherwise
 players who simply respond to the last round look like colluders in up to 100% of games. Shuffling only
 among rounds with the same recent history keeps false alarms at 4–9% while still catching profitable
 collusion. To test LLM agents, we build double auctions where each gpt-4.1-mini seller’s prompt is a
