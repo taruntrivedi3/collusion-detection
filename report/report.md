@@ -17,21 +17,22 @@ Numbers come from results/SUMMARY.md, studies/llm_auction and studies/llm_auctio
 
 ## Abstract
 
-<!-- 150–250 words (currently ~218). -->
+<!-- 150–250 words (currently ~239). Plain terms only: hubs, cliques, history states etc. are defined in Section 3. -->
 
-Auditors of multi-agent systems often see agents' moves, not their messages. The information-theoretic
-detector of Bonjour et al. (2022) flags a single pair of players, so it cannot report a group: in
-simulated n-player Rock Paper Scissors it recovered none of the planted triangles, cliques or hubs, and
-its fixed threshold gave 8–23% false alarms in short games without collusion. We propose a group scan
-that scores every subset of players and calibrates the maximum with a shuffle test within rounds that
-share the same history state. Among 20 players, a 5-player group colluding in 20% of rounds is recovered
-exactly in 48% of 100-round games, against 5% for the best pairwise baseline. Conditioning on history is
-essential: honest players who react to the last round are flagged in up to 100% of games without it and
-4–9% with the right state, which still finds a profitable steering coalition in 94–98% of long games. In
-LLM double auctions where each seller's prompt contains only a logged coarse state, gpt-4.1-mini sellers
-with a message channel and CEO pressure earn 49–56% more than with pressure alone; a same-move shuffle
-test flags them (pooled z = 7.9; p = 0.001) and not the controls. Auditing from moves works if the
-auditor logs what each agent observes and tests groups, not pairs.
+Auditors of multi-agent systems often see what agents do, not what they say to each other. The
+information-theoretic detector of Bonjour et al. (2022) looks for one pair of players whose moves depend
+on each other, so it cannot report a colluding group: in simulated many-player Rock Paper Scissors it found
+none of the planted groups of three to five colluders, and its fixed threshold raised 8–23% false alarms
+in short games without collusion. We propose a group scan that scores every subset of players by how much
+their moves depend on each other and judges the best score against shuffled copies of the game. Among 20
+players, a 5-player group colluding in 20% of rounds is found exactly in 48% of 100-round games, against
+5% for the best pairwise method. The shuffle must respect what honest players react to: honest players who
+respond to the previous round look like colluders in up to 100% of games unless rounds with the same
+recent history are shuffled together, which keeps false alarms at 4–9% while still catching a group that
+colludes for profit. In LLM double auctions where sellers see only a recorded summary of the last hour,
+gpt-4.1-mini sellers given a message channel and profit pressure earn about 50% more than with pressure
+alone; the test flags them but not the controls. Moves-only auditing works if the auditor records what
+each agent sees and tests groups, not just pairs.
 
 ## 1. Introduction
 
