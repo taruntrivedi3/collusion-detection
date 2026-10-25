@@ -63,8 +63,9 @@ th { font-weight: bold; }
 td:nth-child(-n+2) { white-space: nowrap; }
 p.figure { text-align: center; margin: 8pt 0 2pt; break-inside: avoid; break-after: avoid; }
 p.figure img { max-width: 100%; max-height: 4in; }
-p.figure img[src*="fig1_cancellation"] { max-height: 2.5in; }
+p.figure img[src*="fig1_cancellation"] { max-height: 2.05in; }
 p.caption { font-size: 9.5pt; break-after: avoid; }
+p.figure + p.caption { break-after: auto; }   /* figure captions follow their image; only table captions bind forward */
 .katex-display { margin: 7pt 0; text-align: center; }
 .katex { font-size: 1.05em; text-indent: 0; }
 """
