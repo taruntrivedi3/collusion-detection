@@ -237,7 +237,9 @@ Scoring the group as a whole adds up evidence too weak in any single pair (Table
 players, 100 rounds and a 5-clique at CP 0.2, the group scan recovered the exact group in **48% [38, 58]**
 of games, against 5% [2, 11] for the pair test and 4% [2, 10] for the player score (Figure 2, CP 0.2). It also degrades
 less as players are added: for a triangle, the player score falls from 71% to 52% between n = 5 and 20,
-the group scan from 77% to 71%.
+the group scan from 77% to 71%. We plant groups of 3–5 because that is the hard regime: a larger group has more
+linked pairs (21 for 7 players, against 10 for 5), so every method finds it more easily. The scan itself
+searches groups of every size, so nothing in the method stops at 5.
 
 **Table 2.** Exact recovery (%) by planted group and number of players. Each row averages over the CP and
 round settings tried for that group (4 for pair, hub and xor; 12–15 for the others; 200 shuffles), so rows
