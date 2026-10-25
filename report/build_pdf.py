@@ -47,9 +47,10 @@ thead { border-top: 1pt solid #000; border-bottom: 0.5pt solid #000; }
 tbody { border-bottom: 1pt solid #000; }
 th, td { padding: 2pt 6pt; vertical-align: top; }
 th { font-weight: bold; }
+td:nth-child(-n+2) { white-space: nowrap; }
 p.figure { text-align: center; margin: 8pt 0 2pt; break-inside: avoid; break-after: avoid; }
 p.figure img { max-width: 100%; max-height: 4in; }
-p.caption { font-size: 9.5pt; }
+p.caption { font-size: 9.5pt; break-after: avoid; }
 .katex-display { margin: 7pt 0; text-align: center; }
 .katex { font-size: 1.05em; text-indent: 0; }
 """
