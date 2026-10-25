@@ -98,15 +98,11 @@ suspicious behaviour; our "player score" baseline is inspired by this but is not
 Our "pair test" applies Benjamini–Hochberg (1995) false-discovery control to all pairs and joins
 significant pairs into groups.
 
-**Scan statistics and permutation tests.** Searching subsets for the most anomalous one and calibrating
-its maximum by permutation is standard in disease and event surveillance (Kulldorff, 1997; Neill, 2012)
-and controls the family-wise error over all subsets (max-T; Westfall & Young, 1993). Our within-state
-shuffle is a conditional, or stratified, permutation test (Rosenbaum, 1984). What is new here is the target:
+**Scan statistics.** Searching subsets for the most anomalous one and calibrating its maximum by
+permutation is standard in disease surveillance (Kulldorff, 1997) and controls the family-wise error over
+all subsets (max-T; Westfall & Young, 1993). Our within-state shuffle is a stratified permutation test. What is new here is the target:
 subsets of agents scored by their pairwise dependence, a null that shuffles only within history states,
 and the confound of honest agents who react to the same history.
-
-**Cartel screening.** Conley & Decarolis (2016) use randomization tests to detect coordinated groups of
-bidders; like the screens reviewed by Harrington (2008), our flags warrant investigation, not a verdict.
 
 **Gap.** We know of no information-theoretic collusion detector that (i) reports groups larger than two,
 (ii) has a calibrated false-alarm rate, and (iii) handles honest agents correlated through shared history.
@@ -342,8 +338,8 @@ Agrawal et al. (2025) it flagged 88.5% of groups of independently resampled sell
 search stops at about 20 players; the LLM results use one model, scripted buyers and no memory, and have
 no comms-only condition (in a 2-seller pilot it earned the same as comms off; Appendix D).
 
-**Future work.** Greedy or fast subset-scan search beyond 20 players, learned states, higher-order
-dependence (Williams & Beer, 2010), payoff-based tests, and LLM markets with memory and more models.
+**Future work.** Greedy search beyond 20 players, learned states, higher-order dependence, payoff-based
+tests, and LLM markets with memory and more models.
 
 ## 6. Conclusion
 
@@ -373,14 +369,9 @@ during the sprint.
 1. Agrawal, K., Teo, V., Vazquez, J. J., Kunnavakkam, S., Srikanth, V., & Liu, A. (2025). Evaluating LLM agent collusion in double auctions. arXiv:2507.01413. Code: <https://github.com/andyjliu/llm-agent-collusion>
 2. Benjamini, Y., & Hochberg, Y. (1995). Controlling the false discovery rate: a practical and powerful approach to multiple testing. *Journal of the Royal Statistical Society: Series B*, 57(1), 289–300.
 3. Bonjour, T., Aggarwal, V., & Bhargava, B. (2022). Information theoretic approach to detect collusion in multi-agent games. *Proceedings of the 38th Conference on Uncertainty in Artificial Intelligence (UAI)*, PMLR 180, 223–232. <https://proceedings.mlr.press/v180/bonjour22a.html>
-4. Conley, T. G., & Decarolis, F. (2016). Detecting bidders groups in collusive auctions. *American Economic Journal: Microeconomics*, 8(2), 1–38.
-5. Harrington, J. E., Jr. (2008). Detecting cartels. In P. Buccirossi (Ed.), *Handbook of Antitrust Economics* (pp. 213–258). MIT Press.
-6. Kulldorff, M. (1997). A spatial scan statistic. *Communications in Statistics – Theory and Methods*, 26(6), 1481–1496.
-7. Neill, D. B. (2012). Fast subset scan for spatial pattern detection. *Journal of the Royal Statistical Society: Series B*, 74(2), 337–360.
-8. Rose, A., Cullen, C., Abdelnabi, S., Torr, P., Kaplowitz, B. G., & Schroeder de Witt, C. (2026). Detecting multi-agent collusion through multi-agent interpretability. arXiv:2604.01151.
-9. Rosenbaum, P. R. (1984). Conditional permutation tests and the propensity score in observational studies. *Journal of the American Statistical Association*, 79(387), 565–574.
-10. Westfall, P. H., & Young, S. S. (1993). *Resampling-Based Multiple Testing: Examples and Methods for p-Value Adjustment.* Wiley.
-11. Williams, P. L., & Beer, R. D. (2010). Nonnegative decomposition of multivariate information. arXiv:1004.2515.
+4. Kulldorff, M. (1997). A spatial scan statistic. *Communications in Statistics – Theory and Methods*, 26(6), 1481–1496.
+5. Rose, A., Cullen, C., Abdelnabi, S., Torr, P., Kaplowitz, B. G., & Schroeder de Witt, C. (2026). Detecting multi-agent collusion through multi-agent interpretability. arXiv:2604.01151.
+6. Westfall, P. H., & Young, S. S. (1993). *Resampling-Based Multiple Testing: Examples and Methods for p-Value Adjustment.* Wiley.
 
 ---
 
