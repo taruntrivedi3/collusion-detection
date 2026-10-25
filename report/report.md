@@ -7,7 +7,7 @@ Numbers come from results/SUMMARY.md, studies/llm_auction and studies/llm_auctio
 (runs/n5_rates_v1/analysis.txt, dry_run.txt).
 -->
 
-# Detecting Colluding Groups from Moves Alone: Group Scans with History-Conditioned Shuffle Tests
+# Beyond Pairs: Detecting Colluding Groups of Agents from Their Moves
 
 **Tarun Trivedi** (Independent), **Eashan Gandotra** (Independent)
 
