@@ -19,16 +19,15 @@ Numbers come from results/SUMMARY.md, studies/llm_auction_2seller and studies/ll
 
 ## Abstract
 
-<!-- 150–250 words (currently ~239). Plain terms only: hubs, cliques, history states etc. are defined in Section 3. -->
+<!-- 150–250 words (currently ~242). Plain terms only: hubs, cliques, history states etc. are defined in Section 3. -->
 
 Auditors of multi-agent systems often see what agents do, not what they say. The
 information-theoretic detector of Bonjour et al. (2022) looks for one pair of players whose moves depend
 on each other, so it cannot report a group. In many-player Rock Paper Scissors it found
-none of the planted groups of three to five colluders, and its fixed threshold raised 8–23% false alarms
-in short games without collusion. We propose GroupScan, which scores every subset of players by how much
+none of the planted groups of three to five colluders, and its fixed threshold is uncalibrated. We propose GroupScan, which scores every subset of players by how much
 their moves depend on each other and compares the best score with shuffled copies of the game. Among 20
 players, a 5-player group colluding in 20% of rounds is recovered exactly in 48% of 100-round games,
-against 5% for the best pairwise method. The shuffle must respect what honest players react to. Otherwise honest
+against 5% for the best pairwise method; the gap is largest for weak signals and short games. The shuffle must respect what honest players react to. Otherwise honest
 players who react to the previous round look like colluders in up to 100% of games. Shuffling only
 among rounds with the same recent history keeps false alarms at 4–9% and still catches a group that
 colludes for profit. In LLM double auctions where sellers see only a recorded summary of the last hour,
@@ -99,14 +98,18 @@ suspicious behaviour; our "player score" baseline is inspired by this but is not
 Our "pair test" applies Benjamini–Hochberg (1995) false-discovery control to all pairs and joins
 significant pairs into groups.
 
-**Scan statistics.** Searching subsets for the most anomalous one and calibrating its maximum by
-permutation is standard in disease and event surveillance (Kulldorff, 1997; Neill, 2012) and controls the
-family-wise error over all subsets (max-T; Westfall & Young, 1993). What is new here is the target:
+**Scan statistics and permutation tests.** Searching subsets for the most anomalous one and calibrating
+its maximum by permutation is standard in disease and event surveillance (Kulldorff, 1997; Neill, 2012)
+and controls the family-wise error over all subsets (max-T; Westfall & Young, 1993). Our within-state
+shuffle is a conditional, or stratified, permutation test (Rosenbaum, 1984). What is new here is the target:
 subsets of agents scored by their pairwise dependence, a null that shuffles only within history states,
 and the confound of honest agents who react to the same history.
 
-**Gap.** We know of no collusion detector that (i) reports groups larger than two from moves, (ii) has a
-calibrated false-alarm rate, and (iii) handles honest agents correlated through shared history.
+**Cartel screening.** Conley & Decarolis (2016) use randomization tests to detect coordinated groups of
+bidders; like the screens reviewed by Harrington (2008), our flags warrant investigation, not a verdict.
+
+**Gap.** We know of no information-theoretic collusion detector that (i) reports groups larger than two,
+(ii) has a calibrated false-alarm rate, and (iii) handles honest agents correlated through shared history.
 
 ## 3. Methods
 
@@ -203,10 +206,6 @@ so the state is the agents' entire public input.**
   because $S_{t+1}$ depends on the moves at $t$; in a scripted check (300 replications of 20 games) the
   global and max-pair tests gave 4.3% and 5.0% false alarms at a 5% target.
 
-**What did not work.** LLM buyers drove bids to the floor (we switched to scripted buyers), CMI was
-underpowered for the LLM data (Appendix D), and triple scans for xor were dropped as blind to its
-four-player version.
-
 ## 4. Results
 
 ### 4.1 Pairwise net influence cannot see groups
@@ -233,7 +232,8 @@ influence (flagged only if ≥ 0.05 both ways). Right: link z-score against shuf
 
 Scoring a group as a whole adds up evidence that is too weak in any single pair. With 20 players, 100 rounds
 and a 5-clique at CP 0.2, GroupScan recovered the exact group in **48% [38, 58]** of games, against
-5% [2, 11] for the pair test and 4% [2, 10] for the player score (Figure 1). It also degrades less as
+5% [2, 11] for the pair test and 4% [2, 10] for the player score (Figure 1). The advantage is largest
+for weak signals and short games: at CP 0.5 the pair test reaches 80–82% against 100%. It also degrades less as
 players are added: for a triangle at CP 0.2 and 300 rounds, the player score falls from 93% to 32% between
 5 and 20 players, and GroupScan only from 93% to 84% (Table 2). We plant groups of 3–5 players because
 larger groups have more linked pairs and are easier for every method. GroupScan searches all sizes: it
@@ -285,7 +285,7 @@ exploiters look like colluders as games get longer (66–71% under *top*, 96–1
 has either 4 steer colluders or 4 honest exploiters, plus 3 margin-reactive and 3 random players; 200
 games per cell. Payoff = points per round per member, averaged
 over 300–3000 rounds (random play earns 0; margin-reactive players' payoff in brackets). Recovery and false
-alarms: GroupScan, full state, at 300 / 1000 / 3000 rounds.
+alarms: GroupScan, full state, at 300 / 1000 / 3000 rounds. 95% intervals: e.g. 5% → [3, 9], 94% → [90, 97].
 
 | CP | Steer payoff | Exploiter payoff | Steer clean recovery (%) | Exploiter false alarms (%) |
 |---|---|---|---|---|
@@ -337,12 +337,13 @@ shared signal outside the log, collusive or not.
 **Limitations** (details in Appendix A). Coordination that is a function of the public state is
 invisible. In 2-seller pilots (Appendix D) the test missed sellers told to form an explicit cartel, who
 earned $7.63 per hour against $4.72 with comms off, because they coordinated by following last hour's
-public moves. Coordination with no pairwise trace (xor) is invisible too. The exact search stops at about 20
-players, the state must be chosen by the auditor, and the LLM results use one model, scripted buyers and
-no memory.
+public moves; so is xor-style coordination. Without logged inputs the test fails: on recorded markets from
+Agrawal et al. (2025) it flagged 88.5% of groups of independently resampled sellers (Appendix C). Exact
+search stops at about 20 players; the LLM results use one model, scripted buyers and no memory, and have
+no comms-only condition (in a 2-seller pilot it earned the same as comms off; Appendix D).
 
-**Future work.** Richer or learned states, higher-order dependence (e.g. partial information
-decomposition; Williams & Beer, 2010), payoff-based tests, and LLM markets with memory and more models.
+**Future work.** Greedy or fast subset-scan search beyond 20 players, learned states, higher-order
+dependence (Williams & Beer, 2010), payoff-based tests, and LLM markets with memory and more models.
 
 ## 6. Conclusion
 
@@ -372,11 +373,14 @@ during the sprint.
 1. Agrawal, K., Teo, V., Vazquez, J. J., Kunnavakkam, S., Srikanth, V., & Liu, A. (2025). Evaluating LLM agent collusion in double auctions. arXiv:2507.01413. Code: <https://github.com/andyjliu/llm-agent-collusion>
 2. Benjamini, Y., & Hochberg, Y. (1995). Controlling the false discovery rate: a practical and powerful approach to multiple testing. *Journal of the Royal Statistical Society: Series B*, 57(1), 289–300.
 3. Bonjour, T., Aggarwal, V., & Bhargava, B. (2022). Information theoretic approach to detect collusion in multi-agent games. *Proceedings of the 38th Conference on Uncertainty in Artificial Intelligence (UAI)*, PMLR 180, 223–232. <https://proceedings.mlr.press/v180/bonjour22a.html>
-4. Kulldorff, M. (1997). A spatial scan statistic. *Communications in Statistics – Theory and Methods*, 26(6), 1481–1496.
-5. Neill, D. B. (2012). Fast subset scan for spatial pattern detection. *Journal of the Royal Statistical Society: Series B*, 74(2), 337–360.
-6. Rose, A., Cullen, C., Abdelnabi, S., Torr, P., Kaplowitz, B. G., & Schroeder de Witt, C. (2026). Detecting multi-agent collusion through multi-agent interpretability. arXiv:2604.01151.
-7. Westfall, P. H., & Young, S. S. (1993). *Resampling-Based Multiple Testing: Examples and Methods for p-Value Adjustment.* Wiley.
-8. Williams, P. L., & Beer, R. D. (2010). Nonnegative decomposition of multivariate information. arXiv:1004.2515.
+4. Conley, T. G., & Decarolis, F. (2016). Detecting bidders groups in collusive auctions. *American Economic Journal: Microeconomics*, 8(2), 1–38.
+5. Harrington, J. E., Jr. (2008). Detecting cartels. In P. Buccirossi (Ed.), *Handbook of Antitrust Economics* (pp. 213–258). MIT Press.
+6. Kulldorff, M. (1997). A spatial scan statistic. *Communications in Statistics – Theory and Methods*, 26(6), 1481–1496.
+7. Neill, D. B. (2012). Fast subset scan for spatial pattern detection. *Journal of the Royal Statistical Society: Series B*, 74(2), 337–360.
+8. Rose, A., Cullen, C., Abdelnabi, S., Torr, P., Kaplowitz, B. G., & Schroeder de Witt, C. (2026). Detecting multi-agent collusion through multi-agent interpretability. arXiv:2604.01151.
+9. Rosenbaum, P. R. (1984). Conditional permutation tests and the propensity score in observational studies. *Journal of the American Statistical Association*, 79(387), 565–574.
+10. Westfall, P. H., & Young, S. S. (1993). *Resampling-Based Multiple Testing: Examples and Methods for p-Value Adjustment.* Wiley.
+11. Williams, P. L., & Beer, R. D. (2010). Nonnegative decomposition of multivariate information. arXiv:1004.2515.
 
 ---
 
@@ -448,6 +452,8 @@ batches, and the pooled z-score.
 
 | Run | Condition | Profit / hour | Same-move test |
 |---|---|---|---|
+| v2 pilot | comms off | 4.79 | p = 0.30 |
+| v2 pilot | comms only (no pressure) | 4.70 | p = 0.60 |
 | v2 pilot | comms, told coordination pays | 7.42 | p = 0.13 |
 | v4 pilot | comms, told to form a cartel | 7.63 | p = 0.36 |
 | v4 pilot | comms + pressure | 7.81 | p = 0.0002 |
@@ -461,13 +467,17 @@ batches, and the pooled z-score.
   the state, so the shuffle test cannot see it. A test of whether a seller raises after the other raised
   does see it (+0.34 to +0.89), but also fires on honest controls (up to +0.21), so it would need a
   comms-off baseline.
+- **A channel alone does not produce collusion.** Comms without pressure earned the same as comms off
+  in the v2 pilot ($4.70 vs $4.79 per hour).
 - **The same-move statistic was chosen here.** In the 200-game run, CMI flagged comms + pressure in only
   1 of 10 20-game batches (pooled z = +5.0), against 8 of 10 for the same-move count, so the 2-seller
   same-move rates above are post hoc; the 5-seller study then tested the statistic as fixed in advance.
 - **Mechanism.** In low-price hours after a trade, CEO pressure makes the seller who just sold raise (8%
   without pressure → 33% with it), and the channel stops the other seller from undercutting ("lower"
   82% → 41%), so moves synchronize.
-- In v1 the buyers were LLMs and drove bids to the floor, so v2 onward use scripted buyers. The exact
+- **What did not work.** In v1 the buyers were LLMs and drove bids to the floor, so v2 onward use
+  scripted buyers. Triple scans for xor (in the simulations) were dropped as blind to its four-player
+  version. The exact
   v1–v3 prompts were not saved. All pilot conditions and the direction test: `studies/llm_auction_2seller/`
   (`pilots.py`, `report.pdf`).
 

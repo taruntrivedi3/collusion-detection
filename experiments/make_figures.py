@@ -108,7 +108,7 @@ def fig_b():
             _errline(ax, d.n, d, det)
         ax.set_xticks([5, 10, 20]); ax.set_xlabel("number of players")
         ax.set_title({"triangle": "Triangle (3 colluders)", "clique4": "4-clique (4 colluders)"}[s])
-    axs[0].set_ylabel("% of planted groups recovered exactly")
+    axs[0].set_ylabel("% recovered exactly")
     axs[0].set_ylim(0, 100)
     axs[0].legend(loc="lower left")
     fig.suptitle("The player score loses power as players are added; GroupScan holds\n"
@@ -131,7 +131,7 @@ def fig_c(figsize=(10, 4), out=FIG / "figC_weak_cliques.png", title=True):
             d = g[(g.structure == s) & (g.detector == det)]
             _errline(ax, d.cp, d, det)
         ax.set_xlabel("collusion probability"); ax.set_title(f"{s[-1]}-player group among 20 players")
-    axs[0].set_ylabel("% of planted groups recovered exactly")
+    axs[0].set_ylabel("% recovered exactly")
     axs[0].set_ylim(0, 100)
     axs[1].legend(fontsize=8)
     if title:
