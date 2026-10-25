@@ -19,12 +19,12 @@ Numbers come from results/SUMMARY.md, studies/llm_auction_2seller and studies/ll
 
 ## Abstract
 
-<!-- 150–250 words (currently ~246). Plain terms only: hubs, cliques, history states etc. are defined in Section 3. -->
+<!-- 150–250 words (currently ~247). Plain terms only: hubs, cliques, history states etc. are defined in Section 3. -->
 
 When AI agents interact, as players in a game or market participants, some may secretly collude, and an
 auditor who sees only their moves must identify which ones. The information-theoretic detector of
 Bonjour et al. (2022) looks for a single pair of dependent players, so it cannot report
-a group: in multi-player Rock Paper Scissors it found none of the planted groups of three or more
+a group. In multi-player Rock Paper Scissors it found none of the planted groups of three or more
 colluders. We propose GroupScan, which scores every subset of players by how much their moves depend on
 each other and compares the best score with shuffled copies of the game. Among 20 players, a 5-player
 group colluding in 20% of rounds is recovered exactly in 48% of 100-round games, against 5% for the best
@@ -33,8 +33,8 @@ honest players react to, or honest players who respond to the previous round loo
 to 100% of games. Shuffling only among rounds with the same recent history keeps false alarms at 4–9%
 and still catches a group that colludes for profit. In LLM double auctions where each seller's prompt is
 a logged summary of the last hour, gpt-4.1-mini sellers given a message channel and profit pressure
-collude, earning 56% more than with pressure alone, and the test flags them but not the controls,
-so the approach works on real agents whose inputs are logged. By design, it cannot see
+collude, earning 56% more than with pressure alone, and the test flags them but not the controls;
+the method carries over to LLM agents when their inputs are logged. By design, it cannot see
 coordination carried entirely through public moves.
 
 </div>
