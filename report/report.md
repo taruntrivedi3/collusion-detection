@@ -64,8 +64,9 @@ Our contributions:
    coordination pays is found (**94–98%**), while honest players reacting to the same signal are not
    (**4–7%**).
 4. **An LLM market where the null holds by design.** Each seller's prompt is built only from a logged
-   coarse state, and a within-state same-move test detects comms + CEO-pressure collusion among
-   five gpt-4.1-mini sellers (**19/20** batches) while staying quiet on the controls (**0/20**).
+   summary of the last hour. Five gpt-4.1-mini sellers who can message each other and are pressured by a
+   “CEO” to keep margins high coordinate their moves, and the test flags them (**19/20** batches), while
+   sellers without the message channel are not flagged (**0/20**).
 
 ![Figure 1](figures/fig2_weak_cliques.png)
 
