@@ -45,7 +45,7 @@ prices, especially with a channel to talk to each other and pressure from manage
 high. An auditor of such a market usually cannot read private channels; it sees only the moves. We study the
 sprint's research question 1.4: *can information-theoretic methods detect collusion from moves alone?*
 
-**Threat model.** $k \ge 2$ of $n$ agents coordinate through a channel the auditor cannot observe, such
+**Threat model.** Some $k \ge 2$ of $n$ agents coordinate through a channel the auditor cannot observe, such
 as a shared signal, a message channel or a common plan. The auditor sees every action and the public
 state, and must name the colluding agents, if any, while keeping false alarms at a chosen rate (5%). Honest agents need not be random:
 they may react to public history, which itself correlates their moves. The existing detector (Bonjour
@@ -55,10 +55,9 @@ Our contributions:
 
 1. **A failure mode of pairwise net influence.** The published score for a pair subtracts each player's
    strongest dependence on any third player, so inside a group the members cancel each other out. The rule
-   rarely flags even one in-group pair (**8–15%** of games), even when the dependence between members is
-   about 200 standard deviations above chance. Its fixed threshold is also uncalibrated.
-2. **GroupScan**, a shuffle-calibrated scan over all groups of players, recovers weak, broad groups (many
-   players who coordinate in only a few rounds) that pairwise methods miss: **48% vs 5%** for a 5-player
+   rarely flags even one in-group pair (**8–15%** of games), though the dependence between members is about 200 standard
+   deviations above chance. Its fixed threshold is also uncalibrated.
+2. **GroupScan**, a shuffle-calibrated scan over all groups of players, recovers weak, broad groups (several players who coordinate in only a fraction of rounds) that pairwise methods miss: **48% vs 5%** for a 5-player
    group among 20, with false alarms close to the 5% target. Testing pairs one at a time does better on
    isolated pairs, and on a leader with helpers who are not linked to each other.
 3. **History conditioning is necessary.** Honest players who react to the previous round are flagged in
@@ -66,9 +65,9 @@ Our contributions:
    conditioning, a group whose coordination pays is found (**94–98%**), while honest players reacting to
    the same signal are not (**4–7%**).
 4. **An LLM market where the state is everything agents see.** Each seller's prompt is built only from a
-   logged summary of the last hour. Five gpt-4.1-mini sellers who can message each other and are pressured
-   by a “CEO” to keep margins high coordinate their moves, and the test flags them in **19 of 20** batches
-   of five games, while sellers without the message channel are flagged in **0 of 20**.
+   logged summary of the last hour. Five gpt-4.1-mini sellers can message each other and are pressured by a
+   “CEO” to keep margins high. They coordinate their moves, and the test flags them in **19 of 20** batches
+   of five games; sellers without the message channel are flagged in **0 of 20**.
 
 ![Figure 1](figures/fig2_weak_cliques.png)
 
@@ -94,8 +93,7 @@ building block, pairwise conditional mutual information, but change the decision
 
 **LLM collusion in markets.** Agrawal et al. (2025) study LLM sellers in a continuous double auction.
 Measuring collusion from prices and messages, they find that a communication channel increases collusive
-pricing and that CEO profit pressure also shapes it. We ask whether it is detectable from moves
-alone, and reuse comms + pressure as our positive condition.
+pricing and that CEO profit pressure also shapes it. We ask whether this collusion is detectable from moves alone, and reuse comms + pressure as our positive condition.
 
 **Per-agent detectors and multiple testing.** Rose et al. (2026) score individual agents for
 suspicious behaviour; our “player score” baseline, a per-player score built from pairwise links, is
@@ -143,9 +141,9 @@ round: none, top (which move led), order (ranking of move counts) or full (exact
 
 **Within-state shuffle null.** Each player's action column is permuted independently among rounds
 that share the same state. This preserves each player's state-dependent habits and destroys any
-coordination beyond them. The test is valid if the state captures everything honest players react to;
-since the state comes from earlier moves, this holds only approximately, and our false-alarm checks
-measure how closely.
+coordination beyond them. The test is valid if the state captures everything honest players react to. Because the state is built
+from earlier moves, rounds are only approximately exchangeable; our false-alarm checks measure how much
+this matters.
 
 **GroupScan.** Given every player's action in every round and the history state of each round:
 
@@ -172,10 +170,10 @@ $$
    Stop when no group passes or fewer than two players remain.
 
 **Baselines.** *Bonjour*: the published rule with its fixed threshold of 0.05. *Bonjour (calibrated)*:
-the same rule with the threshold taken from the shuffle null. *Pair test*: Benjamini–Hochberg at
-q = 0.05 over all pairs, with p-values from a gamma distribution fitted to the Set-A null (with 200
-shuffles, raw permutation p-values cannot get small enough to pass at n ≥ 10); groups are connected
-components of significant pairs. *Player score*: each player's total link strength; every player whose total exceeds a
+the same rule with the threshold taken from the shuffle null. *Pair test*: Benjamini–Hochberg at q = 0.05 over
+all pairs; groups are the connected components of significant pairs. P-values come from a gamma fit to
+the Set-A null, since with 200 shuffles raw permutation p-values cannot get small enough to pass at
+n ≥ 10. *Player score*: each player's total link strength; every player whose total exceeds a
 shuffle-calibrated threshold is flagged, together as one group.
 
 **Metrics.** *Exact recovery*: the reported group equals the planted one. *Clean recovery*: exact and
@@ -216,9 +214,8 @@ so the state is the agents' entire public input.**
 more by construction (0% in Table 2). More telling, it rarely flags even one in-group pair: in 15% of
 triangle games, 12% of 4- and 5-clique games and 8% of hub games (5–20 players), close to its
 false-alarm rate. Yet the links inside a triangle are about 200 standard deviations above the shuffled
-data (Figure 2). With no collusion its fixed threshold raised false alarms in 8–23% of 100-round games
-and never fired in longer ones (up to 43% in a 3-player variant that conditions on the previous round;
-Appendix B). Every shuffle-calibrated detector stayed at 3–9%.
+data (Figure 2). With no collusion, its fixed threshold raised false alarms in 8–23% of 100-round games (43% in a
+3-player variant that conditions on the previous round; Appendix B) and never fired in longer ones. Every shuffle-calibrated detector stayed at 3–9%.
 
 **Interpretation.** Net influence subtracts the strongest *other* influence on j. Inside a group, j's
 other partners are as strong as i, so Γ ≈ 0 for every member. A fixed threshold on an estimator whose
@@ -340,12 +337,12 @@ calling a flagged group collusion, compare its payoff with an honest baseline, s
 shared signal outside the log, collusive or not.
 
 **Limitations** (details in Appendix A). Coordination that is a function of the public state is
-invisible. In 2-seller pilots (Appendix D) the test missed sellers told to form an explicit cartel, who
-earned $7.63 per hour against $4.72 with comms off, because they coordinated by following last hour's
-public moves. Coordination with no pairwise trace (xor) is also invisible. Without logged inputs the test fails: on recorded markets from
+invisible. In 2-seller pilots (Appendix D), the test missed sellers told to form an explicit cartel, because they
+coordinated by following last hour's public moves; they still earned $7.63 per hour against $4.72 with
+comms off. Coordination with no pairwise trace (xor) is also invisible. Without logged inputs the test fails: on recorded markets from
 Agrawal et al. (2025) it flagged 88.5% of groups of independently resampled sellers (Appendix C). Exact
 search stops at about 20 players; the LLM results use one model, scripted buyers and no memory, and have
-no comms-only condition (in a 2-seller pilot it earned the same as comms off; Appendix D).
+no comms-only condition (in one 2-seller pilot, comms alone earned the same as comms off; Appendix D).
 
 **Future work.** Greedy search beyond 20 players, learned states, higher-order dependence, payoff-based
 tests, and LLM markets with memory and more models.
