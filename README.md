@@ -66,10 +66,12 @@ explains the honest behaviour, the test is not usable. See its
 
 ## Before the sprint
 
-Before the sprint began, we read the papers, came up with a game plan, played around with a few toy
-examples, and implemented the starting code. We also ran the recorded-market study in
+Before Friday, October 23, we read the papers, made a game plan, and implemented the starting code
+suggested in the sprint's resources for question 1.4: pairwise net influence (Bonjour et al., 2022) and a
+scripted Rock-Paper-Scissors harness. We also ran the recorded-market study in
 `studies/auction_null_calibration/` (see the appendix note above), including its log parser in
-`source_snapshot/`.
+`source_snapshot/`. Our first commit (`38cb48c`, October 23) contains this code together with some other
+work from the first hours of the sprint; every later commit is sprint work.
 
 ## Reproduce
 

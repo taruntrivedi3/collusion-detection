@@ -361,10 +361,12 @@ studies (`studies/llm_auction_2seller/`, `studies/llm_auction_5seller/`). An int
 
 ## Work Done Before the Sprint
 
-Before the sprint began, we read the papers, came up with a game plan, played around with a few toy
-examples, and implemented the starting code. We also ran the recorded-market study in Appendix C
-(`studies/auction_null_calibration/`), including its log parser. Everything else in this report was done
-during the sprint.
+Before Friday, October 23, we read the papers, made a game plan, and implemented the starting code
+suggested in the sprint's resources for question 1.4: pairwise net influence (Bonjour et al., 2022) and a
+scripted Rock-Paper-Scissors harness. We also ran the recorded-market study in Appendix C
+(`studies/auction_null_calibration/`), including its log parser. Our first commit (`38cb48c`, October 23)
+contains this code together with some other work from the first hours of the sprint; every later commit
+is sprint work.
 
 ## References
 
