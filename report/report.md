@@ -144,16 +144,16 @@ coordination beyond them. The test is valid if the state captures everything hon
 from earlier moves, rounds are only approximately exchangeable; our false-alarm checks measure how much
 this matters.
 
-**GroupScan.** Given every player's action in every round and the history state of each round:
+**GroupScan.** A group's score adds up the evidence from every pair in it, so weak links can pass
+together where none passes alone (example in Appendix E). Given each round's moves and state:
 
 1. **Edge statistics.** Compute the pairwise conditional mutual information $\gamma_{ij}$ on the observed data.
 2. **Shuffle.** Choose the number of shuffles $M$ (1,000 unless stated). Draw two independent sets of $M$
    within-state shuffles, Set A and Set B, and compute every $\gamma_{ij}$ on each shuffled dataset.
 3. **Standardize edges with Set A.** $z_{ij} = (\gamma_{ij} - \mu^A_{ij}) / \sigma^A_{ij}$, where
    $\mu^A_{ij}$ and $\sigma^A_{ij}$ are the mean and standard deviation of $\gamma_{ij}$ over Set A. The
-   Set-B datasets are standardized with the same Set-A moments.
-4. **Score every group.** For every subset $C$ with $\lvert C\rvert \ge 2$ ($\sim 10^6$ subsets at
-   $n = 20$), compute $T(C)$ and $S(C)$ below. The Set-A mean and variance of $T(C)$ follow exactly from
+   Set-B datasets use the same Set-A moments.
+4. **Score every group.** For every subset $C$ with $\lvert C\rvert \ge 2$, compute $T(C)$ and $S(C)$ below. The Set-A mean and variance of $T(C)$ follow exactly from
    the edge means and covariances.
 
 $$
@@ -479,6 +479,41 @@ batches, and the pooled z-score.
   version. The exact
   v1–v3 prompts were not saved. All pilot conditions and the direction test: `studies/llm_auction_2seller/`
   (`pilots.py`, `report.pdf`).
+
+## Appendix E. A worked example of GroupScan
+
+Six players, 300 rounds, no history state; players 0, 1 and 2 form a clique that coordinates in 10% of
+rounds (CP 0.1); 1,000 shuffles (`experiments/worked_example.py`, output in `results/worked_example.txt`).
+
+**Table E1. Pair scores.** z = how far each pair's dependence sits above the shuffled games, in standard
+deviations; p from the pair test's gamma fit.
+
+| Pair | z | p |
+|---|---|---|
+| 0–1 | 1.58 | 0.076 |
+| 0–2 | 2.90 | 0.016 |
+| 1–2 | 3.15 | 0.011 |
+| the other 12 pairs | −1.02 to 0.43 | 0.27 to 0.90 |
+
+**Pair test: nothing.** With 15 pairs, Benjamini–Hochberg needs the k-th smallest p to be at most
+0.05·k/15 for some k. None is: 0.011 > 0.0033, 0.016 > 0.0067, 0.076 > 0.010, and the rest are larger.
+Each pair is only mildly suspicious on its own.
+
+**GroupScan: {0, 1, 2}.** A group's score sums the z of its pairs and divides by that sum's spread in
+the shuffled games. Without collusion each z is noise around 0, so three of them sum to about 0 with
+spread about √3.
+
+- {0, 1, 2}: 1.58 + 2.90 + 3.15 = 7.63, score **4.43**, the highest of the 57 groups.
+- Adding an honest player adds pairs with z near 0 and dilutes the score: {0, 1, 2, 3} scores 2.92.
+- Dropping a member loses evidence: {1, 2} scores 3.15, {0, 1} 1.58.
+
+Even with no collusion, the best of 57 groups can score high by luck, so the bar is set by running the
+same search on each of 1,000 further shuffled games (Set B): 95% of their best scores fall below **4.18**.
+Since 4.43 > 4.18, GroupScan reports {0, 1, 2}, removes those players and repeats on the other three,
+where the best group scores 0.24 against a bar of 2.87, so it stops. Three weak links in the same
+group add up to strong evidence; the pair test judges each link alone against a bar raised for testing
+15 pairs, while GroupScan pays for its search once, in the bar. At n = 20 the search covers about 10⁶
+groups.
 
 ## LLM Usage Statement
 
