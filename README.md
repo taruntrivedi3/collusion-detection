@@ -1,5 +1,12 @@
 # Finding colluding groups from players' moves
 
+<p align="center"><img src="viewer/teaser.gif" width="720" alt="8 players' rock-paper-scissors moves scrolling by: who's colluding?"></p>
+
+<details>
+<summary><b>Who's colluding? Click to reveal.</b> (Or play it yourself in the <a href="https://taruntrivedi3.github.io/collusion-detection/viewer/#rps/triangle">live viewer</a>.)</summary>
+<p align="center"><img src="viewer/reveal.png" width="900" alt="P1, P4 and P6 form a triangle: GroupScan finds it, Bonjour's pairwise score reports nothing"></p>
+</details>
+
 Apart Research AI Collusion Research Sprint (2026-10-23 to 2026-10-25), research question 1.4:
 *can information-theoretic methods detect collusion in multi-agent games?*
 
