@@ -170,7 +170,8 @@ $$
 - *Bonjour*: the published rule with its fixed threshold of 0.05.
 - *Pair test (ablation)*: Bonjour’s rule, corrected. It uses GroupScan's statistic and
   shuffle but tests each pair on its own (BH at q = 0.05, significant pairs joined into groups).
-  P-values come from a gamma fit; raw shuffle p-values stop at $1/(M+1)$, too coarse for BH at 190 pairs.
+  P-values are the upper tail of a gamma fitted by mean and variance to the pair's Set-A values; raw
+  shuffle p-values stop at $1/(M+1)$, too coarse for BH at 190 pairs.
 - *Player score*: each player's total link strength; those above a shuffle-calibrated bar form one group.
 
 **Metrics.**
