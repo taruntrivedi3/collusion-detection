@@ -168,10 +168,9 @@ $$
 **Baselines.**
 
 - *Bonjour*: the published rule with its fixed threshold of 0.05.
-- *Pair test (ablation)*: Bonjour’s rule, corrected. It uses GroupScan's statistic and
-  shuffle but tests each pair on its own (Benjamini–Hochberg at q = 0.05, significant pairs joined into groups).
-  P-values are the upper tail of a gamma fitted by mean and variance to the pair's Set-A values; raw
-  shuffle p-values stop at $1/(M+1)$, too coarse for that correction at 190 pairs.
+- *Pair test (ablation)*: GroupScan without the group step. Each pair's link is compared with the
+  shuffled games on its own; Benjamini–Hochberg (q = 0.05) corrects for testing every pair, and pairs
+  that pass are joined into groups (Appendix E).
 - *Player score*: each player's total link strength; those above a shuffle-calibrated bar form one group.
 
 **Metrics.**
@@ -453,7 +452,9 @@ Six players, 300 rounds, no history state; players 0, 1 and 2 form a clique that
 rounds (CP 0.1); 1,000 shuffles (`experiments/worked_example.py`, output in `results/worked_example.txt`).
 
 **Table E1. Pair scores.** z = how far each pair's dependence sits above the shuffled games, in standard
-deviations; p from the pair test's gamma fit.
+deviations; p from the pair test: the upper tail of a gamma fitted by mean and variance to the pair's
+Set-A values, since raw shuffle p-values stop at $1/(M+1)$, too coarse for Benjamini–Hochberg across many
+pairs (190 at 20 players).
 
 | Pair | z | p |
 |---|---|---|
