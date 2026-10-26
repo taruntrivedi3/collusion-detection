@@ -176,7 +176,7 @@ $$
 
 - *Exact recovery*: the reported group equals the planted one.
 - *Clean recovery*: exact, and nothing else reported.
-- *False alarm*: any report when no collusion exists (target 5%).
+- *False alarm*: any report when no collusion exists (target 5%); brackets are 95% Wilson intervals.
 
 ### 3.3 LLM double auction with a coarse shared state
 
