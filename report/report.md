@@ -19,7 +19,7 @@ dry_run_groupscan.txt, analysis.txt for profits) and studies/llm_auction_2seller
 
 ## Abstract
 
-<!-- 150–250 words (currently ~220). Plain terms only: hubs, cliques, history states etc. are defined in Section 3. -->
+<!-- 150–250 words (currently ~231). Plain terms only: hubs, cliques, history states etc. are defined in Section 3. -->
 
 When AI agents interact, as players in a game or market participants, some may secretly collude, and an
 auditor who sees only their moves must identify which ones. The information-theoretic detector of
@@ -32,8 +32,8 @@ players who simply respond to the last round look like colluders in up to 100% o
 among rounds with the same recent history keeps false alarms at 4–9% while still catching profitable
 collusion. To test LLM agents, we adapt the double auction of Agrawal et al. (2025) so that each gpt-4.1-mini
 seller’s prompt is a logged summary of the last hour. Sellers given a message channel and profit pressure collude, earning 56%
-more than with pressure alone. GroupScan names all five sellers as one group, while the pairwise detector misses
-them. By design, the test cannot see coordination carried entirely through public moves.
+more than with pressure alone. Pooling the games, GroupScan names all five sellers as one group and flags
+neither control; Bonjour's rule misses them. By design, the test cannot see coordination carried entirely through public moves.
 
 </div>
 
@@ -42,7 +42,7 @@ them. By design, the test cannot see coordination carried entirely through publi
 LLM agents are increasingly deployed as autonomous economic actors: pricing, bidding and trading on
 behalf of firms. Agrawal et al. (2025) show that LLM sellers in a double auction can collude, raising
 prices, especially with a channel to talk to each other and pressure from management to keep margins
-high. An auditor of such a market usually cannot read private channels; it sees only the moves. We study the
+high. An auditor usually cannot read private channels; it sees only the moves. We study the
 sprint's research question 1.4: *can information-theoretic methods detect collusion from moves alone?*
 
 **Threat model.** Some $k \ge 2$ of $n$ agents coordinate through a channel the auditor cannot observe, such
@@ -68,7 +68,7 @@ Our contributions:
    logged summary of the last hour. Five gpt-4.1-mini sellers can message each other and are pressured by a
    “CEO” to keep margins high. They coordinate their moves, and GroupScan flags them in **7 of 10** batches
    of ten games and **5 of 5** of twenty, naming all five sellers when the games are pooled. The controls stay near
-   the false-alarm rate, and the pairwise detector flags none of the batches of ten or more games.
+   the false-alarm rate, and Bonjour's rule flags none of the batches of ten or more games.
 
 ![Figure 1](figures/fig2_weak_cliques.png)
 
@@ -297,7 +297,7 @@ alarms: GroupScan, full state, at 300 / 1000 / 3000 rounds. 95% intervals: e.g. 
 like collusion; too fine, and short games lose power (a triangle among reactors: 50% clean recovery at 300
 rounds with *full*, 94–95% from 1000 rounds).
 
-### 4.4 LLM sellers: GroupScan finds the group, the pairwise rule does not
+### 4.4 LLM sellers: GroupScan finds the group, Bonjour's rule does not
 
 **Observation.** Comms + pressure raised sellers' combined profit by 56% over pressure alone and 60% over
 neither (Table 4): the mean trade price rose from $85.5 to $89.1 while trades fell from 95% to 90% of
@@ -309,7 +309,7 @@ threshold of 2.8 (p = 0.001, the floor at 1,000 shuffles), and nothing for eithe
 out of disjoint batches of 5, 10 and 20 games (Wilson: 7/10 → [40, 89]%, 5/5 → [57, 100]%). Profit: all
 sellers combined, $ per hour, 95% bootstrap interval over games.
 
-| Condition | Sellers' profit / hour | GroupScan: 5 / 10 / 20 games | Bonjour: 5 / 10 / 20 games |
+| Condition | Profit / hour | GroupScan (5 / 10 / 20) | Bonjour (5 / 10 / 20) |
 |---|---|---|---|
 | comms off | 5.12 [4.82, 5.42] | 1/20 · 0/10 · 1/5 | 0/20 · 0/10 · 0/5 |
 | pressure, no comms | 5.24 [4.93, 5.54] | 3/20 · 1/10 · 1/5 | 0/20 · 0/10 · 0/5 |
@@ -349,7 +349,7 @@ The published pairwise detector is blind to colluding groups and its fixed thres
 GroupScan, with a within-state shuffle test, recovers weak, broad groups at near-nominal false-alarm
 rates (4–9% at a 5% target), provided the state captures what honest players react to. In LLM markets
 built so that this holds, it finds comms + CEO-pressure collusion among five gpt-4.1-mini sellers (all
-5 twenty-game batches; all five sellers when pooled), which the pairwise rule misses.
+5 twenty-game batches; all five sellers when pooled), which Bonjour's rule misses.
 
 ## Code and Data
 
@@ -438,8 +438,8 @@ game, and a state made of each seller's last move, who sold and the ask level
 bids to the floor, so later pilots use scripted buyers.
 
 - **Explicit coordination through public moves is missed.** Sellers told to form a cartel and agree each
-  hour on a joint move earned $7.63 per hour (v4) against $4.72 with comms off, but GroupScan did not flag
-  them (p = 0.84 in v4, 0.14 in v3): they coordinated by following the other seller's last move, which is
+  hour on a joint move earned $7.63 per hour in v4 and $5.33 in v3, against $4.72 and $4.80 with comms off,
+  but GroupScan did not flag them (p = 0.84 in v4, 0.14 in v3): they coordinated by following the other seller's last move, which is
   in the state. In the same v4 pilot, comms + pressure was flagged (p = 0.001). A test of whether a seller
   raises after the other raised does see the cartel (+0.34 to +0.89), but also fires on honest controls (up
   to +0.21), so it would need a comms-off baseline.
