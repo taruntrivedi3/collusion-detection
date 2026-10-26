@@ -1,0 +1,7 @@
+Scripted 5-seller market, 20 games x 50 hours, 300 replications, M = 1000
+false alarms (no collusion)        GroupScan          flagged 0.037  exactly {1,2} 0.000
+false alarms (no collusion)        Bonjour            flagged 0.000  exactly {1,2} 0.000
+false alarms (no collusion)        Bonjour, no state  flagged 0.000  exactly {1,2} 0.000
+S1-S2 planted in 10% of rounds     GroupScan          flagged 0.653  exactly {1,2} 0.500
+S1-S2 planted in 10% of rounds     Bonjour            flagged 0.270  exactly {1,2} 0.270
+S1-S2 planted in 10% of rounds     Bonjour, no state  flagged 0.137  exactly {1,2} 0.137

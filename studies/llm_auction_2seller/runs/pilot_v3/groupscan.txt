@@ -1,0 +1,13 @@
+GroupScan and Bonjour, M = 1000 shuffles per set, level 0.95
+
+== comms_off: 20 games
+   pooled: S_max -0.72 vs threshold 1.87 (p = 0.732) -> none
+   batches of  20 games: 0/1 flagged  
+
+== comms_pressure: 20 games
+   pooled: S_max 0.65 vs threshold 1.71 (p = 0.252) -> none
+   batches of  20 games: 0/1 flagged  
+
+== comms_cartel: 20 games
+   pooled: S_max 1.28 vs threshold 2.08 (p = 0.136) -> none
+   batches of  20 games: 0/1 flagged  

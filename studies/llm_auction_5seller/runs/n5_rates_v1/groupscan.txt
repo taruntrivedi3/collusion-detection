@@ -1,0 +1,37 @@
+GroupScan and Bonjour, M = 1000 shuffles per set, level 0.95
+
+== comms_off: 100 games
+   pooled: S_max 2.28 vs threshold 3.44 (p = 0.286) -> none; Bonjour -> none, without state -> none
+   batches of   5 games: 1/20 flagged  {1,2,3,4} x1
+      bonjour: 0/20 flagged  
+      bonjour_nostate: 0/20 flagged  
+   batches of  10 games: 0/10 flagged  
+      bonjour: 0/10 flagged  
+      bonjour_nostate: 0/10 flagged  
+   batches of  20 games: 1/5 flagged  {2,3,5} x1
+      bonjour: 0/5 flagged  
+      bonjour_nostate: 0/5 flagged  
+
+== pressure_off: 100 games
+   pooled: S_max 2.41 vs threshold 3.00 (p = 0.153) -> none; Bonjour -> none, without state -> none
+   batches of   5 games: 3/20 flagged  {1,5} x1, {2,3,5} x1, {1,2,4,5} x1
+      bonjour: 0/20 flagged  
+      bonjour_nostate: 1/20 flagged  {2,3} x1
+   batches of  10 games: 1/10 flagged  {1,2,3} x1
+      bonjour: 0/10 flagged  
+      bonjour_nostate: 0/10 flagged  
+   batches of  20 games: 1/5 flagged  {1,2,3,5} x1
+      bonjour: 0/5 flagged  
+      bonjour_nostate: 0/5 flagged  
+
+== comms_pressure: 100 games
+   pooled: S_max 14.18 vs threshold 2.84 (p = 0.001) -> {1,2,3,4,5}; Bonjour -> none, without state -> none
+   batches of   5 games: 8/20 flagged  {1,2,4} x2, {1,2,3,4,5} x2, {1,2,4,5} x1, {1,2,5} x1, {2,4} + {1,3} x1, {1,3,4,5} x1
+      bonjour: 2/20 flagged  {2,5} x1, {1,3} x1
+      bonjour_nostate: 6/20 flagged  {1,3} x2, {4,5} x2, {3,4} x1, {2,4} x1
+   batches of  10 games: 7/10 flagged  {1,2,3,4,5} x3, {1,2,4,5} x2, {1,2,4} x1, {1,2,3,4} x1
+      bonjour: 0/10 flagged  
+      bonjour_nostate: 2/10 flagged  {4,5} x1, {2,4} x1
+   batches of  20 games: 5/5 flagged  {1,2,3,4,5} x3, {1,2,3,4} x1, {1,2,4} x1
+      bonjour: 0/5 flagged  
+      bonjour_nostate: 0/5 flagged  

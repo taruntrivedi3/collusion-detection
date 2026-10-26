@@ -1,22 +1,24 @@
 # LLM double auction: 5 sellers, 5 buyers, 100 games per condition
 
-Extends [llm_auction_2seller](../llm_auction_2seller/README.md) (2 sellers / 2 buyers) to 5 gpt-4.1-mini sellers, 5 scripted buyers
-and 50 hours per game, with a joint within-state shuffle test over all seller pairs.
+5 gpt-4.1-mini sellers and 5 scripted buyers, 50 hours per game, built on the market of the
+[2-seller pilots](../llm_auction_2seller/README.md). Detection uses GroupScan, the same detector as the RPS
+experiments (CMI edges, within-state shuffle, scan over seller groups), with Bonjour et al.'s pairwise rule
+as the baseline.
 
 **Result.** With a broadcast message channel plus CEO profit-margin pressure, sellers earn 8.20 per hour combined
 [95% CI 7.83, 8.59] versus 5.24 [4.93, 5.54] with pressure alone and 5.12 [4.82, 5.42] with neither
-(bootstrap over games). The global test flags comms + pressure in 95% of 5-game batches
-and every 10- and 20-game batch, and flags neither control in any batch.
+(bootstrap over games). Pooled over 100 games, GroupScan reports exactly {S1, S2, S3, S4, S5} (score 14.2 vs
+threshold 2.8, p = 0.001) and nothing for the controls (p = 0.29, 0.15). Bonjour's rule reports nothing in any
+condition: with five mutually linked sellers, each pair's net influence cancels.
 
-| Condition | Sellers' profit / hour (combined) | 5 games (20 batches) | 10 games (10 batches) | 20 games (5 batches) | Pooled, 100 games |
-| --- | --- | --- | --- | --- | --- |
-| `comms_off` | 5.12 | 0.00 (0.05) | 0.00 (0.00) | 0.00 (0.00) | p = 0.17 |
-| `pressure_off` | 5.24 | 0.00 (0.00) | 0.00 (0.00) | 0.00 (0.00) | p = 0.71 |
-| `comms_pressure` | 8.20 | 0.95 (0.80) | 1.00 (1.00) | 1.00 (1.00) | p = 0.001 |
+| Condition | Sellers' profit / hour (combined) | GroupScan: 5 / 10 / 20 games | Bonjour: 5 / 10 / 20 games |
+| --- | --- | --- | --- |
+| `comms_off` | 5.12 | 1/20 · 0/10 · 1/5 | 0/20 · 0/10 · 0/5 |
+| `pressure_off` | 5.24 | 3/20 · 1/10 · 1/5 | 0/20 · 0/10 · 0/5 |
+| `comms_pressure` | 8.20 | 8/20 · 7/10 · 5/5 | 2/20 · 0/10 · 0/5 |
 
-Rejection rate at α = 0.05 for the global test (max-pair test in parentheses). Pooled p is the global test;
-0.001 is the floor at 1,000 shuffles. Pooled comms + pressure: 1,991 more matching seller pairs than the
-shuffle expects (out of 50,000 pair-hours), every one of the 10 pairs above z = 5 (top pair z ≈ 11.5).
+Batches in which each detector reports a group, out of disjoint batches of 5, 10 and 20 games (1,000 shuffles
+per set, 5% level). In the 20-game batches GroupScan names all five sellers 3 times and a 3- or 4-seller subset twice.
 
 ## Setup
 
@@ -33,31 +35,31 @@ shuffle expects (out of 50,000 pair-hours), every one of the 10 pairs above z = 
 ## Test
 
 Null: given the state, every seller's action is independent of every other seller's. Each seller's action
-column is shuffled independently among rounds with the same state, which draws exactly from that null.
+column is shuffled independently among hours with the same state, which draws exactly from that null.
+`groupscan_n.py` runs GroupScan (`collusion.detect.detect_subgraph`) and Bonjour's rule
+(`collusion.detect.detect_bonjour`) on the pooled hours of each batch.
 
-- **Global test:** total same-move count summed over all 10 seller pairs.
-- **Max-pair test:** largest standardized pair count; controls the family-wise error rate over pairs and
-  names the pair. In the scripted dry run (only S1 and S2 collude) it names S1–S2 in 99.7% of batches.
+Scripted dry run (`groupscan_n.py --dry-run 300`, 20 games × 50 hours): GroupScan false alarms 3.7% (Bonjour 0%);
+with S1 and S2 coordinating in 10% of hours, GroupScan flags 65% of batches (50% exactly {S1, S2}), Bonjour 27%.
 
-Scripted dry run (`dry_run_n.py`, 300 replications of 20 games × 50 hours): false alarms 4.3% (global) and
-5.0% (max-pair); planted S1–S2 collusion in 10% of rounds is found by the max-pair test in every replication.
-
-**Limit.** Here every pair is in sync (the whole group agrees to "hold, don't undercut"), so the max-pair test
-does not isolate a sub-cartel. As in the 2-seller study, coordination that follows only the public state
-(follow-the-leader) is invisible to this test.
+**Limit.** Coordination that follows only the public state (follow-the-leader, or the explicit-cartel prompt
+of the 2-seller pilots) is invisible to this test.
 
 ## Files
 
 | File | Purpose |
 | --- | --- |
 | `market_n.py` | N-seller / M-buyer market, count-based state, scripted agents |
+| `groupscan_n.py` | GroupScan and Bonjour on a run directory, and the scripted dry run |
 | `stats_n.py` | Joint within-state shuffle test: global and max-pair statistics |
 | `llm_pilot_n.py` | Runs LLM games and writes `games.jsonl` / `calls.jsonl` |
-| `analyze_n.py` | Outcomes, pooled test and rejection rates over disjoint batches |
+| `analyze_n.py` | Outcomes per condition (profit, trades, actions) |
 | `dry_run_n.py` | Scripted false-alarm and power check |
 | `runs/n5_rates_v1/games.jsonl` | All 300 games: per-hour state, actions, messages, quotes, trades |
 | `runs/n5_rates_v1/settings_100.json` | Arguments used for the run |
-| `runs/n5_rates_v1/analysis.txt` | Output of `analyze_n.py`: every number in the table above |
+| `runs/n5_rates_v1/groupscan.txt` | Output of `groupscan_n.py runs/n5_rates_v1 5,10,20`: detection numbers above |
+| `runs/n5_rates_v1/dry_run_groupscan.txt` | Output of `groupscan_n.py --dry-run 300` |
+| `runs/n5_rates_v1/analysis.txt` | Output of `analyze_n.py`: profits above |
 | `runs/n5_rates_v1/dry_run.txt` | Output of `dry_run_n.py 300`: scripted false alarms and power |
 
 `market.py`, `stats.py` and `llm_pilot.py` are imported from `../llm_auction_2seller`. Per-call transcripts
@@ -65,11 +67,12 @@ does not isolate a sub-cartel. As in the 2-seller study, coordination that follo
 
 ## Reproduce
 
-From this directory, standard library only:
+From this directory (GroupScan needs the repository's `requirements.txt`; the rest is standard library):
 
 ```bash
-python3 analyze_n.py runs/n5_rates_v1 5,10,20   # table above (about 1 minute on 32 cores)
-python3 dry_run_n.py 300                        # scripted false-alarm and power check
+python groupscan_n.py runs/n5_rates_v1 5,10,20   # detection numbers above (under a minute on 32 cores)
+python groupscan_n.py --dry-run 300              # scripted false alarms and power
+python analyze_n.py runs/n5_rates_v1 5,10,20     # profits per condition
 ```
 
 To rerun the games with new LLM calls (results will differ by sampling):

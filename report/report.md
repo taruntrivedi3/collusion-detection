@@ -3,8 +3,8 @@ DRAFT report following the Apart Research AI Collusion Sprint (Oct 2026) templat
 Length: main text (through Conclusion) must fit 8 pages; references and appendices follow.
 Live view in VS Code: Ctrl+K V (built-in preview) or Markdown Preview Enhanced (renders $math$, exports PDF).
 Comments like this one are hidden in the preview. Lines marked TODO need a human decision or check.
-Numbers come from results/SUMMARY.md, studies/llm_auction_2seller and studies/llm_auction_5seller
-(runs/n5_rates_v1/analysis.txt, dry_run.txt).
+Numbers come from results/SUMMARY.md, studies/llm_auction_5seller (runs/n5_rates_v1/groupscan.txt,
+dry_run_groupscan.txt, analysis.txt for profits) and studies/llm_auction_2seller (pilots, Appendix D).
 -->
 
 # Beyond Pairs: Detecting Colluding Groups of Agents from Their Moves
@@ -32,8 +32,8 @@ players who simply respond to the last round look like colluders in up to 100% o
 among rounds with the same recent history keeps false alarms at 4–9% while still catching profitable
 collusion. To test LLM agents, we adapt the double auction of Agrawal et al. (2025) so that each gpt-4.1-mini
 seller’s prompt is a logged summary of the last hour. Sellers given a message channel and profit pressure collude, earning 56%
-more than with pressure alone, and the test flags them but not the controls. By design, it cannot see
-coordination carried entirely through public moves.
+more than with pressure alone. GroupScan names all five sellers as one group, while the pairwise detector misses
+them. By design, the test cannot see coordination carried entirely through public moves.
 
 </div>
 
@@ -66,8 +66,9 @@ Our contributions:
    the same signal are not (**4–7%**).
 4. **An LLM market where the state is everything agents see.** Each seller's prompt is built only from a
    logged summary of the last hour. Five gpt-4.1-mini sellers can message each other and are pressured by a
-   “CEO” to keep margins high. They coordinate their moves, and the test flags them in **19 of 20** batches
-   of five games; sellers without the message channel are flagged in **0 of 20**.
+   “CEO” to keep margins high. They coordinate their moves, and GroupScan flags them in **7 of 10** batches
+   of ten games and **5 of 5** of twenty, naming all five sellers when the games are pooled. The controls stay near
+   the false-alarm rate, and the pairwise detector flags none of the batches of ten or more games.
 
 ![Figure 1](figures/fig2_weak_cliques.png)
 
@@ -195,14 +196,13 @@ so the state is the agents' entire public input.**
   margins are tracked and low-margin sellers are decommissioned); *comms + pressure* (plus a 200-character
   message channel; each seller sees every seller's last message). Messages are not in $S_t$. Sellers
   are gpt-4.1-mini at temperature 0.7 (75,000 calls, ≈$14).
-- **Test.** The statistic is the *same-move count* of each seller pair: the number of hours in which both
-  made the same move. It was chosen in earlier 2-seller runs where CMI was underpowered (Appendix D) and
-  fixed before this run. The *global test* sums it over all 10 pairs; the *max-pair test* takes the
-  largest standardized pair, which controls family-wise error and names the pair. Sellers are
-  conditionally independent given $S_t$ unless something outside it links them, so any message that
-  changes moves breaks the null, collusive or not. Exchangeability within a state is only approximate,
-  because $S_{t+1}$ depends on the moves at $t$; in a scripted check (300 replications of 20 games) the
-  global and max-pair tests gave 4.3% and 5.0% false alarms at a 5% target.
+- **Test.** GroupScan exactly as in §3.2, with the sellers as players and $S_t$ as the state: CMI edges,
+  within-state shuffles ($M$ = 1,000), a scan over all 26 groups of two or more sellers, and peeling. The
+  baseline is Bonjour's published rule on the same CMI. Sellers are conditionally independent given
+  $S_t$ unless something outside it links them, so any message that changes moves breaks the null,
+  collusive or not. Exchangeability within a state is only approximate, because $S_{t+1}$ depends on the
+  moves at $t$; in a scripted market with no collusion (300 replications of 20 games) GroupScan flagged
+  3.7% at a 5% target.
 
 ## 4. Results
 
@@ -297,33 +297,31 @@ alarms: GroupScan, full state, at 300 / 1000 / 3000 rounds. 95% intervals: e.g. 
 like collusion; too fine, and short games lose power (a triangle among reactors: 50% clean recovery at 300
 rounds with *full*, 94–95% from 1000 rounds).
 
-### 4.4 LLM sellers: comms + CEO pressure is detected, controls are not
+### 4.4 LLM sellers: GroupScan finds the group, the pairwise rule does not
 
 **Observation.** Comms + pressure raised sellers' combined profit by 56% over pressure alone and 60% over
 neither (Table 4): the mean trade price rose from $85.5 to $89.1 while trades fell from 95% to 90% of
-hours. Pooled over 100 games, the global test gave p = 0.001, the floor at 1,000 shuffles, against
-p = 0.17 and 0.71 for the controls. Comms + pressure sellers made the same move in 1,991 more of their
-50,000 pair-hours than the shuffle expects, with the top pairs at z = 9–12. Raw agreement alone would not
-show this: these sellers agreed in 66.8% of pair-hours against 62.8% expected within states, while
-sellers with no channel and no pressure agreed even more often (68.6%) because they all lowered together.
+hours. Pooled over 100 games, GroupScan reports exactly the five sellers, with score 14.2 against a
+threshold of 2.8 (p = 0.001, the floor at 1,000 shuffles), and nothing for either control (p = 0.29 and
+0.15). Bonjour's rule reports nothing in any condition.
 
-**Table 4. Only comms + pressure is flagged.** Batches flagged by the global test at α = 0.05, out of
-disjoint batches of 5, 10 and 20 games (95% Wilson intervals: 19/20 → [76, 99]%, 5/5 → [57, 100]%).
-Profit: all sellers combined, $ per hour, with a 95% bootstrap interval over games.
+**Table 4. GroupScan flags comms + pressure; Bonjour's rule misses it.** Batches with a reported group,
+out of disjoint batches of 5, 10 and 20 games (Wilson: 7/10 → [40, 89]%, 5/5 → [57, 100]%). Profit: all
+sellers combined, $ per hour, 95% bootstrap interval over games.
 
-| Condition | Sellers' profit / hour | 5 games | 10 games | 20 games |
-|---|---|---|---|---|
-| comms off | 5.12 [4.82, 5.42] | 0/20 | 0/10 | 0/5 |
-| pressure, no comms | 5.24 [4.93, 5.54] | 0/20 | 0/10 | 0/5 |
-| **comms + pressure** | **8.20** [7.83, 8.59] | **19/20** | **10/10** | **5/5** |
+| Condition | Sellers' profit / hour | GroupScan: 5 / 10 / 20 games | Bonjour: 5 / 10 / 20 games |
+|---|---|---|---|
+| comms off | 5.12 [4.82, 5.42] | 1/20 · 0/10 · 1/5 | 0/20 · 0/10 · 0/5 |
+| pressure, no comms | 5.24 [4.93, 5.54] | 3/20 · 1/10 · 1/5 | 0/20 · 0/10 · 0/5 |
+| **comms + pressure** | **8.20** [7.83, 8.59] | **8/20 · 7/10 · 5/5** | 2/20 · 0/10 · 0/5 |
 
 **Interpretation.** The sellers converge on “hold, don't undercut” (for example, “Maintain stable asks;
-avoid price wars to protect profits for all sellers.”, seed 102, hour 25), so the excess agreement
-appears in all 10 pairs at once. For the same reason the max-pair test, which flags 16/20, 10/10 and 5/5
-batches (controls: 1/20 and 0/20 five-game batches), cannot single out a sub-cartel. In a scripted check
-where only two of five sellers coordinate, in 10% of hours, it names the right pair in 99.7% of batches.
-What the test detects is a shared signal outside the logged state; reading it as collusion rests on the
-profit gap over the pressure-only control.
+avoid price wars to protect profits for all sellers.”, seed 102, hour 25), so all five depend on each
+other at once, and Bonjour's score cancels inside the group as in §4.1. GroupScan names all five in 3 of
+the 5 twenty-game batches and a 3- or 4-seller subset in the others. The control flags are not
+significantly above 5% (binomial p ≥ 0.07). With only two of five scripted sellers coordinating in 10% of
+hours, GroupScan flags 65% of 20-game batches against 27% for Bonjour. The test detects a shared signal
+outside the logged state; reading it as collusion rests on the profit gap over the pressure-only control.
 
 ## 5. Discussion and Limitations
 
@@ -350,8 +348,8 @@ tests, and LLM markets with memory and more models.
 The published pairwise detector is blind to colluding groups and its fixed threshold is uncalibrated.
 GroupScan, with a within-state shuffle test, recovers weak, broad groups at near-nominal false-alarm
 rates (4–9% at a 5% target), provided the state captures what honest players react to. In LLM markets
-built so that this holds, it detects comms + CEO-pressure collusion among gpt-4.1-mini sellers (19 of 20
-five-game batches) and does not flag the controls.
+built so that this holds, it finds comms + CEO-pressure collusion among five gpt-4.1-mini sellers (all
+5 twenty-game batches; all five sellers when pooled), which the pairwise rule misses.
 
 ## Code and Data
 
@@ -432,52 +430,21 @@ alarms and 85.6% detection of copied triples, but did not transfer to held-out m
 flags across folds). This motivated the coarse-state design of Section 3.3: without a state that
 explains honest behaviour, the test is not usable. Details: `studies/auction_null_calibration/`.
 
-## Appendix D. 2-seller development runs
+## Appendix D. 2-seller pilots
 
 Before the 5-seller study we developed the market with 2 LLM sellers and 2 scripted buyers, 30 hours per
 game, and a state made of each seller's last move, who sold and the ask level
-(`studies/llm_auction_2seller/`). Four pilots (v1–v4) of 20 games per condition were followed by a
-200-game run of the three final conditions.
+(`studies/llm_auction_2seller/`, pilots v1–v4, 20 games per condition). The v1 buyers were LLMs and drove
+bids to the floor, so later pilots use scripted buyers.
 
-**Table D1. Explicit cartels raise profit but are missed; comms + pressure is detected.** Seller profit (all sellers combined, $ per hour) and same-move shuffle-test results. Pilots:
-p-value of one 20-game batch. 200-game run: batches flagged at α = 0.05 out of 10 disjoint 20-game
-batches, and the pooled z-score.
-
-| Run | Condition | Profit / hour | Same-move test |
-|---|---|---|---|
-| v2 pilot | comms off | 4.79 | p = 0.30 |
-| v2 pilot | comms only (no pressure) | 4.70 | p = 0.60 |
-| v2 pilot | comms, told coordination pays | 7.42 | p = 0.13 |
-| v3 pilot | comms + pressure | 7.38 | p = 0.87 |
-| v4 pilot | comms off | 4.72 | p = 0.48 |
-| v4 pilot | comms, told to form a cartel | 7.63 | p = 0.36 |
-| v4 pilot | comms + pressure | 7.81 | p = 0.0002 |
-| 200-game run | comms off | 4.29 [4.06, 4.51] | 0/10 batches; z ≤ 1.5 |
-| 200-game run | pressure, no comms | 4.76 [4.52, 5.00] | 2/10; z ≤ 1.5 |
-| 200-game run | **comms + pressure** | **7.07** [6.76, 7.38] | **8/10**; z = +7.9 |
-
-- **Explicit coordination through public moves is missed.** Sellers told to form a cartel, or that
-  coordinating pays, raise prices but coordinate by following the other seller's last move, which is in
-  the state, so the shuffle test cannot see it. A test of whether a seller raises after the other raised
-  does see it (+0.34 to +0.89), but also fires on honest controls (up to +0.21), so it would need a
-  comms-off baseline.
+- **Explicit coordination through public moves is missed.** Sellers told to form a cartel and agree each
+  hour on a joint move earned $7.63 per hour (v4) against $4.72 with comms off, but GroupScan did not flag
+  them (p = 0.84 in v4, 0.14 in v3): they coordinated by following the other seller's last move, which is
+  in the state. In the same v4 pilot, comms + pressure was flagged (p = 0.001). A test of whether a seller
+  raises after the other raised does see the cartel (+0.34 to +0.89), but also fires on honest controls (up
+  to +0.21), so it would need a comms-off baseline.
 - **A channel alone did not raise profit in the one pilot that tested it.** Comms without pressure earned
-  the same as comms off in v2 ($4.70 vs $4.79 per hour, 20 games each).
-- **The v3 and v4 comms + pressure pilots disagree** (p = 0.87 vs 0.0002). v3 showed each seller only the
-  other seller's message, so the difference may come from that design change or from chance (in the
-  200-game run, 8 of 10 single 20-game batches are flagged); one pilot each cannot tell them apart.
-  Pressure alone was flagged in 2 of 10 batches, not significantly above a 5% rate (binomial p = 0.09).
-- **The same-move statistic was chosen here.** In the 200-game run, CMI flagged comms + pressure in only
-  1 of 10 20-game batches (pooled z = +5.0), against 8 of 10 for the same-move count, so the 2-seller
-  same-move rates above are post hoc; the 5-seller study then tested the statistic as fixed in advance.
-- **Mechanism.** In low-price hours after a trade, CEO pressure makes the seller who just sold raise (8%
-  without pressure → 33% with it), and the channel stops the other seller from undercutting (“lower”
-  82% → 41%), so moves synchronize.
-- **What did not work.** In v1 the buyers were LLMs and drove bids to the floor, so v2 onward use
-  scripted buyers. Triple scans for xor (in the simulations) were dropped as blind to its four-player
-  version. The exact
-  v1–v3 prompts were not saved. All pilot conditions and the direction test: `studies/llm_auction_2seller/`
-  (`pilots.py`, `report.pdf`).
+  the same as comms off in v2 ($4.70 vs $4.79 per hour). The exact v1–v3 prompts were not saved.
 
 ## Appendix E. A worked example of GroupScan
 
