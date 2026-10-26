@@ -98,10 +98,8 @@ pricing and that CEO profit pressure also shapes it. We ask whether this collusi
 **Per-agent detectors and multiple testing.** Rose et al. (2026) score individual agents for
 suspicious behaviour; our “player score” baseline, a per-player score built from pairwise links, is
 inspired by this but is not their method.
-Our “pair test” is the strongest pairwise baseline we could build from GroupScan's parts: each pair is
-tested against the same within-state shuffle (p-values from a gamma fit), Benjamini–Hochberg (1995)
-controls false discoveries across pairs, and significant pairs are joined into groups. Comparing the two
-isolates the value of scoring groups.
+Our “pair test” keeps GroupScan's statistic and shuffle but tests each pair on its own, with
+Benjamini–Hochberg (1995) correction, so comparing the two isolates the value of scoring groups.
 
 **Permutation tests.** Our within-state shuffle is a stratified permutation test, and scanning subsets
 with the best score calibrated by shuffling is a standard idea. What we add is applying it to groups of
@@ -171,10 +169,10 @@ $$
    Stop when no group passes or fewer than two players remain.
 
 **Baselines.** *Bonjour*: the published rule with its fixed threshold of 0.05. *Bonjour (calibrated)*:
-the same rule with the threshold taken from the shuffle null. *Pair test*: Benjamini–Hochberg at q = 0.05 over
-all pairs; groups are the connected components of significant pairs. P-values come from a gamma fit to
-the Set-A null: a raw shuffle p-value cannot go below $1/(M+1)$, so BH would fire only if at least
-$m/(q(M+1))$ of the $m$ pairs sat at that floor (19 at 20 players and 200 shuffles). *Player score*: each player's total link strength; every player whose total exceeds a
+the same rule with the threshold taken from the shuffle null. *Pair test (ablation)*: GroupScan's statistic and
+shuffle, but each pair is tested on its own: Benjamini–Hochberg at q = 0.05 across pairs, with
+significant pairs joined into groups. P-values come from a gamma fit to the Set-A null, because raw
+shuffle p-values cannot go below $1/(M+1)$. *Player score*: each player's total link strength; every player whose total exceeds a
 shuffle-calibrated threshold is flagged, together as one group.
 
 **Metrics.** *Exact recovery*: the reported group equals the planted one. *Clean recovery*: exact and
