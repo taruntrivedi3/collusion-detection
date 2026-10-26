@@ -99,7 +99,7 @@ pricing and that CEO profit pressure also shapes it. We ask whether this collusi
 **Per-agent detectors and multiple testing.** Rose et al. (2026) score individual agents for
 suspicious behaviour; our player score is inspired by this but is not their method. Our pair-test
 ablation, which isolates the value of scoring groups, controls false discoveries with Benjamini–Hochberg
-(BH; 1995).
+(1995).
 
 **Permutation tests.** Our within-state shuffle is a stratified permutation test, and scanning subsets
 with the best score calibrated by shuffling is a standard idea. What we add is applying it to groups of
@@ -169,9 +169,9 @@ $$
 
 - *Bonjour*: the published rule with its fixed threshold of 0.05.
 - *Pair test (ablation)*: Bonjour’s rule, corrected. It uses GroupScan's statistic and
-  shuffle but tests each pair on its own (BH at q = 0.05, significant pairs joined into groups).
+  shuffle but tests each pair on its own (Benjamini–Hochberg at q = 0.05, significant pairs joined into groups).
   P-values are the upper tail of a gamma fitted by mean and variance to the pair's Set-A values; raw
-  shuffle p-values stop at $1/(M+1)$, too coarse for BH at 190 pairs.
+  shuffle p-values stop at $1/(M+1)$, too coarse for that correction at 190 pairs.
 - *Player score*: each player's total link strength; those above a shuffle-calibrated bar form one group.
 
 **Metrics.**
