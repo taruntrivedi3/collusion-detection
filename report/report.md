@@ -168,9 +168,9 @@ $$
 **Baselines.**
 
 - *Bonjour*: the published rule with its fixed threshold of 0.05.
-- *Pair test (ablation)*: GroupScan without the group step. Each pair's link is compared with the
-  shuffled games on its own; Benjamini–Hochberg (q = 0.05) corrects for testing every pair, and pairs
-  that pass are joined into groups (Appendix E).
+- *Pair test (ablation)*: GroupScan without the group step. Each pair is tested separately: its link
+  is compared with the same pair's links in the shuffled games. Benjamini–Hochberg (q = 0.05) corrects
+  for testing every pair, and pairs that pass are joined into groups (Appendix E).
 - *Player score*: each player's total link strength; those above a shuffle-calibrated bar form one group.
 
 **Metrics.**
