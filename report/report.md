@@ -96,8 +96,9 @@ Measuring collusion from prices and messages, they find that a communication cha
 pricing and that CEO profit pressure also shapes it. We ask whether this collusion is detectable from moves alone, and reuse comms + pressure as our positive condition.
 
 **Per-agent detectors and multiple testing.** Rose et al. (2026) score individual agents for
-suspicious behaviour; our player-score baseline is inspired by this but is not their method. Our
-pair-test ablation, which isolates the value of scoring groups, uses Benjamini–Hochberg (1995; BH) control.
+suspicious behaviour; our player score is inspired by this but is not their method. Our pair-test
+ablation, which isolates the value of scoring groups, controls false discoveries with Benjamini–Hochberg
+(BH; 1995).
 
 **Permutation tests.** Our within-state shuffle is a stratified permutation test, and scanning subsets
 with the best score calibrated by shuffling is a standard idea. What we add is applying it to groups of
@@ -168,15 +169,14 @@ $$
 - *Bonjour*: the published rule with its fixed threshold of 0.05.
 - *Pair test (ablation)*: GroupScan's statistic and shuffle, but each pair is tested on its own (BH at
   q = 0.05, significant pairs joined into groups). P-values come from a gamma fit, as raw shuffle
-  p-values stop at $1/(M+1)$.
-- *Player score*: each player's total link strength; players above a shuffle-calibrated bar form one group.
+  p-values stop at $1/(M+1)$, too coarse for BH across 190 pairs.
+- *Player score*: each player's total link strength; those above a shuffle-calibrated bar form one group.
 
 **Metrics.**
 
 - *Exact recovery*: the reported group equals the planted one.
 - *Clean recovery*: exact, and nothing else reported.
 - *False alarm*: any report when no collusion exists (target 5%).
-- Brackets give 95% Wilson intervals.
 
 ### 3.3 LLM double auction with a coarse shared state
 
