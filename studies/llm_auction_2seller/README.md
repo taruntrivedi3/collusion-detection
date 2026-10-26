@@ -9,17 +9,20 @@ coarse summary of the last hour. Report: [report.pdf](report.pdf).
 comms + pressure (CMI z = 5.0, same-move z = 7.9) and stays silent on both controls (|z| ≤ 1.5). Per 20-game
 batch, the same-move statistic detects it in 80% of batches and CMI in 10%.
 
-**Limits.** With two sellers this is a pairwise test; GroupScan is not used here. Coordination that is a
+**Limits.** With two sellers this is a pairwise test; the 200-game run does not use GroupScan (the pilots
+were later rerun with it, below). Coordination that is a
 function of the public state (for example "copy S1's last move") is invisible by construction; an
 explicit-cartel prompt produced exactly that and was missed (pilots below). The market is designed for
 detectability: the prompt contains nothing but the recorded state. The same-move statistic was chosen after
-this run showed CMI was underpowered, so its 80% is post hoc; the 5-seller study
-([llm_auction_5seller](../llm_auction_5seller/README.md)) tests it as fixed in advance.
+this run showed CMI was underpowered, so its 80% is post hoc. The 5-seller study
+([llm_auction_5seller](../llm_auction_5seller/README.md)), which the report presents, uses GroupScan with CMI instead.
 
 **Pilots.** Four 20-game pilots ran before this study, including conditions later dropped (`comms_on`,
 `comms_instructed`, `comms_cartel`). The shuffle test missed the cartel and instructed sellers in every pilot
-and missed comms + pressure in one of two. All results: `python3 pilots.py`, and Appendix D of the
-[report](../../report/report.md).
+and missed comms + pressure in one of two. GroupScan, run on pilots v3 and v4 (`runs/pilot_v3/groupscan.txt`,
+`runs/pilot_v4/groupscan.txt`), agrees: it misses the cartel (p = 0.14, 0.84) and flags comms + pressure only in
+v4 (p = 0.001). Appendix D of the [report](../../report/report.md) uses these GroupScan p-values and the profits
+and direction test from `python3 pilots.py`.
 
 ## Setup
 
@@ -44,6 +47,7 @@ and missed comms + pressure in one of two. All results: `python3 pilots.py`, and
 | `runs/rates_v1/settings.json` | Arguments used for the run |
 | `pilots.py` | Summary of the four pilots: profit, shuffle tests (same-move, CMI), direction test |
 | `runs/pilot_v1` … `pilot_v4/` | Pilot games (`games.jsonl`) and arguments. v1 used LLM buyers; v1–v3 used earlier prompt wording that was not saved |
+| `runs/pilot_v3/groupscan.txt`, `runs/pilot_v4/groupscan.txt` | GroupScan on each pilot (`../llm_auction_5seller/groupscan_n.py`), report Appendix D |
 
 Per-call transcripts (`calls.jsonl`) are not included; every action and message is in `games.jsonl`.
 
@@ -55,7 +59,8 @@ From this directory (standard library only, except `build_report.py`, which need
 python3 rates.py runs/rates_v1 cmi          # batch rejection rates, CMI statistic
 python3 rates.py runs/rates_v1 same_moves   # batch rejection rates, same-move statistic
 python3 build_report.py                     # report.pdf + detection.png from the same data
-python3 pilots.py                           # pilot results (report Appendix D)
+python3 pilots.py                           # pilot profits, shuffle and direction tests (report Appendix D)
+cd ../llm_auction_5seller && python groupscan_n.py ../llm_auction_2seller/runs/pilot_v4 20   # GroupScan on a pilot (needs requirements.txt)
 ```
 
 To rerun the games with new LLM calls (results will differ by sampling):

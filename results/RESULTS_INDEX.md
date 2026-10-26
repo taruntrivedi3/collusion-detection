@@ -122,9 +122,13 @@ No command here calls an LLM; all games are saved in `runs/*/games.jsonl`.
 |---|---|---|
 | 2 sellers: `report.pdf`, `detection.png` (every number in the 2-seller study) | `build_report.py` | games seeds 0–199 per condition; 2,000 shuffles; profit CIs bootstrap seed 0, 10,000 resamples |
 | 2 sellers: batch rejection rates | `rates.py runs/rates_v1 same_moves` (or `cmi`) | disjoint batches of 5 / 10 / 20 games |
-| 5 sellers: `runs/n5_rates_v1/analysis.txt` (profits, pooled test, batch rates) | `analyze_n.py runs/n5_rates_v1 5,10,20` | games seeds 100–199 per condition; 1,000 shuffles; test seed = job index |
-| 5 sellers: `runs/n5_rates_v1/dry_run.txt` (scripted false alarms and power) | `dry_run_n.py 300` | 300 replications of 20 games × 50 hours; replication seed 1000 × i + 17 |
-| LLM detection figure, 2 and 5 sellers: `report/figures/fig4_llm_detection.png` (not in the report) | `python report/make_llm_figure.py` (from the repo root) | reads the two outputs above |
+| 5 sellers: `runs/n5_rates_v1/groupscan.txt` (GroupScan and Bonjour: pooled result and batch rates; report §4.4, Table 4) | `groupscan_n.py runs/n5_rates_v1 5,10,20` | games seeds 100–199 per condition; 1,000 shuffles per set; shuffle seed = job index |
+| 5 sellers: `runs/n5_rates_v1/dry_run_groupscan.txt` (GroupScan and Bonjour on scripted markets; report §3.3, §4.4) | `groupscan_n.py --dry-run 300` | 300 replications of 20 games × 50 hours; replication seed 1000 × i + 17 |
+| 5 sellers: `runs/n5_rates_v1/analysis.txt` (profits for Table 4; also the earlier same-move test, not in the report) | `analyze_n.py runs/n5_rates_v1 5,10,20` | games seeds 100–199 per condition; 1,000 shuffles; test seed = job index |
+| 5 sellers: `runs/n5_rates_v1/dry_run.txt` (same-move test on scripted markets, not in the report) | `dry_run_n.py 300` | 300 replications of 20 games × 50 hours; replication seed 1000 × i + 17 |
+| 2-seller pilots: `runs/pilot_v3/groupscan.txt`, `runs/pilot_v4/groupscan.txt` (report Appendix D) | from `studies/llm_auction_5seller`: `groupscan_n.py ../llm_auction_2seller/runs/pilot_v4 20` (and `pilot_v3`) | one 20-game batch per condition; 1,000 shuffles |
+| 2-seller pilots: profits and direction test (report Appendix D) | `pilots.py` (in `studies/llm_auction_2seller`) | 20 games per condition |
+| LLM detection figure, 2 and 5 sellers: `report/figures/fig4_llm_detection.png` (not in the report) | `python report/make_llm_figure.py` (from the repo root) | reads the 2-seller run and 5-seller `analysis.txt` (same-move test) |
 
 ## Documents
 
