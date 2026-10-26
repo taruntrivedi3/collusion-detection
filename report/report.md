@@ -96,10 +96,8 @@ Measuring collusion from prices and messages, they find that a communication cha
 pricing and that CEO profit pressure also shapes it. We ask whether this collusion is detectable from moves alone, and reuse comms + pressure as our positive condition.
 
 **Per-agent detectors and multiple testing.** Rose et al. (2026) score individual agents for
-suspicious behaviour; our “player score” baseline, a per-player score built from pairwise links, is
-inspired by this but is not their method.
-Our “pair test” keeps GroupScan's statistic and shuffle but tests each pair on its own, with
-Benjamini–Hochberg (1995) correction, so comparing the two isolates the value of scoring groups.
+suspicious behaviour; our player-score baseline is inspired by this but is not their method. Our
+pair-test ablation, which isolates the value of scoring groups, uses Benjamini–Hochberg (1995; BH) control.
 
 **Permutation tests.** Our within-state shuffle is a stratified permutation test, and scanning subsets
 with the best score calibrated by shuffling is a standard idea. What we add is applying it to groups of
@@ -168,12 +166,12 @@ $$
    players, with the threshold recomputed among them.
    Stop when no group passes or fewer than two players remain.
 
-**Baselines.** *Bonjour*: the published rule with its fixed threshold of 0.05. *Bonjour (calibrated)*:
-the same rule with the threshold taken from the shuffle null. *Pair test (ablation)*: GroupScan's statistic and
-shuffle, but each pair is tested on its own: Benjamini–Hochberg at q = 0.05 across pairs, with
-significant pairs joined into groups. P-values come from a gamma fit to the Set-A null, because raw
-shuffle p-values cannot go below $1/(M+1)$. *Player score*: each player's total link strength; every player whose total exceeds a
-shuffle-calibrated threshold is flagged, together as one group.
+**Baselines.**
+
+- *Bonjour*: the published rule, fixed threshold 0.05; *Bonjour (calibrated)*: shuffle-null threshold.
+- *Pair test (ablation)*: GroupScan's statistic and shuffle, but each pair tested on its own (BH at
+  q = 0.05, significant pairs joined into groups; gamma-fit p-values, as raw ones stop at $1/(M+1)$).
+- *Player score*: each player's total link strength; players above a shuffle-calibrated bar form one group.
 
 **Metrics.** *Exact recovery*: the reported group equals the planted one. *Clean recovery*: exact and
 nothing else reported. *False alarm*: any report when no collusion exists (target 5%). Brackets give 95%
