@@ -173,7 +173,8 @@ $$
 **Baselines.** *Bonjour*: the published rule with its fixed threshold of 0.05. *Bonjour (calibrated)*:
 the same rule with the threshold taken from the shuffle null. *Pair test*: Benjamini–Hochberg at q = 0.05 over
 all pairs; groups are the connected components of significant pairs. P-values come from a gamma fit to
-the Set-A null; Appendix F justifies each choice. *Player score*: each player's total link strength; every player whose total exceeds a
+the Set-A null, since with 200 shuffles raw permutation p-values cannot get small enough to pass at
+n ≥ 10. *Player score*: each player's total link strength; every player whose total exceeds a
 shuffle-calibrated threshold is flagged, together as one group.
 
 **Metrics.** *Exact recovery*: the reported group equals the planted one. *Clean recovery*: exact and
@@ -515,33 +516,6 @@ where the best group scores 0.24 against a bar of 2.87, so it stops. Three weak 
 group add up to strong evidence; the pair test judges each link alone against a bar raised for testing
 15 pairs, while GroupScan pays for its search once, in the bar. At n = 20 the search covers about 10⁶
 groups.
-
-## Appendix F. Design of the pair test
-
-The pair test is meant to be the strongest pairwise detector, so that comparing it with GroupScan
-measures only the value of scoring groups. Each choice either gives it GroupScan's inputs or makes it
-more generous.
-
-- **Same statistic and null as GroupScan.** It tests the same γ against the same within-state shuffle,
-  so both methods see identical evidence and differ only in how they decide.
-- **Raw γ, not Bonjour's Γ.** Γ subtracts each player's strongest third-party link, which cancels the
-  signal inside groups (Section 4.1). Using Γ would handicap the baseline on exactly the structures we
-  test.
-- **Gamma-fit p-values.** A shuffle p-value cannot go below 1/(M + 1). Benjamini–Hochberg rejects
-  anything only if the smallest p is at most q/m for m pairs: 0.05/45 ≈ 0.0011 at 10 players and
-  0.05/190 ≈ 0.00026 at 20, below the floor at 200 shuffles (0.005) and, at 20 players, at 1,000
-  (0.001). Raw shuffle p-values would make the pair test unable to report anything. We fit a gamma
-  distribution by its mean and variance to each pair's shuffled γ values and use its upper tail. The
-  family is right: with no state and N rounds, 2N ln 2 · γ is asymptotically χ² with 4 degrees of freedom, which is a
-  gamma. Fitted on Set A and checked on Set B over 192 null runs (10 players; every state; 300–3,000
-  rounds), the share of p-values below x is 0.99–1.02 times x at x = 0.05, 0.96–1.04 at 0.01 and
-  0.83–1.13 at 0.001 (`results/step5/validate_shortcuts.csv`). The far tail is slightly generous, which
-  is why the pair test's false alarms run a little high (7.7% vs 5.1% for GroupScan, Appendix A).
-- **Benjamini–Hochberg at q = 0.05.** With no collusion every pair is null, and BH then caps the chance
-  of any report at q, the same 5% target as GroupScan. When some pairs do collude, BH rejects more than
-  methods that bound the chance of any false pair, such as Bonferroni or Holm.
-- **Groups as connected components.** A group is recovered as soon as its significant pairs connect all
-  its members; not every pair inside it has to pass. Requiring every pair (a clique) would be stricter.
 
 ## LLM Usage Statement
 
