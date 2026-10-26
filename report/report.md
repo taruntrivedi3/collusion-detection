@@ -167,7 +167,7 @@ $$
 **Baselines.**
 
 - *Bonjour*: the published rule with its fixed threshold of 0.05.
-- *Pair test (ablation)*: Bonjour with its score and threshold fixed. It uses GroupScan's statistic and
+- *Pair test (ablation)*: Bonjour’s rule, corrected. It uses GroupScan's statistic and
   shuffle but tests each pair on its own (BH at q = 0.05, significant pairs joined into groups).
   P-values come from a gamma fit; raw shuffle p-values stop at $1/(M+1)$, too coarse for BH at 190 pairs.
 - *Player score*: each player's total link strength; those above a shuffle-calibrated bar form one group.
