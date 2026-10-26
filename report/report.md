@@ -104,9 +104,6 @@ with the best score calibrated by shuffling is a standard idea. What we add is a
 agents, a null that shuffles only within history states, and the confound of honest agents who react to
 the same history.
 
-**Gap.** We know of no information-theoretic collusion detector that (i) reports groups larger than two,
-(ii) has a calibrated false-alarm rate, and (iii) handles honest agents correlated through shared history.
-
 ## 3. Methods
 
 ### 3.1 Simulated game: n-player Rock Paper Scissors
@@ -168,14 +165,18 @@ $$
 
 **Baselines.**
 
-- *Bonjour*: the published rule, fixed threshold 0.05; *Bonjour (calibrated)*: shuffle-null threshold.
-- *Pair test (ablation)*: GroupScan's statistic and shuffle, but each pair tested on its own (BH at
-  q = 0.05, significant pairs joined into groups; gamma-fit p-values, as raw ones stop at $1/(M+1)$).
+- *Bonjour*: the published rule with its fixed threshold of 0.05.
+- *Pair test (ablation)*: GroupScan's statistic and shuffle, but each pair is tested on its own (BH at
+  q = 0.05, significant pairs joined into groups). P-values come from a gamma fit, as raw shuffle
+  p-values stop at $1/(M+1)$.
 - *Player score*: each player's total link strength; players above a shuffle-calibrated bar form one group.
 
-**Metrics.** *Exact recovery*: the reported group equals the planted one. *Clean recovery*: exact and
-nothing else reported. *False alarm*: any report when no collusion exists (target 5%). Brackets give 95%
-Wilson intervals.
+**Metrics.**
+
+- *Exact recovery*: the reported group equals the planted one.
+- *Clean recovery*: exact, and nothing else reported.
+- *False alarm*: any report when no collusion exists (target 5%).
+- Brackets give 95% Wilson intervals.
 
 ### 3.3 LLM double auction with a coarse shared state
 
