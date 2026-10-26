@@ -98,9 +98,10 @@ pricing and that CEO profit pressure also shapes it. We ask whether this collusi
 **Per-agent detectors and multiple testing.** Rose et al. (2026) score individual agents for
 suspicious behaviour; our “player score” baseline, a per-player score built from pairwise links, is
 inspired by this but is not their method.
-Our “pair test” is the usual per-pair alternative, as in graphical-model selection: one test per pair
-against the same shuffle, Benjamini–Hochberg (1995) false-discovery control across all pairs, and
-significant pairs joined into groups. Comparing it with GroupScan isolates the value of scoring groups.
+Our “pair test” is the strongest pairwise baseline we could build from GroupScan's parts: each pair is
+tested against the same within-state shuffle (p-values from a gamma fit), Benjamini–Hochberg (1995)
+controls false discoveries across pairs, and significant pairs are joined into groups. Comparing the two
+isolates the value of scoring groups.
 
 **Permutation tests.** Our within-state shuffle is a stratified permutation test. What is new here is the target:
 subsets of agents scored by their pairwise dependence, a null that shuffles only within history states,
