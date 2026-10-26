@@ -103,9 +103,10 @@ tested against the same within-state shuffle (p-values from a gamma fit), Benjam
 controls false discoveries across pairs, and significant pairs are joined into groups. Comparing the two
 isolates the value of scoring groups.
 
-**Permutation tests.** Our within-state shuffle is a stratified permutation test. What is new here is the target:
-subsets of agents scored by their pairwise dependence, a null that shuffles only within history states,
-and the confound of honest agents who react to the same history.
+**Permutation tests.** Our within-state shuffle is a stratified permutation test, and scanning subsets
+with the best score calibrated by shuffling is a standard idea. What we add is applying it to groups of
+agents, a null that shuffles only within history states, and the confound of honest agents who react to
+the same history.
 
 **Gap.** We know of no information-theoretic collusion detector that (i) reports groups larger than two,
 (ii) has a calibrated false-alarm rate, and (iii) handles honest agents correlated through shared history.
