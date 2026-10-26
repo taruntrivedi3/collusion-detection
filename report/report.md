@@ -19,7 +19,7 @@ Numbers come from results/SUMMARY.md, studies/llm_auction_2seller and studies/ll
 
 ## Abstract
 
-<!-- 150–250 words (currently ~213). Plain terms only: hubs, cliques, history states etc. are defined in Section 3. -->
+<!-- 150–250 words (currently ~220). Plain terms only: hubs, cliques, history states etc. are defined in Section 3. -->
 
 When AI agents interact, as players in a game or market participants, some may secretly collude, and an
 auditor who sees only their moves must identify which ones. The information-theoretic detector of
@@ -30,8 +30,8 @@ by how strongly their moves depend on each other, calibrated against shuffled co
 versus 5% for the best pairwise method. The shuffle must respect what honest players react to; otherwise
 players who simply respond to the last round look like colluders in up to 100% of games. Shuffling only
 among rounds with the same recent history keeps false alarms at 4–9% while still catching profitable
-collusion. To test LLM agents, we build double auctions where each gpt-4.1-mini seller’s prompt is a
-logged summary of the last hour. Sellers given a message channel and profit pressure collude, earning 56%
+collusion. To test LLM agents, we adapt the double auction of Agrawal et al. (2025) so that each gpt-4.1-mini
+seller’s prompt is a logged summary of the last hour. Sellers given a message channel and profit pressure collude, earning 56%
 more than with pressure alone, and the test flags them but not the controls. By design, it cannot see
 coordination carried entirely through public moves.
 
