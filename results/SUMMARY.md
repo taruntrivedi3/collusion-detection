@@ -139,8 +139,9 @@ target.
   cannot detect that honest players react to something unrecorded.
 - **The pair test runs slightly high:** 7.7% [6.8, 8.7] false alarms on 3,000 fresh null games
   (20 players, 300 rounds). Its p-values come from a gamma fit to the shuffled values (a plain
-  shuffle p-value cannot go low enough to pass its correction at 10+ players), and that fit is a
-  little too generous far in the tail.
+  shuffle p-value cannot go below 1/(B + 1), so the correction would fire only if many pairs sat at
+  that floor: 19 at 20 players and 200 shuffles), and that fit is a little too generous far in the
+  tail, likely part of why.
 
 ## Checks
 

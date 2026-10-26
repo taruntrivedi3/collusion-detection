@@ -173,8 +173,8 @@ $$
 **Baselines.** *Bonjour*: the published rule with its fixed threshold of 0.05. *Bonjour (calibrated)*:
 the same rule with the threshold taken from the shuffle null. *Pair test*: Benjamini–Hochberg at q = 0.05 over
 all pairs; groups are the connected components of significant pairs. P-values come from a gamma fit to
-the Set-A null, since with 200 shuffles raw permutation p-values cannot get small enough to pass at
-n ≥ 10. *Player score*: each player's total link strength; every player whose total exceeds a
+the Set-A null: a raw shuffle p-value cannot go below $1/(M+1)$, so BH would fire only if at least
+$m/(q(M+1))$ of the $m$ pairs sat at that floor (19 at 20 players and 200 shuffles). *Player score*: each player's total link strength; every player whose total exceeds a
 shuffle-calibrated threshold is flagged, together as one group.
 
 **Metrics.** *Exact recovery*: the reported group equals the planted one. *Clean recovery*: exact and
@@ -399,7 +399,7 @@ during the sprint.
   (Appendix C).
 - **False-alarm rates are near, not exactly, nominal.** GroupScan's highest cell, 8% [6, 11] at
   20 players and 300 rounds, came out at 5.1% [4.4, 6.0] on 3,000 fresh games. The pair test runs slightly
-  high (7.7% [6.8, 8.7] on those games) because its gamma-fit tail is generous.
+  high (7.7% [6.8, 8.7] on those games), likely in part because its gamma-fit tail is generous.
 - **LLM scope.** One model (gpt-4.1-mini), scripted buyers, coarse states and no agent memory. Richer
   inputs give LLMs more to react to and require a richer state.
 
