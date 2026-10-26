@@ -146,7 +146,7 @@ this matters.
 
 **GroupScan.** Given every player's action in every round and the history state of each round:
 
-1. **Edge statistics.** Compute the pairwise conditional mutual information $\gamma_{ij}$ for every pair of players on the observed data.
+1. **Edge statistics.** Compute the pairwise conditional mutual information $\gamma_{ij}$ on the observed data.
 2. **Shuffle.** Choose the number of shuffles $M$ (1,000 unless stated). Draw two independent sets of $M$
    within-state shuffles, Set A and Set B, and compute every $\gamma_{ij}$ on each shuffled dataset.
 3. **Standardize edges with Set A.** $z_{ij} = (\gamma_{ij} - \mu^A_{ij}) / \sigma^A_{ij}$, where
